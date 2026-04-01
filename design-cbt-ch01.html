@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시각디자인기사 CBT — 디자인론 제1강</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F0;
+    --surface: #FFFFFF;
+    --surface-alt: #F2EFE8;
+    --border: #E0DDD5;
+    --accent: #3C3489;
+    --accent-light: #EEEDFE;
+    --accent-mid: #7F77DD;
+    --text-primary: #1C1A2E;
+    --text-secondary: #6B6880;
+    --text-muted: #9996B0;
+    --green-bg: #EAF3DE;
+    --green-border: #639922;
+    --green-text: #27500A;
+    --red-bg: #FCEBEB;
+    --red-border: #E24B4A;
+    --red-text: #501313;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--accent);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .header-tag {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: #AFA9EC;
+    border: 1px solid #534AB7;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .header-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #AFA9EC;
+    margin-top: 1px;
+  }
+
+  /* ── Layout ── */
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    margin-bottom: 1.25rem;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-mid);
+    border-radius: 2px;
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── Score bar ── */
+  .score-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    align-items: center;
+  }
+  .score-pill {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .score-pill.correct { background: var(--green-bg); color: var(--green-text); }
+  .score-pill.wrong   { background: var(--red-bg);   color: var(--red-text); }
+  .score-pill.remain  { background: var(--surface-alt); color: var(--text-secondary); }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    animation: fadeUp .25s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+  .q-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    padding: 3px 9px;
+    border-radius: 99px;
+    letter-spacing: .03em;
+  }
+  .q-category {
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+  .q-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 8px; margin-top: 1.25rem; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: .75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: var(--surface);
+    transition: background .12s, border-color .12s, transform .08s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .opt:hover:not(.disabled) {
+    background: var(--accent-light);
+    border-color: var(--accent-mid);
+    transform: translateX(2px);
+  }
+  .opt:active:not(.disabled) { transform: scale(.99); }
+  .opt-num {
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .opt-text { font-size: 14px; line-height: 1.65; color: var(--text-primary); }
+
+  .opt.correct { background: var(--green-bg); border-color: var(--green-border); }
+  .opt.correct .opt-num { background: var(--green-border); border-color: var(--green-border); color: #fff; }
+  .opt.wrong   { background: var(--red-bg);   border-color: var(--red-border); }
+  .opt.wrong .opt-num   { background: var(--red-border);   border-color: var(--red-border);   color: #fff; }
+  .opt.show-correct { background: var(--green-bg); border-color: var(--green-border); opacity: .65; }
+  .opt.show-correct .opt-num { background: var(--green-border); border-color: var(--green-border); color: #fff; }
+  .opt.disabled { pointer-events: none; }
+
+  /* ── Explanation ── */
+  .explanation {
+    margin-top: 1rem;
+    padding: 1rem 1.125rem;
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    animation: fadeUp .2s ease both;
+  }
+  .explanation-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .06em;
+    margin-bottom: 5px;
+  }
+  .explanation p { font-size: 13px; line-height: 1.75; color: var(--text-secondary); }
+
+  /* ── Nav ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn {
+    padding: .65rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: background .12s, border-color .12s, transform .08s;
+  }
+  .btn:hover { background: var(--surface-alt); border-color: #C8C5BE; }
+  .btn:active { transform: scale(.98); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover { background: #26215C; border-color: #26215C; }
+  .btn:disabled { opacity: .35; pointer-events: none; }
+
+  /* ── Result ── */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    animation: fadeUp .3s ease both;
+  }
+  .result-ring {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid var(--accent);
+    margin: 0 auto 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-light);
+  }
+  .result-score { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .result-score-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .result-title { font-size: 17px; font-weight: 700; margin-bottom: .25rem; }
+  .result-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.75rem; }
+  .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.75rem; }
+  .result-stat {
+    background: var(--surface-alt);
+    border-radius: var(--radius);
+    padding: 1rem .5rem;
+  }
+  .result-stat-n { font-size: 22px; font-weight: 700; }
+  .result-stat-l { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .result-stat.c .result-stat-n { color: var(--green-border); }
+  .result-stat.w .result-stat-n { color: var(--red-border); }
+  .result-stat.p .result-stat-n { color: var(--accent); }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+  /* ── Footer note ── */
+  .footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-tag">시각디자인기사 필기</div>
+  </div>
+  <div>
+    <div class="header-title">디자인론 — 제1강 CBT</div>
+    <div class="header-sub">디자인 일반 · 시각 커뮤니케이션</div>
+  </div>
+</header>
+
+<main>
+  <div id="app"></div>
+  <div class="footer-note">Seouloratorio Visual Design Study · 시각디자인기사 2026년 5월 9일 시험</div>
+</main>
+
+<script>
+const questions = [
+  {
+    q: "디자인이라는 말의 어원이 아닌 것은?",
+    opts: ["라틴어 '데시그나레(designare)'", "이탈리아어 '디세뇨(degseno)'", "프랑스어 '데생(dessein)'", "그리스어 '데코라(decora)'"],
+    ans: 3,
+    cat: "디자인의 개요",
+    exp: "디자인의 어원은 라틴어 '데시그나레', 이탈리아어 '디세뇨', 프랑스어 '데생'에서 유래하였습니다. 그리스어 '데코라'는 어원에 포함되지 않습니다."
+  },
+  {
+    q: "빅터 파파넥(Victor Papanek)이 제시한 디자인 복합기능 6가지에 해당하지 않는 것은?",
+    opts: ["방법(method)", "텔레시스(telesis)", "미학(aesthetics)", "독창성(originality)"],
+    ans: 3,
+    cat: "빅터 파파넥",
+    exp: "빅터 파파넥의 복합기능 6가지는 방법(method), 용도(use), 필요성(needs), 텔레시스(telesis), 연상(association), 미학(aesthetics)입니다. 독창성(originality)은 포함되지 않습니다."
+  },
+  {
+    q: "디자인의 4대 조건(굿디자인의 기본 조건)에 해당하지 않는 것은?",
+    opts: ["합목적성", "심미성", "경제성", "기능성"],
+    ans: 3,
+    cat: "굿디자인",
+    exp: "디자인의 4대 조건은 합목적성, 심미성, 경제성, 독창성입니다. '기능성'은 4대 조건에 직접 포함되지 않으며, 합목적성의 하위 개념에 해당합니다."
+  },
+  {
+    q: "디자인의 조건 중 합리적(객관적) 영역에 해당하는 것으로만 묶인 것은?",
+    opts: ["합목적성, 경제성", "심미성, 독창성", "합목적성, 독창성", "심미성, 경제성"],
+    ans: 0,
+    cat: "질서성",
+    exp: "합리적(객관적) 영역은 합목적성과 경제성이며, 비합리적(주관적) 영역은 심미성과 독창성입니다. 질서성은 이 두 영역을 조화롭게 연결해 주는 역할을 합니다."
+  },
+  {
+    q: "커뮤니케이션 정보이론을 최초로 체계화한 학자는?",
+    opts: ["빅터 파파넥 · 바우하우스", "섀넌(Shannon) · 위버(Weaver)", "모홀리-나기 · 클레", "바이어 · 이텐"],
+    ans: 1,
+    cat: "커뮤니케이션",
+    exp: "섀넌(C.E. Shannon)과 위버(N. Weaver)는 1940년대 후반 '커뮤니케이션의 수학적 이론'을 통해 정보원→송신기→채널→수신기→목적지의 커뮤니케이션 모델을 제창하였습니다."
+  },
+  {
+    q: "시각 커뮤니케이션의 기능 중 '포스터, 신문광고, 디스플레이'에 해당하는 기능은?",
+    opts: ["지시적 기능", "설득적 기능", "상징적 기능", "기록적 기능"],
+    ans: 1,
+    cat: "시각 커뮤니케이션",
+    exp: "설득적 기능의 예시는 포스터, 신문광고, 디스플레이입니다. 지시적 기능은 신호·문자·도표, 상징적 기능은 심벌·마크·로고, 기록적 기능은 사진·영상·TV에 해당합니다."
+  },
+  {
+    q: "디자인의 기획적 활동(정신적 과정)에 해당하는 것은?",
+    opts: ["형태를 만드는 조형적 활동", "아이디어를 구체화·실체화하는 과정", "심미적인 시각화 능력 발휘", "심적 계획, 아이디어 발상, 관리·감독"],
+    ans: 3,
+    cat: "디자인 활동",
+    exp: "기획적 활동(정신적 과정)은 심적 계획(mental plan), 아이디어 발상, 관리, 감독 등 기획의 개념에 해당합니다. ①②③은 모두 기능적 활동(실체적 과정)입니다."
+  },
+  {
+    q: "빅터 파파넥의 복합기능 중 '텔레시스(telesis)'에 대한 설명으로 옳은 것은?",
+    opts: [
+      "재료 또는 도구를 타당성 있게 사용하는 것",
+      "인간의 마음속 깊이 자리한 충동과 욕망에 관계되는 것",
+      "특수한 목적 달성을 위해 자연·사회 변천 작용에 대한 계획적·의도적 실용화",
+      "용도에 적합해야 한다는 디자인의 기본 전제"
+    ],
+    ans: 2,
+    cat: "빅터 파파넥",
+    exp: "텔레시스(telesis)는 특수한 목적을 달성하기 위해 자연과 사회의 변천 작용에 대한 계획적이고 의도적인 실용화를 의미합니다. ①은 방법(method), ②는 연상(association), ④는 용도(use)입니다."
+  },
+  {
+    q: "다음 중 시각디자인의 3차(입체) 영역에 해당하는 것은?",
+    opts: ["편집디자인", "영상디자인", "패키지디자인", "인테리어디자인"],
+    ans: 2,
+    cat: "디자인 분류",
+    exp: "시각디자인의 3차(입체) 영역에는 패키지디자인, 사인디자인, CI, POP 등이 있습니다. 편집디자인은 2차(평면), 영상디자인은 4차(공간), 인테리어디자인은 환경디자인 영역입니다."
+  },
+  {
+    q: "굿디자인(Good Design)에 현대에 추가된 요소가 아닌 것은?",
+    opts: ["지역성", "문화성", "친자연성(친환경성)", "경제성"],
+    ans: 3,
+    cat: "굿디자인",
+    exp: "현대의 굿디자인에는 기존 4대 조건(합목적성, 심미성, 경제성, 독창성)에 지역성, 문화성, 친자연성이 추가됩니다. 경제성은 기존 4대 조건에 이미 포함되어 있습니다."
+  }
+];
+
+let current = 0, score = 0, answered = [];
+
+function pct() { return Math.round((score / questions.length) * 100); }
+
+function render() {
+  const app = document.getElementById('app');
+  if (current >= questions.length) { renderResult(app); return; }
+  const q = questions[current];
+  const isAns = answered[current] !== undefined;
+  const userAns = answered[current];
+  const prog = Math.round((current / questions.length) * 100);
+  const correctSoFar = answered.filter((a, i) => a === questions[i].ans).length;
+  const wrongSoFar = answered.filter((a, i) => a !== questions[i].ans).length;
+  const remain = questions.length - answered.length;
+
+  app.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>문제 ${current + 1} / ${questions.length}</span>
+        <span>${prog}%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${prog}%"></div></div>
+    </div>
+    <div class="score-bar">
+      <span class="score-pill correct">정답 ${correctSoFar}</span>
+      <span class="score-pill wrong">오답 ${wrongSoFar}</span>
+      <span class="score-pill remain">남은 문제 ${remain}</span>
+    </div>
+    <div class="q-card">
+      <div class="q-header">
+        <span class="q-badge">Q${current + 1}</span>
+        <span class="q-category">${q.cat}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">
+        ${q.opts.map((o, i) => {
+          let cls = '';
+          if (isAns) {
+            cls = 'disabled ';
+            if (i === q.ans) cls += (i === userAns) ? 'correct' : 'show-correct';
+            else if (i === userAns) cls += 'wrong';
+          }
+          return `<div class="opt ${cls}" onclick="choose(${i})">
+            <div class="opt-num">${i + 1}</div>
+            <div class="opt-text">${o}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      ${isAns ? `
+        <div class="explanation">
+          <div class="explanation-label">해설</div>
+          <p>${q.exp}</p>
+        </div>` : ''}
+    </div>
+    <div class="nav-row">
+      <button class="btn" onclick="prev()" ${current === 0 ? 'disabled' : ''}>← 이전</button>
+      ${isAns
+        ? `<button class="btn primary" onclick="next()">${current < questions.length - 1 ? '다음 문제 →' : '결과 보기 →'}</button>`
+        : `<button class="btn" disabled>선택 후 진행</button>`
+      }
+    </div>
+  `;
+}
+
+function choose(i) {
+  if (answered[current] !== undefined) return;
+  answered[current] = i;
+  if (i === questions[current].ans) score++;
+  render();
+}
+
+function next() { current++; render(); }
+function prev() { if (current > 0) { current--; render(); } }
+
+function renderResult(app) {
+  const wrong = questions.length - score;
+  const p = pct();
+  const msg = p >= 80 ? '우수합니다! 완성도가 높아요.' : p >= 60 ? '합격권입니다. 틀린 문제를 복습하세요.' : '조금 더 복습이 필요합니다.';
+  app.innerHTML = `
+    <div class="result-card">
+      <div class="result-ring">
+        <div class="result-score">${p}점</div>
+        <div class="result-score-label">득점률</div>
+      </div>
+      <div class="result-title">${msg}</div>
+      <div class="result-sub">${questions.length}문제 중 ${score}문제 정답</div>
+      <div class="result-grid">
+        <div class="result-stat c"><div class="result-stat-n">${score}</div><div class="result-stat-l">정답</div></div>
+        <div class="result-stat w"><div class="result-stat-n">${wrong}</div><div class="result-stat-l">오답</div></div>
+        <div class="result-stat p"><div class="result-stat-n">${p}%</div><div class="result-stat-l">정답률</div></div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="restart()" style="width:100%;padding:.75rem">다시 풀기</button>
+    </div>
+  `;
+}
+
+function restart() { current = 0; score = 0; answered = []; render(); }
+
+render();
+</script>
+</body>
+</html>
