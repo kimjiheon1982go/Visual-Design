@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디자인 일반 · 기출문제 25선</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #faf7f0;
+    --accent: #c8421a;
+    --accent2: #2a5298;
+    --muted: #8a7f70;
+    --line: #d6cfc0;
+    --correct: #1a6b3c;
+    --wrong: #b91c1c;
+    --correct-bg: #f0faf4;
+    --wrong-bg: #fef2f2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(214,207,192,0.4) 27px, rgba(214,207,192,0.4) 28px);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 21px);
+  }
+  header .label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+  header h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  header .sub {
+    margin-top: 0.8rem;
+    color: rgba(250,247,240,0.55);
+    font-size: 0.85rem;
+    font-weight: 300;
+  }
+
+  /* SCOREBOARD */
+  #scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1.2rem 2rem;
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  .score-item {
+    text-align: center;
+  }
+  .score-item .val {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--paper);
+  }
+  .score-item .val.c { color: #4ade80; }
+  .score-item .val.w { color: #f87171; }
+  .score-item .lbl {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(250,247,240,0.4);
+  }
+  #progress-bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    position: absolute;
+    bottom: 0; left: 0;
+  }
+  #progress-bar {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    box-shadow: 2px 3px 0 var(--line);
+    transition: box-shadow 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding: 1.1rem 1.4rem 0.8rem;
+    border-bottom: 1px solid var(--line);
+    background: #fdfbf7;
+  }
+  .q-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    padding: 0.15rem 0.5rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 2px;
+  }
+  .q-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* OPTIONS */
+  .options {
+    padding: 0.8rem 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.875rem;
+    color: var(--ink);
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent2);
+    background: #f0f4fc;
+  }
+  .opt-btn .opt-label {
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 1.2rem;
+    font-size: 0.8rem;
+  }
+  .opt-btn.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+  }
+  .opt-btn.correct .opt-label { color: var(--correct); }
+  .opt-btn.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+  }
+  .opt-btn.wrong .opt-label { color: var(--wrong); }
+  .opt-btn:disabled { cursor: default; }
+
+  /* EXPLANATION */
+  .explanation {
+    display: none;
+    margin: 0 1.2rem 1rem;
+    padding: 0.8rem 1rem;
+    background: #f5f0e8;
+    border-left: 3px solid var(--accent);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: #4a3f30;
+    border-radius: 0 2px 2px 0;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+
+  /* RESULT PANEL */
+  #result-panel {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    margin-top: 2rem;
+    animation: fadeUp 0.5s ease;
+  }
+  #result-panel h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+  }
+  #result-panel .big-score {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin: 1rem 0;
+  }
+  #result-panel .grade {
+    font-size: 1.1rem;
+    color: rgba(250,247,240,0.7);
+    margin-bottom: 2rem;
+  }
+  #restart-btn {
+    padding: 0.9rem 2.5rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  #restart-btn:hover { background: #a83515; }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label">시각디자인 산업기사 · 기사 대비</div>
+  <h1>디자인 일반 &amp; 시각 커뮤니케이션<br>기출문제 25선</h1>
+  <p class="sub">각 문항을 클릭하여 정답을 확인하세요</p>
+</header>
+
+<div id="scoreboard">
+  <div class="score-item"><div class="val" id="sc-total">25</div><div class="lbl">전체</div></div>
+  <div class="score-item"><div class="val c" id="sc-correct">0</div><div class="lbl">정답</div></div>
+  <div class="score-item"><div class="val w" id="sc-wrong">0</div><div class="lbl">오답</div></div>
+  <div class="score-item"><div class="val" id="sc-remain">25</div><div class="lbl">남은문항</div></div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+</div>
+
+<main id="quiz-area"></main>
+
+<footer>© 2025 디자인 기출문제 · GitHub Pages</footer>
+
+<script>
+const questions = [
+  {
+    q: "디자인이라는 말의 어원으로 옳지 않은 것은?",
+    opts: ["라틴어 데시그나레(designare)", "이탈리아어 디세뇨(disegno)", "프랑스어 데생(dessein)", "영어 드로잉(drawing)"],
+    ans: 3,
+    exp: "<strong>드로잉(drawing)</strong>은 디자인의 어원이 아닙니다. 디자인의 어원은 라틴어 <em>designare</em>, 이탈리아어 <em>disegno</em>, 프랑스어 <em>dessein</em>에서 유래하였습니다."
+  },
+  {
+    q: "빅터 파파넥(Victor Papanek)이 제시한 복합기능의 6가지 요소에 해당하지 않는 것은?",
+    opts: ["방법(method)", "텔레시스(telesis)", "경제성(economy)", "연상(association)"],
+    ans: 2,
+    exp: "파파넥의 복합기능 6요소는 방법(method), 용도(use), 필요성(needs), 텔레시스(telesis), 연상(association), 미학(aesthetics)입니다. <strong>경제성</strong>은 포함되지 않습니다."
+  },
+  {
+    q: "굿디자인(Good Design)의 4대 조건으로 옳은 것은?",
+    opts: ["합목적성, 심미성, 경제성, 독창성", "합목적성, 기능성, 경제성, 창의성", "심미성, 독창성, 지역성, 문화성", "기능성, 심미성, 질서성, 경제성"],
+    ans: 0,
+    exp: "굿디자인의 4대 조건은 <strong>합목적성, 심미성, 경제성, 독창성</strong>이며, 이를 조화롭게 유지하는 것이 질서성입니다."
+  },
+  {
+    q: "합목적성에 대한 설명으로 가장 옳은 것은?",
+    opts: ["최소의 비용으로 최대의 이익을 추구하는 것이다.", "목적을 실현하는 데 적합한 성질로, 실용성 또는 효용성이라고도 한다.", "아름다움을 추구하는 주관적 미의식이다.", "새로운 것을 만들어내는 창의적 감각이다."],
+    ans: 1,
+    exp: "<strong>합목적성</strong>은 '목적에 얼마나 부합하는가'를 의미하며, 조형에서는 실용성 또는 효용성이라고도 합니다. 합리주의적 관점에서 가장 중요한 조건입니다."
+  },
+  {
+    q: "디자인 조건 중 합리적(객관적) 영역에 해당하는 것으로만 묶인 것은?",
+    opts: ["심미성, 독창성", "합목적성, 경제성", "심미성, 경제성", "독창성, 합목적성"],
+    ans: 1,
+    exp: "합리적(객관적) 영역: <strong>합목적성, 경제성</strong> / 비합리적(주관적) 영역: 심미성, 독창성입니다."
+  },
+  {
+    q: "질서성에 대한 설명으로 옳은 것은?",
+    opts: ["합리성과 비합리성이 조화를 이루도록 하는 디자인 조건이다.", "최소 비용으로 최대 효과를 내는 것을 의미한다.", "지역의 고유한 특성을 반영하는 것이다.", "모방을 배제하고 창의성을 극대화하는 것이다."],
+    ans: 0,
+    exp: "<strong>질서성</strong>은 합리성(합목적성·경제성)과 비합리성(심미성·독창성)을 조화롭게 통합하여 균형 잡힌 디자인을 만들어내는 조건입니다."
+  },
+  {
+    q: "기획적 활동에서의 디자인 과정을 순서대로 나열한 것은?",
+    opts: ["자료수집→문제인식→자료분석→평가", "문제인식→자료수집→자료분석→평가", "자료분석→문제인식→자료수집→평가", "문제인식→자료분석→자료수집→평가"],
+    ans: 1,
+    exp: "기획적 활동의 디자인 과정: <strong>문제인식 → 자료수집 → 자료분석 → 평가</strong> 순서로 진행됩니다."
+  },
+  {
+    q: "기능적 활동에서의 디자인 과정 중 제2단계에 해당하는 것은?",
+    opts: ["욕구", "재료", "조형", "기술"],
+    ans: 2,
+    exp: "기능적 활동의 디자인 과정: 1단계(욕구) → <strong>2단계(조형)</strong> → 3단계(재료) → 4단계(기술)"
+  },
+  {
+    q: "독창성에 대한 설명으로 옳지 않은 것은?",
+    opts: ["독창성의 반대는 모방이라 할 수 있다.", "100%의 모방도 새로운 재해석이면 독창적 디자인이 된다.", "대중성이나 기능보다는 차별화에 중점을 두어야 한다.", "현대 디자인의 근본은 독창성이라 말할 수 있다."],
+    ans: 1,
+    exp: "100%의 모방은 창의라 할 수 없으며, 똑같은 디자인의 반복이나 부분적 변경은 디자인이라 할 수 없습니다. <strong>모방은 독창성으로 인정되지 않습니다.</strong>"
+  },
+  {
+    q: "빅터 파파넥의 복합기능 중 '텔레시스(telesis)'의 의미로 옳은 것은?",
+    opts: ["재료 또는 도구를 타당성 있게 사용하는 것", "인간의 마음속 깊이 자리한 충동과 욕망에 관계되는 것", "자연과 사회의 변천 작용에 대한 계획적이고 의도적인 실용화", "용도에 적합해야 한다는 디자인의 기본 전제"],
+    ans: 2,
+    exp: "<strong>텔레시스(telesis)</strong>는 특수한 목적 달성을 위해 자연과 사회의 변천 작용에 대한 계획적·의도적인 실용화를 의미합니다."
+  },
+  {
+    q: "다음 중 순수미술의 특징으로 옳은 것은?",
+    opts: ["사회의 요구 범위 안에서 개인의 자유가 허용된다.", "검증과 대중만족이 중요한 조건이다.", "주관적이며 자율적, 자기만족적인 특징을 가진다.", "응용예술의 한 형태이다."],
+    ans: 2,
+    exp: "<strong>순수미술</strong>은 주관적이며 자율적, 자기만족적인 특징을 가집니다. 응용미술은 대중만족과 사회 요구를 중요시합니다."
+  },
+  {
+    q: "시각디자인의 분류 중 3차(입체) 영역에 해당하는 것은?",
+    opts: ["타이포그래피", "일러스트레이션", "패키지디자인", "영상디자인"],
+    ans: 2,
+    exp: "시각디자인의 3차(입체) 영역에는 <strong>패키지디자인, 사인디자인, CI, POP</strong> 등이 포함됩니다."
+  },
+  {
+    q: "환경디자인에 대한 설명으로 옳지 않은 것은?",
+    opts: ["인간이 살아가는 공간을 디자인하는 분야이다.", "실내 개념을 인테리어(interior) 디자인이라 한다.", "현대의 공간은 우주공간 개념으로 확대되고 있다.", "정보전달을 목적으로 시각적 매체를 이용하는 디자인이다."],
+    ans: 3,
+    exp: "정보전달을 목적으로 시각적 매체를 이용하는 것은 <strong>시각디자인(visual communication design)</strong>의 정의입니다. 환경디자인은 인간이 살아가는 공간을 디자인하는 분야입니다."
+  },
+  {
+    q: "커뮤니케이션 정보이론을 최초로 수학적으로 체계화한 사람은?",
+    opts: ["빅터 파파넥(Victor Papanek)", "세논(Shannon)과 위버(Weaver)", "마샬 맥루한(Marshall McLuhan)", "루돌프 아른하임(Rudolf Arnheim)"],
+    ans: 1,
+    exp: "<strong>세논(C.E. Shannon)과 위버(N. Weaver)</strong>는 1940년대 후반 '커뮤니케이션의 수학적 이론'을 통해 커뮤니케이션 정보이론을 체계화하였습니다."
+  },
+  {
+    q: "시각 커뮤니케이션의 기능 중 '포스터, 신문광고, 디스플레이'에 해당하는 기능은?",
+    opts: ["지시적 기능", "설득적 기능", "상징적 기능", "기록적 기능"],
+    ans: 1,
+    exp: "<strong>설득적 기능</strong>에는 포스터, 신문광고, 디스플레이 등이 포함됩니다. 지시적 기능은 신호·문자, 상징적 기능은 심벌·로고가 대표적입니다."
+  },
+  {
+    q: "커뮤니케이션 모델에서 송신자와 수신자를 연결해주는 매개체를 무엇이라 하는가?",
+    opts: ["메시지(message)", "채널(channel)", "피드백(feedback)", "노이즈(noise)"],
+    ans: 1,
+    exp: "광고 메시지를 소비자에게 전달해주는 매개수단을 <strong>채널(매체)</strong>이라고 합니다. 텔레비전, 라디오, 신문, 잡지 등이 대표적입니다."
+  },
+  {
+    q: "굿디자인의 추가 요소 중 '친자연성'에 대한 설명으로 옳지 않은 것은?",
+    opts: ["인간과 자연이 함께할 수 있는 조화로운 지속가능한 디자인을 지향한다.", "디자인 교육·개발·정책도 생태적 과정을 전제로 해야 한다.", "산업화 과정에서 발생한 생태계 파괴 문제에 대응한다.", "지역의 고유한 특성을 디자인에 반영하는 것을 의미한다."],
+    ans: 3,
+    exp: "지역의 고유한 특성을 반영하는 것은 <strong>지역성</strong>입니다. 친자연성(친환경성)은 인간과 자연이 조화롭게 공존하는 지속가능한 디자인을 추구합니다."
+  },
+  {
+    q: "다음 중 시각 커뮤니케이션의 '상징적 기능'에 해당하는 것은?",
+    opts: ["신호, 문자, 도표", "포스터, 신문광고", "심벌, 마크, 로고, 패턴", "사진, 영상, TV"],
+    ans: 2,
+    exp: "<strong>상징적 기능</strong>의 예: 심벌, 마크, 로고, 패턴, 일러스트레이션 / 지시적 기능: 신호·문자 / 설득적 기능: 포스터·광고 / 기록적 기능: 사진·영상"
+  },
+  {
+    q: "심미성에 대한 설명으로 옳은 것은?",
+    opts: ["객관적이고 합리적인 기준에 의해 판단된다.", "주관적이고 비합리적인 부분이 많아 합목적성과 대립 관계에 있다.", "경제적 효율을 고려한 미적 판단이다.", "지역성과 문화성에 의해서만 결정된다."],
+    ans: 1,
+    exp: "<strong>심미성</strong>은 주관적이고 비합리적인 부분이 많아, 객관적·합리적인 합목적성과 대립되는 위치에 있습니다."
+  },
+  {
+    q: "경제성에 대한 설명으로 가장 적절한 것은?",
+    opts: ["아름다움을 경제적으로 표현하는 능력이다.", "최소의 비용과 노력으로 최대의 이익을 발생시키려는 원칙이다.", "대량생산 제품에만 적용되는 개념이다.", "디자이너의 창의력을 경제적 가치로 환산하는 것이다."],
+    ans: 1,
+    exp: "<strong>경제성</strong>이란 '최소의 비용과 노력으로 최대의 이익'을 발생시키려는 경제활동의 가장 기본이 되는 원칙입니다."
+  },
+  {
+    q: "디자인을 넓은 의미로 해석할 때 포함되는 활동이 아닌 것은?",
+    opts: ["국민생활에 기여", "수요의 창조", "순수 예술 작품 창작", "산업경제의 활성화"],
+    ans: 2,
+    exp: "넓은 의미의 디자인은 쾌적한 생활환경 창조, 국민생활 기여, 수요 창조, 산업경제 활성화 등을 포함합니다. <strong>순수 예술 작품 창작</strong>은 포함되지 않습니다."
+  },
+  {
+    q: "매스 커뮤니케이션(mass communication)에 대한 설명으로 옳은 것은?",
+    opts: ["두 개인 간의 직접적인 정보 교환을 말한다.", "매스 미디어를 통한 소통으로 TV·라디오·신문 등이 포함된다.", "시각 커뮤니케이션과 완전히 다른 개념이다.", "비언어적 신체언어만을 포함하는 커뮤니케이션이다."],
+    ans: 1,
+    exp: "<strong>매스 커뮤니케이션</strong>은 매스 미디어를 통한 소통이며, 텔레비전·라디오·신문·잡지 등이 주요 매체입니다."
+  },
+  {
+    q: "디자인의 분류 중 제품디자인 영역의 3차(입체) 분야에 해당하는 것은?",
+    opts: ["타이포그래피", "영상디자인", "공업디자인, 가구디자인", "조경디자인"],
+    ans: 2,
+    exp: "제품디자인의 3차(입체) 영역에는 <strong>공업디자인, 액세서리디자인, 크라프트디자인, 공예디자인, 가구디자인, 조명디자인</strong> 등이 포함됩니다."
+  },
+  {
+    q: "다음 중 선전(propaganda)의 정의로 가장 적절한 것은?",
+    opts: ["개인과 개인 간의 자유로운 정보 공유 행위", "많은 사람의 행동·태도·의지결정을 일정한 방향으로 유도하려는 의도적·조직적 시도", "수신자가 없는 일방적 정보 발신 행위", "자연 발생적으로 형성되는 여론의 흐름"],
+    ans: 1,
+    exp: "<strong>선전(propaganda)</strong>은 많은 사람의 행동·태도·의지결정 등을 일정한 방향으로 유도·조작하고자 하는 의도적이면서 조직적인 시도입니다."
+  },
+  {
+    q: "빅터 파파넥의 디자인 철학으로 옳지 않은 것은?",
+    opts: ["디자이너의 사회적 책임감을 강조하였다.", "디자인은 미적인 아름다움만을 추구하는 예술행위라고 주장하였다.", "경제적·심리적·정신적·윤리적·지적 요구까지 고려해야 한다고 하였다.", "20세기 디자인 철학에 가장 큰 영향을 미친 이론가였다."],
+    ans: 1,
+    exp: "파파넥은 디자인이 단순히 미적 아름다움만 추구하는 것이 아니라, 인간의 <strong>경제적·심리적·정신적·윤리적·지적 요구와 환경까지 고려한 복합적 기능</strong>을 가진다고 주장하였습니다."
+  }
+];
+
+let correct = 0, wrong = 0, answered = 0;
+
+function updateScore() {
+  document.getElementById('sc-correct').textContent = correct;
+  document.getElementById('sc-wrong').textContent = wrong;
+  document.getElementById('sc-remain').textContent = questions.length - answered;
+  document.getElementById('progress-bar').style.width = (answered / questions.length * 100) + '%';
+  if (answered === questions.length) showResult();
+}
+
+function showResult() {
+  document.getElementById('result-panel').style.display = 'block';
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById('final-score').textContent = correct + ' / ' + questions.length;
+  document.getElementById('final-pct').textContent = pct + '점';
+  let grade = pct >= 80 ? '🏆 우수! 합격권입니다.' : pct >= 60 ? '📚 보통. 조금 더 복습하세요.' : '💪 분발하세요! 다시 도전해봐요.';
+  document.getElementById('grade-msg').textContent = grade;
+}
+
+function render() {
+  const area = document.getElementById('quiz-area');
+  area.innerHTML = '';
+
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.style.animationDelay = (qi * 0.04) + 's';
+
+    const header = document.createElement('div');
+    header.className = 'q-header';
+    header.innerHTML = `<span class="q-num">Q${String(qi+1).padStart(2,'0')}</span><span class="q-text">${q.q}</span>`;
+    card.appendChild(header);
+
+    const opts = document.createElement('div');
+    opts.className = 'options';
+    const labels = ['①','②','③','④'];
+    q.opts.forEach((o, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `<span class="opt-label">${labels[oi]}</span><span>${o}</span>`;
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        opts.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+        if (oi === q.ans) { btn.classList.add('correct'); correct++; }
+        else {
+          btn.classList.add('wrong');
+          opts.querySelectorAll('.opt-btn')[q.ans].classList.add('correct');
+          wrong++;
+        }
+        exp.classList.add('show');
+        answered++;
+        updateScore();
+      });
+      opts.appendChild(btn);
+    });
+    card.appendChild(opts);
+
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.innerHTML = '📌 ' + q.exp;
+    card.appendChild(exp);
+
+    area.appendChild(card);
+  });
+
+  // result panel
+  const rp = document.createElement('div');
+  rp.id = 'result-panel';
+  rp.innerHTML = `
+    <h2>최종 결과</h2>
+    <div class="big-score" id="final-score"></div>
+    <div class="grade" id="final-pct"></div>
+    <div class="grade" id="grade-msg"></div>
+    <br><br>
+    <button id="restart-btn" onclick="restart()">🔄 다시 풀기</button>
+  `;
+  area.appendChild(rp);
+}
+
+function restart() {
+  correct = 0; wrong = 0; answered = 0;
+  updateScore();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+updateScore();
+</script>
+</body>
+</html>
