@@ -3,685 +3,652 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>시각디자인 기사 필기 — 학습 캘린더</title>
+<title>시각디자인 산업기사 학습 플래너 · 2026.05.09</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+
 <style>
   :root {
-    --bg: #0d0d0f;
-    --bg2: #16161a;
-    --bg3: #1e1e24;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --text: #f0eee8;
-    --text2: #a09e98;
-    --text3: #5e5c57;
-    --p1: #7f77dd;
-    --p1b: #2a2548;
-    --p2: #1d9e75;
-    --p2b: #0c3326;
-    --p3: #378add;
-    --p3b: #0c2a44;
-    --p4: #ba7517;
-    --p4b: #3a2308;
-    --p5: #d85a30;
-    --p5b: #3d1a0c;
-    --done: #2a2a30;
-    --done-text: #4a4855;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg: #0e0e0f;
+    --surface: #161618;
+    --border: #2a2a2e;
+    --text: #e8e6e0;
+    --muted: #7a7875;
+    --accent-theory1: #c8a96e;  /* Subject 1 - 황금 */
+    --accent-theory2: #8fb8d0;  /* Subject 2 - 블루그레이 */
+    --accent-theory3: #a8c49a;  /* Subject 3 - 그린 */
+    --accent-mock: #d4846a;     /* 모의고사 - 테라코타 */
+    --accent-past: #b07cc6;     /* 기출문제 - 바이올렛 */
+    --accent-final: #e06565;    /* 시험당일 - 레드 */
+    --accent-rest: #555560;     /* 복습/정리 */
+    --done-bg: #1d1f1a;
+    --done-check: #6a9960;
   }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 300;
+    font-family: 'Noto Serif KR', serif;
     min-height: 100vh;
-    line-height: 1.6;
+    padding: 0 0 80px;
   }
 
-  /* ── header ── */
+  /* ── HEADER ── */
   header {
-    border-bottom: 1px solid var(--border);
-    padding: 20px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
     position: sticky;
     top: 0;
-    background: rgba(13,13,15,0.92);
-    backdrop-filter: blur(12px);
     z-index: 100;
-  }
-  .header-left { display: flex; align-items: center; gap: 14px; }
-  .logo { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; }
-  .title { font-size: 15px; font-weight: 500; color: var(--text); }
-  .dday-pill {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    background: var(--p5b);
-    color: var(--p5);
-    border: 1px solid rgba(216,90,48,0.3);
-    border-radius: 20px;
-    padding: 3px 12px;
-  }
-  .header-right { display: flex; align-items: center; gap: 12px; }
-  .prog-wrap { display: flex; align-items: center; gap: 8px; }
-  .prog-bar { width: 120px; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
-  .prog-fill { height: 100%; background: var(--p1); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
-  .prog-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); min-width: 32px; }
-  .reset-btn {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 11px;
-    color: var(--text3);
-    background: none;
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    padding: 4px 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .reset-btn:hover { color: var(--text2); border-color: var(--border2); background: var(--bg3); }
-
-  /* ── main layout ── */
-  .main { padding: 32px; max-width: 1200px; margin: 0 auto; }
-
-  /* ── view toggle ── */
-  .view-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    margin-bottom: 28px;
-    width: fit-content;
-  }
-  .view-btn {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text3);
-    background: none;
-    border: none;
-    padding: 7px 18px;
-    cursor: pointer;
-    transition: all 0.15s;
-    border-right: 1px solid var(--border2);
-  }
-  .view-btn:last-child { border-right: none; }
-  .view-btn.active { background: var(--bg3); color: var(--text); }
-  .view-btn:hover:not(.active) { color: var(--text2); }
-
-  /* ── calendar grid ── */
-  .cal-section { display: none; }
-  .cal-section.active { display: block; }
-  .list-section { display: none; }
-  .list-section.active { display: block; }
-
-  .month-block { margin-bottom: 40px; }
-  .month-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 14px;
-  }
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-  .day-header {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text3);
-    text-align: center;
-    padding: 6px 0;
-    letter-spacing: 0.06em;
-  }
-  .day-cell {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    min-height: 100px;
-    padding: 8px 8px 6px;
-    position: relative;
-    cursor: default;
-    transition: border-color 0.15s;
-  }
-  .day-cell.has-tasks { cursor: pointer; }
-  .day-cell.has-tasks:hover { border-color: var(--border2); }
-  .day-cell.empty { background: transparent; border-color: transparent; }
-  .day-cell.today { border-color: rgba(127,119,221,0.5); }
-  .day-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    margin-bottom: 6px;
+    background: rgba(14,14,15,.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(16px,4vw,64px);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 60px;
   }
-  .today-dot {
-    width: 5px; height: 5px;
-    background: var(--p1);
-    border-radius: 50%;
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
   }
-  .task-chip {
-    display: block;
-    font-size: 10px;
-    line-height: 1.3;
-    padding: 3px 5px;
-    border-radius: 4px;
-    margin-bottom: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: opacity 0.15s;
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: .12em;
+    color: var(--accent-theory1);
   }
-  .task-chip.done-chip { opacity: 0.35; text-decoration: line-through; }
-  .more-label { font-size: 9px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
-
-  /* phase colors for chips */
-  .chip-p1 { background: var(--p1b); color: var(--p1); }
-  .chip-p2 { background: var(--p2b); color: var(--p2); }
-  .chip-p3 { background: var(--p3b); color: var(--p3); }
-  .chip-p4 { background: var(--p4b); color: var(--p4); }
-  .chip-p5 { background: var(--p5b); color: var(--p5); }
-
-  /* ── modal ── */
-  .modal-bg {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-bg.open { display: flex; }
-  .modal {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius);
-    width: 100%;
-    max-width: 460px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 24px;
-    animation: slideUp 0.2s ease;
-  }
-  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-  .modal-date {
+  .subtitle {
+    font-size: .7rem;
+    color: var(--muted);
+    letter-spacing: .08em;
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text2);
+  }
+  .dday-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: .8rem;
+    color: var(--bg);
+    background: var(--accent-final);
+    padding: 4px 12px;
+    border-radius: 2px;
+    letter-spacing: .06em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: clamp(32px,6vw,80px) clamp(16px,4vw,64px) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .hero-title {
+    font-size: clamp(1.8rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+  .hero-title .highlight {
+    color: var(--accent-theory1);
+    position: relative;
+  }
+  .progress-block {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    color: var(--muted);
+    letter-spacing: .1em;
+    margin-bottom: 6px;
+  }
+  .progress-bar-wrap {
+    width: 220px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-theory1), var(--accent-mock));
+    border-radius: 3px;
+    transition: width .4s ease;
+  }
+  .progress-numbers {
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .progress-numbers span { color: var(--accent-theory1); }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    padding: 24px clamp(16px,4vw,64px) 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .72rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── PHASE SECTION ── */
+  .phases {
+    padding: 0 clamp(16px,4vw,64px);
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     margin-bottom: 16px;
   }
-  .modal-close {
-    float: right;
-    background: none;
-    border: none;
-    color: var(--text3);
-    font-size: 18px;
-    cursor: pointer;
-    line-height: 1;
-    margin-top: -2px;
+  .phase-line {
+    height: 1px;
+    flex: 1;
+    background: var(--border);
   }
-  .modal-close:hover { color: var(--text2); }
-  .modal-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 9px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
+  .phase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
   }
-  .modal-item:last-child { border-bottom: none; }
-  .modal-cb {
-    width: 17px; height: 17px;
-    border-radius: 4px;
-    border: 1.5px solid var(--border2);
-    flex-shrink: 0;
-    margin-top: 2px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-  }
-  .modal-cb.checked { background: var(--p1); border-color: var(--p1); }
-  .modal-cb svg { display: none; }
-  .modal-cb.checked svg { display: block; }
-  .modal-text { font-size: 13px; line-height: 1.5; color: var(--text); transition: color 0.15s; }
-  .modal-text.done { color: var(--done-text); text-decoration: line-through; }
-  .phase-tag {
-    display: inline-block;
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 3px;
-    margin-bottom: 4px;
+  .phase-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: .02em;
   }
 
-  /* ── list view ── */
-  .phase-card {
-    background: var(--bg2);
+  /* ── DAYS GRID ── */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  /* ── DAY CARD ── */
+  .day-card {
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 14px;
+    border-radius: 6px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    position: relative;
     overflow: hidden;
   }
-  .phase-card-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px;
-    cursor: pointer;
-    transition: background 0.15s;
+  .day-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 6px 0 0 6px;
+    background: var(--card-color, var(--border));
   }
-  .phase-card-header:hover { background: var(--bg3); }
-  .phase-card-left { display: flex; align-items: center; gap: 10px; }
-  .phase-bar { width: 3px; height: 32px; border-radius: 2px; flex-shrink: 0; }
-  .phase-name { font-size: 13px; font-weight: 500; }
-  .phase-range { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 2px; }
-  .phase-right { display: flex; align-items: center; gap: 10px; }
-  .phase-pct { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); }
-  .mini-bar { width: 60px; height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
-  .mini-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
-  .chevron { font-size: 11px; color: var(--text3); transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
+  .day-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-color, var(--border));
+  }
+  .day-card.done {
+    background: var(--done-bg);
+    opacity: .65;
+  }
+  .day-card.done .card-title { text-decoration: line-through; text-decoration-color: var(--muted); }
+  .day-card.today {
+    border-color: var(--card-color, var(--accent-theory1));
+    background: rgba(200,169,110,.04);
+  }
+  .day-card.today::after {
+    content: 'TODAY';
+    position: absolute;
+    top: 10px; right: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: .55rem;
+    letter-spacing: .12em;
+    color: var(--card-color, var(--accent-theory1));
+    background: rgba(200,169,110,.12);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
 
-  .phase-body { display: none; border-top: 1px solid var(--border); }
-  .phase-body.open { display: block; }
-  .week-block { padding: 10px 18px 4px; border-bottom: 1px solid var(--border); }
-  .week-block:last-child { border-bottom: none; }
-  .week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 6px; text-transform: uppercase; }
-  .list-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 7px 0;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border);
-    transition: opacity 0.15s;
-  }
-  .list-item:last-child { border-bottom: none; }
-  .list-cb {
-    width: 15px; height: 15px;
-    border-radius: 3px;
-    border: 1.5px solid var(--border2);
-    flex-shrink: 0; margin-top: 2px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-  }
-  .list-cb.checked { background: var(--p1); border-color: var(--p1); }
-  .list-cb svg { display: none; }
-  .list-cb.checked svg { display: block; }
-  .list-text { font-size: 12px; color: var(--text); line-height: 1.5; transition: color 0.15s; }
-  .list-text.done { color: var(--done-text); text-decoration: line-through; }
-
-  /* ── legend ── */
-  .legend {
-    display: flex; flex-wrap: wrap; gap: 10px;
-    margin-bottom: 22px;
-    font-size: 11px;
-  }
-  .legend-item { display: flex; align-items: center; gap: 5px; color: var(--text2); }
-  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-
-  /* ── stats bar ── */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  .card-meta {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 28px;
+    margin-bottom: 8px;
   }
-  .stat-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
+  .card-dday {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    color: var(--card-color, var(--muted));
+    letter-spacing: .06em;
+    opacity: .85;
   }
-  .stat-label { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-  .stat-val { font-size: 22px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
-  .stat-val span { font-size: 13px; color: var(--text3); }
+  .card-date {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    color: var(--muted);
+  }
+  .card-check {
+    margin-left: auto;
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .day-card.done .card-check {
+    background: var(--done-check);
+    border-color: var(--done-check);
+  }
+  .card-check svg { display: none; }
+  .day-card.done .card-check svg { display: block; }
 
-  @media (max-width: 640px) {
-    .main { padding: 16px; }
-    header { padding: 14px 16px; }
-    .cal-grid { gap: 2px; }
-    .day-cell { min-height: 72px; padding: 5px; }
-    .task-chip { font-size: 9px; }
-    .prog-bar { width: 80px; }
+  .card-title {
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    padding-right: 24px;
+  }
+  .card-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .card-items li {
+    font-size: .7rem;
+    color: var(--muted);
+    line-height: 1.4;
+    padding-left: 10px;
+    position: relative;
+  }
+  .card-items li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--card-color, var(--muted));
+    opacity: .7;
+  }
+
+  /* ── EXAM DAY ── */
+  .exam-day {
+    background: linear-gradient(135deg, #1a0808, #200d0d);
+    border: 1px solid var(--accent-final);
+    border-radius: 8px;
+    padding: 28px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .exam-day::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(224,101,101,.08), transparent 60%);
+  }
+  .exam-day-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--accent-final);
+    margin-bottom: 10px;
+  }
+  .exam-day-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .exam-day-sub {
+    margin-top: 8px;
+    font-size: .75rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    padding: 0 clamp(16px,4vw,64px);
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: .68rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-chip .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 60px;
+    padding: 20px clamp(16px,4vw,64px);
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 520px) {
+    .days-grid { grid-template-columns: 1fr; }
+    .progress-bar-wrap { width: 160px; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <div class="header-left">
-    <div class="logo">Visual Design</div>
-    <div class="title">필기 학습 캘린더</div>
-    <div class="dday-pill" id="dday">D-?</div>
+    <span class="logo">PLANNER</span>
+    <span class="subtitle">시각디자인 산업기사 · 2026</span>
   </div>
-  <div class="header-right">
-    <div class="prog-wrap">
-      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
-      <div class="prog-text" id="prog-text">0%</div>
-    </div>
-    <button class="reset-btn" onclick="resetAll()">초기화</button>
-  </div>
+  <span class="dday-badge" id="ddayBadge">D-?</span>
 </header>
 
-<div class="main">
-  <!-- stats -->
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-label">전체 항목</div><div class="stat-val" id="s-total">0<span>개</span></div></div>
-    <div class="stat-card"><div class="stat-label">완료</div><div class="stat-val" id="s-done">0<span>개</span></div></div>
-    <div class="stat-card"><div class="stat-label">남은 항목</div><div class="stat-val" id="s-left">0<span>개</span></div></div>
-    <div class="stat-card"><div class="stat-label">시험까지</div><div class="stat-val" id="s-days">0<span>일</span></div></div>
-  </div>
-
-  <!-- legend -->
-  <div class="legend" id="legend"></div>
-
-  <!-- view toggle -->
-  <div class="view-toggle">
-    <button class="view-btn active" id="btn-cal" onclick="switchView('cal')">캘린더 보기</button>
-    <button class="view-btn" id="btn-list" onclick="switchView('list')">목록 보기</button>
-  </div>
-
-  <!-- calendar -->
-  <div class="cal-section active" id="cal-section"></div>
-
-  <!-- list -->
-  <div class="list-section" id="list-section"></div>
-</div>
-
-<!-- modal -->
-<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <button class="modal-close" onclick="document.getElementById('modal-bg').classList.remove('open')">✕</button>
-    <div class="modal-date" id="modal-date"></div>
-    <div id="modal-body"></div>
+<!-- HERO -->
+<div class="hero">
+  <h1 class="hero-title">
+    시각디자인<br>
+    <span class="highlight">산업기사</span><br>
+    학습 플래너
+  </h1>
+  <div class="progress-block">
+    <div class="progress-label">OVERALL PROGRESS</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-numbers"><span id="doneCount">0</span> / <span id="totalCount">0</span> 완료</div>
   </div>
 </div>
+
+<!-- STATS -->
+<div class="stats-bar" id="statsBar"></div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-theory1)"></span>Subject 1 이론</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-theory2)"></span>Subject 2 이론</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-theory3)"></span>Subject 3 이론</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-mock)"></span>모의고사</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-past)"></span>기출문제</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-rest)"></span>복습·정리</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--accent-final)"></span>시험 당일</div>
+</div>
+
+<div class="phases" id="phases"></div>
+
+<footer>
+  <span>시각디자인 산업기사 · 2026.05.09 시험</span>
+  <span>카드를 클릭하여 완료 체크 ✓</span>
+</footer>
 
 <script>
+// ── 학습 플랜 데이터 ──
+const PLAN = [
+  {
+    phase: 'PHASE 01',
+    title: 'Subject 1 — 시각디자인 조사·분석',
+    color: 'var(--accent-theory1)',
+    days: [
+      { date: '2026-04-01', label: '이론', title: 'Part 01 · Ch 01–02', items: ['디자인의 개요 (디자인 정의·분류·원리)', '시각 커뮤니케이션의 이해'] },
+      { date: '2026-04-02', label: '이론', title: 'Part 01 · Ch 03–04', items: ['시각디자인 관리', '시장 환경 조사 및 분석'] },
+      { date: '2026-04-03', label: '이론', title: 'Part 01 · Ch 05–06', items: ['디자인 트렌드 조사 및 분석', '사용자 조사 및 분석'] },
+      { date: '2026-04-04', label: '이론', title: 'Part 02 · Ch 01–02', items: ['프로젝트 결과보고서 정리', '데이터베이스 관리'] },
+      { date: '2026-04-05', label: '이론', title: 'Part 02 · Ch 03–04', items: ['지식재산권 확보', '디자인 저작권 관리'] },
+      { date: '2026-04-06', label: '이론', title: 'Part 03 · Ch 01–02', items: ['디자인 자료 조사', '디자인 자료 선정'] },
+      { date: '2026-04-07', label: '복습', title: 'Subject 1 전체 복습', items: ['제1과목 연습문제 풀기', '오답 정리 & 취약 개념 재독'] },
+    ]
+  },
+  {
+    phase: 'PHASE 02',
+    title: 'Subject 2 — 시각디자인 기획 구상',
+    color: 'var(--accent-theory2)',
+    days: [
+      { date: '2026-04-08', label: '이론', title: 'Part 01 · Ch 01–02', items: ['디자인 요소 수집', '디자인사 (바우하우스·모더니즘 등)'] },
+      { date: '2026-04-09', label: '이론', title: 'Part 01 · Ch 03–04', items: ['아트웍', '베리에이션'] },
+      { date: '2026-04-10', label: '이론', title: 'Part 02 · Ch 01–02', items: ['디자인 요소 응용', '아트웍 응용화'] },
+      { date: '2026-04-11', label: '이론', title: 'Part 03 · Ch 01–02', items: ['프로젝트 준비', '프로젝트 계획'] },
+      { date: '2026-04-12', label: '이론', title: 'Part 03 · Ch 03', items: ['프로젝트 계약문서 준비'] },
+      { date: '2026-04-13', label: '복습', title: 'Subject 2 전체 복습', items: ['제2과목 연습문제 풀기', '오답 정리'] },
+      { date: '2026-04-14', label: '복습', title: 'Sub 1+2 통합 복습', items: ['두 과목 연결 개념 정리', '자주 나오는 용어·이론 암기'] },
+    ]
+  },
+  {
+    phase: 'PHASE 03',
+    title: 'Subject 3 — 시각디자인 제작',
+    color: 'var(--accent-theory3)',
+    days: [
+      { date: '2026-04-15', label: '이론', title: 'Part 01 · Ch 01–02', items: ['아이디어 구상 및 전개', '아이디어 스케치 구상 및 전개'] },
+      { date: '2026-04-16', label: '이론', title: 'Part 02 · Ch 01–02', items: ['아이디어 적용', '비주얼 방향 전개 및 적용'] },
+      { date: '2026-04-17', label: '이론', title: 'Part 03 · Ch 01–02', items: ['편집디자인 레이아웃 구현', '타이포그래피 적용'] },
+      { date: '2026-04-18', label: '이론', title: 'Part 03 · Ch 03', items: ['색상 선택 (색채 이론·배색)'] },
+      { date: '2026-04-19', label: '이론', title: 'Part 04 · Ch 01–02', items: ['완성 레이아웃 수정', '인쇄상태 점검'] },
+      { date: '2026-04-20', label: '이론', title: 'Part 04 · Ch 03', items: ['후가공 상태 점검'] },
+      { date: '2026-04-21', label: '복습', title: '전 과목 이론 총정리', items: ['제3과목 연습문제 풀기', '3과목 전체 취약파트 집중 재학습'] },
+    ]
+  },
+  {
+    phase: 'PHASE 04',
+    title: '산업기사 모의고사 12회',
+    color: 'var(--accent-mock)',
+    days: [
+      { date: '2026-04-22', label: '모의', title: '1회 + 2회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-23', label: '모의', title: '3회 + 4회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-24', label: '모의', title: '5회 + 6회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-25', label: '모의', title: '7회 + 8회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-26', label: '모의', title: '9회 + 10회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-27', label: '모의', title: '11회 + 12회 모의고사', items: ['각 40문항 풀기', '즉시 채점 & 오답 메모'] },
+      { date: '2026-04-28', label: '복습', title: '1~6회 오답 정리', items: ['틀린 문항 이론 재확인', '빈출 유형 패턴 파악'] },
+      { date: '2026-04-29', label: '복습', title: '7~12회 오답 정리', items: ['틀린 문항 이론 재확인', '모의고사 점수 추이 체크'] },
+    ]
+  },
+  {
+    phase: 'PHASE 05',
+    title: '기사 기출문제 (2011–2022)',
+    color: 'var(--accent-past)',
+    days: [
+      { date: '2026-04-30', label: '기출', title: '2011~2013년 기출', items: ['A형 3개년 풀기', '이론 취약 파트 재학습'] },
+      { date: '2026-05-01', label: '기출', title: '2014~2016년 기출', items: ['A형·B형 3개년 풀기', '출제 경향 분석'] },
+      { date: '2026-05-02', label: '기출', title: '2017~2019년 기출', items: ['A형 3개년 풀기', '오답 개념 정리'] },
+      { date: '2026-05-03', label: '기출', title: '2020~2022년 기출', items: ['A형 3개년 풀기 (최신 경향)', '최빈출 토픽 정리'] },
+      { date: '2026-05-04', label: '복습', title: '기출 오답 집중 정리', items: ['반복 오답 개념 암기', '헷갈리는 용어 최종 정리'] },
+      { date: '2026-05-05', label: '복습', title: '전체 최약점 파트 집중 보완', items: ['점수 낮은 과목 집중', '주요 공식·법칙 암기 재확인'] },
+    ]
+  },
+  {
+    phase: 'PHASE 06',
+    title: '최종 마무리',
+    color: 'var(--accent-final)',
+    days: [
+      { date: '2026-05-06', label: '정리', title: '핵심 이론 최종 요약본 정리', items: ['각 과목별 핵심 키워드 1장 요약', '자주 틀리는 유형 최종 점검'] },
+      { date: '2026-05-07', label: '정리', title: '모의고사 1~2회 재도전 + 컨디션 조절', items: ['실전처럼 시간 재고 풀기', '식사·수면 루틴 정상화'] },
+      { date: '2026-05-08', label: '정리', title: 'D-1 · 가볍게 훑고 쉬기', items: ['요약본 한 번 훑기', '시험장 위치·준비물 확인', '충분한 수면 ★'] },
+    ]
+  },
+];
+
+// ── 시험일 ──
 const EXAM_DATE = new Date('2026-05-09');
-const STORAGE_KEY = 'vd2026_v2';
 
-const PHASES = [
-  {
-    id:'p1', label:'1단계 이론 기초', color:'#7f77dd', bg:'#2a2548',
-    weeks:[
-      {label:'1주차 3/30-4/5', days:{
-        '2026-03-30':['디자인의 개요 — 정의·분류·역할 이해'],
-        '2026-03-31':['시각 커뮤니케이션 — 기호·아이콘·인포그래픽'],
-        '2026-04-01':['시각디자인 관리 — 브랜드·CI/BI 개념'],
-        '2026-04-02':['디자인사 — 바우하우스·아르누보·모더니즘'],
-        '2026-04-03':['인강 1강~4강 수강 완료'],
-        '2026-04-04':['1주차 전체 복습 및 핵심 용어 정리'],
-        '2026-04-05':['오답 노트 작성 (1주차)'],
-      }},
-      {label:'2주차 4/6-4/12', days:{
-        '2026-04-06':['시장 환경 조사 — SWOT·3C 분석'],
-        '2026-04-07':['디자인 트렌드 조사 — 트렌드 리포트 읽기'],
-        '2026-04-08':['사용자 조사 — 페르소나·사용자 여정 지도'],
-        '2026-04-09':['디자인 요소 수집 — 조형 요소(점·선·면·색)'],
-        '2026-04-10':['인강 5강~8강 수강 완료'],
-        '2026-04-11':['2주차 전체 복습'],
-        '2026-04-12':['오답 노트 작성 (2주차)'],
-      }},
-    ]
-  },
-  {
-    id:'p2', label:'2단계 기획·제작', color:'#1d9e75', bg:'#0c3326',
-    weeks:[
-      {label:'3주차 4/13-4/19', days:{
-        '2026-04-13':['아트웍 — 일러스트레이션·사진·그래픽 활용'],
-        '2026-04-14':['베리에이션 — 디자인 변형 및 응용 개념'],
-        '2026-04-15':['디자인 요소 응용 — 레이아웃·그리드 시스템'],
-        '2026-04-16':['프로젝트 준비·계획 — 기획서 구조 이해'],
-        '2026-04-17':['프로젝트 계약문서 — 저작권·계약 기초'],
-        '2026-04-18':['인강 9강~12강 수강 완료'],
-        '2026-04-19':['3주차 전체 복습'],
-      }},
-      {label:'4주차 전반 4/20-4/21', days:{
-        '2026-04-20':['비주얼 아이데이션 — 아이디어 구상·스케치 방법론'],
-        '2026-04-21':['아이디어 적용 — 컨셉 보드·무드 보드 제작'],
-      }},
-    ]
-  },
-  {
-    id:'p3', label:'3단계 기출 집중', color:'#378add', bg:'#0c2a44',
-    weeks:[
-      {label:'4주차 후반 4/22-4/24', days:{
-        '2026-04-22':['편집디자인 레이아웃 — 판형·여백·그리드'],
-        '2026-04-23':['타이포그래피 — 서체·자간·행간·가독성'],
-        '2026-04-24':['색상 선택 — 색채 이론·배색·색의 심리'],
-      }},
-      {label:'5주차 전반 4/25-4/28', days:{
-        '2026-04-25':['후가공 — 코팅·박·형압 종류','지식재산권·저작권 개념 정리'],
-        '2026-04-26':['2011년 기출문제 풀기 + 오답 노트','2012년 기출문제 풀기 + 오답 노트'],
-        '2026-04-27':['2013년 기출문제 풀기 + 오답 노트','2014년 기출문제 풀기 + 오답 노트'],
-        '2026-04-28':['2015~2016년 기출문제 풀기 + 오답 노트','자주 나오는 키워드 30개 암기'],
-      }},
-    ]
-  },
-  {
-    id:'p4', label:'4단계 모의고사', color:'#ba7517', bg:'#3a2308',
-    weeks:[
-      {label:'6주차 4/29-5/3', days:{
-        '2026-04-29':['2017년 기출문제 풀기 + 오답 노트','2018년 기출문제 풀기 + 오답 노트'],
-        '2026-04-30':['2019년 기출문제 풀기 + 오답 노트','2020년 기출문제 풀기 + 오답 노트'],
-        '2026-05-01':['2021년 기출문제 풀기 + 오답 노트','2022년 기출문제 풀기 + 오답 노트'],
-        '2026-05-02':['모의고사 1~3회 풀기 + 오답 분석'],
-        '2026-05-03':['모의고사 4~6회 풀기 + 오답 분석'],
-      }},
-      {label:'7주차 전반 5/4-5/5', days:{
-        '2026-05-04':['모의고사 7~9회 풀기 + 오답 분석','고난도 문항 유형 정리'],
-        '2026-05-05':['모의고사 10~12회 풀기 + 오답 분석','취약 파트 이론 재정리'],
-      }},
-    ]
-  },
-  {
-    id:'p5', label:'5단계 최종 마무리', color:'#d85a30', bg:'#3d1a0c',
-    weeks:[
-      {label:'시험 전날·당일 5/6-5/9', days:{
-        '2026-05-06':['오답 노트 전체 최종 복습','핵심 키워드 암기 리스트 2회 반복'],
-        '2026-05-07':['자주 출제 공식·개념 빠르게 훑기','모의고사 1회 가볍게 실전 연습'],
-        '2026-05-08':['시험 준비물 확인 — 수험표·신분증·필기구','충분한 수면으로 컨디션 조절'],
-        '2026-05-09':['시험 당일 핵심 키워드만 가볍게 확인','시각디자인 기사 필기 시험 응시!'],
-      }},
-    ]
-  },
-];
+// ── 오늘 ──
+function todayStr() {
+  const d = new Date();
+  return d.toISOString().slice(0,10);
+}
 
-const MONTHS = [
-  { year:2026, month:3, label:'March 2026' },
-  { year:2026, month:4, label:'April 2026' },
-  { year:2026, month:5, label:'May 2026' },
-];
-const DAY_LABELS = ['일','월','화','수','목','금','토'];
+// ── D-day 계산 ──
+function calcDday(dateStr) {
+  const t = new Date(dateStr + 'T00:00:00');
+  const diff = Math.round((EXAM_DATE - t) / 86400000);
+  if (diff > 0) return `D-${diff}`;
+  if (diff === 0) return 'D-DAY';
+  return `D+${Math.abs(diff)}`;
+}
 
-let state = {};
+// ── localStorage key ──
+const STORAGE_KEY = 'vd_planner_2026';
 
-function toKey(y,m,d){ return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-function loadState(){ try{ const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); }catch(e){} }
-function saveState(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }catch(e){} }
+function loadDone() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveDone(obj) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+}
 
-function getAllTasks(){
-  const map = {};
-  PHASES.forEach(ph => ph.weeks.forEach(wk => {
-    Object.entries(wk.days).forEach(([date, tasks]) => {
-      if(!map[date]) map[date]=[];
-      tasks.forEach((t,i)=> map[date].push({key:`${date}_${ph.id}_${i}`,text:t,phase:ph}));
+// ── 렌더 ──
+function render() {
+  const done = loadDone();
+  const today = todayStr();
+  const phasesEl = document.getElementById('phases');
+  phasesEl.innerHTML = '';
+
+  // D-day badge
+  const nowDiff = Math.round((EXAM_DATE - new Date()) / 86400000);
+  document.getElementById('ddayBadge').textContent = nowDiff > 0 ? `D-${nowDiff}` : nowDiff === 0 ? 'D-DAY' : '시험 종료';
+
+  let totalCards = 0, doneCount = 0;
+
+  PLAN.forEach(phase => {
+    const section = document.createElement('section');
+
+    // phase header
+    const phHeader = document.createElement('div');
+    phHeader.className = 'phase-header';
+    phHeader.innerHTML = `
+      <div class="phase-line"></div>
+      <span class="phase-label">${phase.phase}</span>
+      <div class="phase-line"></div>
+    `;
+    section.appendChild(phHeader);
+
+    const phTitle = document.createElement('h2');
+    phTitle.className = 'phase-title';
+    phTitle.style.color = phase.color;
+    phTitle.style.marginBottom = '16px';
+    phTitle.textContent = phase.title;
+    section.appendChild(phTitle);
+
+    const grid = document.createElement('div');
+    grid.className = 'days-grid';
+
+    phase.days.forEach(day => {
+      totalCards++;
+      const isDone = !!done[day.date];
+      if (isDone) doneCount++;
+      const isToday = day.date === today;
+
+      const card = document.createElement('div');
+      card.className = 'day-card' + (isDone ? ' done' : '') + (isToday ? ' today' : '');
+      card.style.setProperty('--card-color', phase.color);
+
+      const dday = calcDday(day.date);
+      const dateDisp = day.date.slice(5).replace('-', '/');
+
+      card.innerHTML = `
+        <div class="card-meta">
+          <span class="card-dday">${dday}</span>
+          <span class="card-date">${dateDisp}</span>
+          <div class="card-check">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="card-title">${day.title}</div>
+        <ul class="card-items">${day.items.map(i => `<li>${i}</li>`).join('')}</ul>
+      `;
+
+      card.addEventListener('click', () => {
+        const d = loadDone();
+        d[day.date] ? delete d[day.date] : (d[day.date] = true);
+        saveDone(d);
+        render();
+      });
+
+      grid.appendChild(card);
     });
-  }));
-  return map;
-}
-const ALL_TASKS = getAllTasks();
 
-function totalCount(){ return Object.values(ALL_TASKS).reduce((a,b)=>a+b.length,0); }
-function doneCount(){ return Object.values(state).filter(Boolean).length; }
-
-function updateStats(){
-  const total=totalCount(), done=doneCount(), left=total-done;
-  const pct=Math.round(done/total*100);
-  document.getElementById('s-total').innerHTML=total+'<span>개</span>';
-  document.getElementById('s-done').innerHTML=done+'<span>개</span>';
-  document.getElementById('s-left').innerHTML=left+'<span>개</span>';
-  document.getElementById('prog-fill').style.width=pct+'%';
-  document.getElementById('prog-text').textContent=pct+'%';
-  const today=new Date(); today.setHours(0,0,0,0);
-  const diff=Math.ceil((EXAM_DATE-today)/(86400000));
-  document.getElementById('s-days').innerHTML=(diff>=0?diff:0)+'<span>일</span>';
-  const ddEl=document.getElementById('dday');
-  if(diff>0) ddEl.textContent='D-'+diff;
-  else if(diff===0) ddEl.textContent='D-DAY';
-  else ddEl.textContent='시험 완료';
-}
-
-function renderLegend(){
-  const el=document.getElementById('legend');
-  el.innerHTML=PHASES.map(p=>`<div class="legend-item"><div class="legend-dot" style="background:${p.color}"></div>${p.label}</div>`).join('');
-}
-
-function renderCalendar(){
-  const el=document.getElementById('cal-section');
-  const today=new Date(); today.setHours(0,0,0,0);
-  let html='';
-  MONTHS.forEach(({year,month,label})=>{
-    html+=`<div class="month-block"><div class="month-title">${label}</div><div class="cal-grid">`;
-    DAY_LABELS.forEach(d=>{ html+=`<div class="day-header">${d}</div>`; });
-    const firstDay=new Date(year,month-1,1).getDay();
-    for(let i=0;i<firstDay;i++) html+=`<div class="day-cell empty"></div>`;
-    const daysInMonth=new Date(year,month,0).getDate();
-    for(let d=1;d<=daysInMonth;d++){
-      const key=toKey(year,month,d);
-      const tasks=ALL_TASKS[key]||[];
-      const isToday=new Date(year,month-1,d).getTime()===today.getTime();
-      const hasTasks=tasks.length>0;
-      const show=tasks.slice(0,2);
-      const more=tasks.length-2;
-      const todayDot=isToday?'<div class="today-dot"></div>':'';
-      let chips=show.map(t=>{
-        const cls='chip-'+t.phase.id+(state[t.key]?' done-chip':'');
-        return `<span class="task-chip ${cls}">${t.text}</span>`;
-      }).join('');
-      if(more>0) chips+=`<div class="more-label">+${more}개 더</div>`;
-      html+=`<div class="day-cell${hasTasks?' has-tasks':''}${isToday?' today':''}" ${hasTasks?`onclick="openModal('${key}')"`:''}><div class="day-num"><span>${d}</span>${todayDot}</div>${chips}</div>`;
-    }
-    html+=`</div></div>`;
+    section.appendChild(grid);
+    phasesEl.appendChild(section);
   });
-  el.innerHTML=html;
+
+  // 시험 당일 카드
+  const examSection = document.createElement('section');
+  const phHeader2 = document.createElement('div');
+  phHeader2.className = 'phase-header';
+  phHeader2.innerHTML = `<div class="phase-line"></div><span class="phase-label">EXAM DAY</span><div class="phase-line"></div>`;
+  examSection.appendChild(phHeader2);
+  const examCard = document.createElement('div');
+  examCard.className = 'exam-day';
+  examCard.innerHTML = `
+    <div class="exam-day-label">2026.05.09 · SATURDAY</div>
+    <div class="exam-day-title">🎯 시각디자인 산업기사 필기 시험</div>
+    <div class="exam-day-sub">지금까지 쌓은 실력을 믿고 — 침착하게, 끝까지.</div>
+  `;
+  examSection.appendChild(examCard);
+  phasesEl.appendChild(examSection);
+
+  // 진행률 업데이트
+  document.getElementById('doneCount').textContent = doneCount;
+  document.getElementById('totalCount').textContent = totalCards;
+  const pct = totalCards ? Math.round(doneCount / totalCards * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // 통계 칩
+  const statsBar = document.getElementById('statsBar');
+  statsBar.innerHTML = `
+    <div class="stat-chip"><span class="dot" style="background:var(--accent-theory1)"></span>이론 21일</div>
+    <div class="stat-chip"><span class="dot" style="background:var(--accent-mock)"></span>모의고사 8일</div>
+    <div class="stat-chip"><span class="dot" style="background:var(--accent-past)"></span>기출 6일</div>
+    <div class="stat-chip"><span class="dot" style="background:var(--accent-rest)"></span>정리·복습 3일</div>
+    <div class="stat-chip" style="margin-left:auto">진행률 ${pct}%</div>
+  `;
 }
 
-function renderList(){
-  const el=document.getElementById('list-section');
-  el.innerHTML=PHASES.map(ph=>{
-    let total=0,done=0;
-    ph.weeks.forEach(wk=>Object.values(wk.days).forEach(tasks=>tasks.forEach((_,i)=>{
-      const key=Object.keys(wk.days).find(date=>wk.days[date].indexOf(wk.days[Object.keys(wk.days)[0]][0])>=0);
-      total++;
-    })));
-    const allKeys=[];
-    ph.weeks.forEach(wk=>Object.entries(wk.days).forEach(([date,tasks])=>tasks.forEach((_,i)=>allKeys.push(`${date}_${ph.id}_${i}`))));
-    total=allKeys.length;
-    done=allKeys.filter(k=>state[k]).length;
-    const pct=total?Math.round(done/total*100):0;
-    let weeksHtml=ph.weeks.map(wk=>{
-      let itemsHtml=Object.entries(wk.days).map(([date,tasks])=>
-        tasks.map((t,i)=>{
-          const k=`${date}_${ph.id}_${i}`;
-          const chk=state[k]?'checked':'';
-          const doneClass=state[k]?'done':'';
-          return `<div class="list-item" onclick="toggleKey('${k}')">
-            <div class="list-cb ${chk}"><svg width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5L3.5 6L8 1" stroke="white" stroke-width="2" fill="none"/></svg></div>
-            <span class="list-text ${doneClass}">${t}</span>
-          </div>`;
-        }).join('')
-      ).join('');
-      return `<div class="week-block"><div class="week-label">${wk.label}</div>${itemsHtml}</div>`;
-    }).join('');
-    return `<div class="phase-card">
-      <div class="phase-card-header" onclick="togglePhase('${ph.id}')">
-        <div class="phase-card-left">
-          <div class="phase-bar" style="background:${ph.color}"></div>
-          <div><div class="phase-name">${ph.label}</div></div>
-        </div>
-        <div class="phase-right">
-          <div class="phase-pct">${done}/${total}</div>
-          <div class="mini-bar"><div class="mini-fill" style="background:${ph.color};width:${pct}%"></div></div>
-          <div class="chevron" id="chev-${ph.id}">▼</div>
-        </div>
-      </div>
-      <div class="phase-body" id="pbody-${ph.id}">${weeksHtml}</div>
-    </div>`;
-  }).join('');
-}
-
-function togglePhase(id){
-  const body=document.getElementById('pbody-'+id);
-  const chev=document.getElementById('chev-'+id);
-  body.classList.toggle('open');
-  chev.classList.toggle('open');
-}
-
-let currentModalDate=null;
-function openModal(dateKey){
-  const tasks=ALL_TASKS[dateKey]||[]; if(!tasks.length) return;
-  const [y,m,d]=dateKey.split('-');
-  document.getElementById('modal-date').textContent=`${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
-  const body=document.getElementById('modal-body');
-  body.innerHTML=tasks.map(t=>{
-    const chk=state[t.key]?'checked':'';
-    const done=state[t.key]?'done':'';
-    return `<div class="modal-item" onclick="toggleKey('${t.key}')">
-      <div class="modal-cb ${chk}"><svg width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5L3.5 6L8 1" stroke="white" stroke-width="2" fill="none"/></svg></div>
-      <span class="modal-text ${done}">${t.text}</span>
-    </div>`;
-  }).join('');
-  currentModalDate=dateKey;
-  document.getElementById('modal-bg').classList.add('open');
-}
-function closeModal(e){
-  if(e.target===document.getElementById('modal-bg'))
-    document.getElementById('modal-bg').classList.remove('open');
-}
-
-function toggleKey(key){
-  state[key]=!state[key];
-  saveState();
-  refreshAll();
-  if(currentModalDate) openModal(currentModalDate);
-}
-
-function resetAll(){
-  if(!confirm('모든 체크를 초기화할까요?')) return;
-  state={};
-  saveState();
-  refreshAll();
-  document.getElementById('modal-bg').classList.remove('open');
-}
-
-function refreshAll(){
-  renderCalendar();
-  renderList();
-  updateStats();
-}
-
-function switchView(v){
-  document.getElementById('cal-section').classList.toggle('active', v==='cal');
-  document.getElementById('list-section').classList.toggle('active', v==='list');
-  document.getElementById('btn-cal').classList.toggle('active', v==='cal');
-  document.getElementById('btn-list').classList.toggle('active', v==='list');
-}
-
-loadState();
-renderLegend();
-refreshAll();
+render();
 </script>
 </body>
 </html>
