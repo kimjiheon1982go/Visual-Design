@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT 모의고사 — 디자인 관리 · 시장조사 · 포지셔닝</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12202e;
+    --cream: #f4f7fb;
+    --warm: #fdfeff;
+    --accent: #1a5276;
+    --accent2: #2e86c1;
+    --gold: #d4ac0d;
+    --gold-light: #f0c14b;
+    --muted: #6c7a89;
+    --border: #c8d6e5;
+    --correct: #1e8449;
+    --correct-bg: #d5f5e3;
+    --wrong: #922b21;
+    --wrong-bg: #fdecea;
+    --show: #1a5276;
+    --show-bg: #d6eaf8;
+    --opt-hover: #eaf2fb;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: var(--ink);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 24px rgba(0,0,0,.35);
+  }
+  .header-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .header-left { flex: 0 0 auto; }
+  .header-badge {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 3px;
+  }
+  .header-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .header-progress { flex: 1; }
+  .prog-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255,255,255,.45);
+    margin-bottom: 5px;
+  }
+  .prog-track {
+    height: 5px;
+    background: rgba(255,255,255,.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--gold));
+    border-radius: 3px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .header-score {
+    flex: 0 0 auto;
+    text-align: right;
+  }
+  .score-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--gold-light);
+    line-height: 1;
+    display: block;
+  }
+  .score-label { font-size: 10px; color: rgba(255,255,255,.4); }
+
+  /* ── BODY ── */
+  .app-body {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  /* ── RESULT BANNER ── */
+  .result-banner {
+    display: none;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 6px;
+    padding: 32px 40px;
+    margin-bottom: 24px;
+    text-align: center;
+    animation: fadeUp .5s ease;
+  }
+  .result-banner.show { display: block; }
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 58px;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .result-sub { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+  .result-grade {
+    display: inline-block;
+    padding: 6px 22px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: .08em;
+  }
+  .result-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-top: 22px;
+  }
+  .rb { text-align: center; }
+  .rb-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rb-num.c { color: #58d68d; }
+  .rb-num.w { color: #ec7063; }
+  .rb-num.s { color: rgba(255,255,255,.35); }
+  .rb-label { font-size: 11px; color: rgba(255,255,255,.4); }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+    animation: fadeUp .3s ease both;
+  }
+  .q-card:hover { box-shadow: 0 3px 20px rgba(18,32,46,.08); }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .q-card:nth-child(1)  { animation-delay:.02s; }
+  .q-card:nth-child(2)  { animation-delay:.04s; }
+  .q-card:nth-child(3)  { animation-delay:.06s; }
+  .q-card:nth-child(4)  { animation-delay:.08s; }
+  .q-card:nth-child(5)  { animation-delay:.10s; }
+  .q-card:nth-child(6)  { animation-delay:.12s; }
+  .q-card:nth-child(7)  { animation-delay:.14s; }
+  .q-card:nth-child(8)  { animation-delay:.16s; }
+  .q-card:nth-child(9)  { animation-delay:.18s; }
+  .q-card:nth-child(10) { animation-delay:.20s; }
+
+  .q-head {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #f0f6ff 0%, #fafcff 100%);
+  }
+  .q-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--accent);
+    min-width: 34px;
+    line-height: 1;
+    padding-top: 2px;
+    opacity: .7;
+  }
+  .q-meta { flex: 1; }
+  .q-tag {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 7px;
+  }
+  .q-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.78;
+    color: var(--ink);
+  }
+
+  /* ── OPTIONS ── */
+  .q-opts { padding: 4px 0 6px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: background .15s;
+    border-bottom: 1px solid rgba(200,214,229,.35);
+  }
+  .opt:last-child { border-bottom: none; }
+  .opt:hover:not(.disabled) { background: var(--opt-hover); }
+  .opt.disabled { cursor: default; }
+  .opt-label {
+    min-width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: all .2s;
+    margin-top: 1px;
+  }
+  .opt-text {
+    font-size: 13.5px;
+    line-height: 1.72;
+    color: #2c3e50;
+    padding-top: 2px;
+  }
+
+  /* STATE */
+  .opt.selected .opt-label { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+  .opt.selected { background: #eaf4fd; }
+  .opt.correct { background: var(--correct-bg); }
+  .opt.correct .opt-label { background: var(--correct); border-color: var(--correct); color: #fff; }
+  .opt.correct .opt-text { color: var(--correct); font-weight: 500; }
+  .opt.wrong { background: var(--wrong-bg); }
+  .opt.wrong .opt-label { background: var(--wrong); border-color: var(--wrong); color: #fff; }
+  .opt.wrong .opt-text { color: var(--wrong); }
+  .opt.show-correct { background: var(--show-bg); }
+  .opt.show-correct .opt-label { background: var(--show); border-color: var(--show); color: #fff; }
+  .opt.show-correct .opt-text { color: var(--show); font-weight: 500; }
+
+  /* ── EXPLANATION ── */
+  .q-explain {
+    display: none;
+    padding: 13px 22px 16px 60px;
+    border-top: 1px dashed var(--border);
+    background: #f0f5fc;
+  }
+  .q-explain.show { display: block; }
+  .explain-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: .15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 5px;
+  }
+  .explain-text { font-size: 13px; line-height: 1.82; color: #2c3e50; }
+
+  /* ── BUTTONS ── */
+  .submit-row { text-align: center; margin-top: 24px; }
+  .btn-submit {
+    background: var(--accent);
+    color: #fff; border: none;
+    padding: 14px 52px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: .04em;
+    cursor: pointer; border-radius: 4px;
+    transition: background .2s, transform .1s;
+  }
+  .btn-submit:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-retry {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 10px 34px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; border-radius: 4px;
+    margin-top: 12px;
+    transition: background .2s;
+    display: none;
+  }
+  .btn-retry:hover { background: var(--ink); color: #fff; }
+
+  /* ── FLOAT ── */
+  .float-ind {
+    position: fixed; bottom: 22px; right: 22px;
+    background: var(--ink); color: #fff;
+    padding: 9px 16px; border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.22);
+  }
+  .float-ind span { color: var(--gold-light); font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .header-inner { flex-wrap: wrap; }
+    .header-progress { order: 3; flex: 1 0 100%; }
+    .q-head { padding: 16px 14px; }
+    .opt { padding: 11px 14px; }
+    .q-explain { padding: 12px 14px; }
+    .header-title { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-badge">시각디자인기사 CBT</div>
+      <div class="header-title">디자인 관리 · 시장조사 · 포지셔닝</div>
+    </div>
+    <div class="header-progress">
+      <div class="prog-row">
+        <span>진행률</span>
+        <span id="progLabel">0 / 25</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+    <div class="header-score">
+      <span class="score-big" id="scoreNum">—</span>
+      <span class="score-label">점</span>
+    </div>
+  </div>
+</header>
+
+<div class="app-body">
+  <div class="result-banner" id="resultBanner">
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-sub">25문항 · 문항당 4점 · 총 100점</div>
+    <div class="result-grade" id="resultGrade">—</div>
+    <div class="result-breakdown">
+      <div class="rb"><span class="rb-num c" id="rbC">0</span><span class="rb-label">정답</span></div>
+      <div class="rb"><span class="rb-num w" id="rbW">0</span><span class="rb-label">오답</span></div>
+      <div class="rb"><span class="rb-num s" id="rbS">0</span><span class="rb-label">미응답</span></div>
+    </div>
+  </div>
+
+  <div id="quizWrap"></div>
+
+  <div class="submit-row">
+    <button class="btn-submit" id="btnSubmit" onclick="submitQuiz()">채점하기</button><br>
+    <button class="btn-retry" id="btnRetry" onclick="resetQuiz()">다시 풀기</button>
+  </div>
+</div>
+
+<div class="float-ind"><span id="floatNum">0</span> / 25 응답</div>
+
+<script>
+const questions = [
+  {
+    tag: "디자인 관리 · 제1강",
+    text: "기획과 계획의 관계에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "기획은 계획에 따라 나타나는 결과이고, 계획은 사전준비 차원의 행위이다",
+      "기획은 사전준비 차원의 행위이고, 계획은 기획에 따라 나타나는 결과이다",
+      "기획과 계획은 완전히 동일한 의미로 구별 없이 사용된다",
+      "계획은 아이디어를 내는 행위이고, 기획은 미래의 목표이다"
+    ],
+    ans: 1,
+    exp: "계획은 미래의 목표이며, 그 목표를 위해 사전에 준비하는 행위·아이디어를 내는 행위를 기획이라 한다. 기획은 계획을 위한 사전준비 차원의 '행위'이고, 계획은 기획에 따라 나타나는 '결과'이다."
+  },
+  {
+    tag: "디자인 관리 · 전략 개념",
+    text: "전략(strategy)의 어원에 대한 설명으로 옳은 것은?",
+    opts: [
+      "라틴어 'politia'에서 유래하여 '국가의 운영'을 뜻한다",
+      "고대 그리스어 '스트라테고스(strategos)'에서 유래하여 장군·지휘관을 의미한다",
+      "산스크리트어 'Pur'에서 유래하여 '도시'를 뜻한다",
+      "중세 영어 'policie'에서 유래하여 '정책'을 의미한다"
+    ],
+    ans: 1,
+    exp: "전략은 '군대'를 뜻하는 stratis와 '끈다'는 ago가 결합하여 장군·지휘관을 의미하는 고대 그리스어 '스트라테고스(strategos)'에서 유래하였다."
+  },
+  {
+    tag: "디자인 관리 · 프로세스",
+    text: "디자인 관리 측면의 프로세스 순서로 가장 적절한 것은?",
+    opts: [
+      "계획 → 아이디어 수집 → 시장조사 → 아이디어 확정 → 시안 제작 → 프레젠테이션 → 생산/품질관리 → 종합평가",
+      "시장조사 → 계획 → 아이디어 수집 → 아이디어 확정 → 프레젠테이션 → 시안 제작 → 생산/품질관리 → 종합평가",
+      "계획 → 시장조사 → 아이디어 수집 → 아이디어 확정 → 시안 제작 → 프레젠테이션 → 생산/품질관리 → 종합평가",
+      "계획 → 시장조사 → 시안 제작 → 아이디어 수집 → 아이디어 확정 → 프레젠테이션 → 생산/품질관리 → 종합평가"
+    ],
+    ans: 2,
+    exp: "디자인 관리 프로세스: 계획 → 시장조사 → 아이디어 수집 → 아이디어 확정 → 시안 제작 → 프레젠테이션 → 생산/품질관리 → 종합평가"
+  },
+  {
+    tag: "디자인 관리 · 디자인 정책",
+    text: "디자인 정책(design policy)의 어원으로 가장 적절한 것은?",
+    opts: [
+      "고대 그리스어 'strategos' — 장군·지휘관",
+      "라틴어 'ratio' — 이성·계획",
+      "그리스어 'polis(폴리스)' — 도시국가",
+      "산스크리트어 'karma' — 행위·결과"
+    ],
+    ans: 2,
+    exp: "정책의 어원은 그리스어 'polis(폴리스)'로 '도시국가'를 뜻한다. 이후 라틴어 Politia → 중세 영어 policie로 변화하였다."
+  },
+  {
+    tag: "디자인 관리 · 디자인 경영",
+    text: "디자인 경영(design management)의 특성으로 가장 거리가 먼 것은?",
+    opts: [
+      "시각화(Visualization)와 유용성(Usability)에 기초를 둔다",
+      "창의성(Creativity)과 감성(Emotion)을 경영기술로 활용한다",
+      "전통적인 경영방식과 동일한 개념으로 수익 극대화만을 목표로 한다",
+      "시뮬레이션(Simulation)과 기능성(Functionality)에 기초를 둔다"
+    ],
+    ans: 2,
+    exp: "디자인 경영은 전통적인 경영방식과는 다른 개념으로, 시뮬레이션·시각화·유용성·기능성·창의성·감성 등의 경영기술과 디자인 프로세스에 기초를 두고 있다."
+  },
+  {
+    tag: "시각 커뮤니케이션 · 시장조사",
+    text: "시장조사(marketing research)의 3단계 방법으로 올바르게 나열된 것은?",
+    opts: [
+      "시장분석 → 시장실험 → 시장실사",
+      "시장실사 → 시장분석 → 시장실험",
+      "시장분석 → 시장실사 → 시장실험",
+      "시장실험 → 시장분석 → 시장실사"
+    ],
+    ans: 2,
+    exp: "시장조사 3단계: 시장분석(market analysis) → 시장실사(marketing survey) → 시장실험(test marketing). 시장분석은 시장 크기·경쟁사 동향 등을 조사하고, 시장실사는 출시 전 소비자 반응 수집, 시장실험은 실제 출시 후 성과 측정이다."
+  },
+  {
+    tag: "시장조사 · 자료수집",
+    text: "1차 자료(primary data)와 2차 자료(secondary data)에 대한 설명으로 옳은 것은?",
+    opts: [
+      "1차 자료는 과거에 다른 목적으로 수집된 자료이고, 2차 자료는 현재 목적에 맞게 직접 수집한 자료이다",
+      "1차 자료는 시간·비용이 적게 들고, 2차 자료는 시간·비용이 많이 든다",
+      "1차 자료는 직접 조사·수집한 자료이고, 2차 자료는 과거 다른 연구목적으로 수집되어 현재 연구에 활용 가능한 자료이다",
+      "1차 자료와 2차 자료는 동일한 의미로 구별 없이 사용된다"
+    ],
+    ans: 2,
+    exp: "1차 자료는 기존의 2차 자료로부터 얻을 수 없어 직접 조사·수집한 자료이다. 2차 자료는 과거의 다른 연구목적으로 조사된 자료로 현재 연구에 활용 가능한 자료이다. 1차 자료는 2차 자료보다 시간·비용·노력이 더 많이 든다."
+  },
+  {
+    tag: "시장조사 · 자료수집방법",
+    text: "서베이법(survey method)에 해당하지 않는 것은?",
+    opts: ["개별면접조사(대인조사)", "전화조사", "관찰법", "인터넷조사"],
+    ans: 2,
+    exp: "서베이법(survey method)은 개별면접조사(대인조사), 전화조사, 우편조사, 인터넷조사 등을 이용하여 자료를 수집하는 방법이다. 관찰법(observation method)은 소비자의 행동을 직접 관찰하는 별도의 방법이다."
+  },
+  {
+    tag: "시장조사 · 양적·질적 연구",
+    text: "질적 연구방법(qualitative research)에 해당하는 것은? (2017년 1회, 2019년 1회 산업기사)",
+    opts: [
+      "개별면접조사법, 전화조사법",
+      "우편조사법, 인터넷조사법",
+      "심층면접법, 포커스그룹조사법",
+      "설문지법, 서베이법"
+    ],
+    ans: 2,
+    exp: "질적 연구방법에는 심층면접법, 포커스그룹조사법 등이 있다. 양적 연구방법에는 개별면접조사법·전화조사법·우편조사법 등이 있다."
+  },
+  {
+    tag: "SD법 (2024년 1·2회 기출)",
+    text: "SD법(Semantic Differential Method)을 처음 고안한 사람과 고안 연도가 올바르게 짝지어진 것은?",
+    opts: [
+      "게슈탈트(Gestalt) / 1920년",
+      "오스굿(C.E. Osgood) / 1959년",
+      "먼셀(A.H. Munsell) / 1905년",
+      "이튼(J. Itten) / 1961년"
+    ],
+    ans: 1,
+    exp: "SD법(언어척도법·의미분화법)은 1959년 미국의 심리학자 오스굿(C.E. Osgood)이 경관·제품·색·음향·감촉 등 다양한 대상의 인상을 파악하기 위해 고안한 조사 방법이다."
+  },
+  {
+    tag: "SD법 · 척도",
+    text: "SD법에서 사용하는 기본 평가척도 단계와 세밀한 차이가 필요할 경우의 단계가 올바르게 짝지어진 것은?",
+    opts: [
+      "기본 3단계 / 세밀 5단계",
+      "기본 5단계 / 세밀 7단계",
+      "기본 7단계 / 세밀 10단계",
+      "기본 10단계 / 세밀 50단계"
+    ],
+    ans: 1,
+    exp: "SD법은 보통 5단계 척도를 사용하지만, 세밀한 차이가 필요한 경우 7단계 평가를 척도화하여 조사할 수 있다."
+  },
+  {
+    tag: "SD법 · 형용사 평가차원",
+    text: "SD법의 형용사 평가척도 중 '능력차원(potency dimension)'에 해당하는 형용사 쌍으로 옳은 것은?",
+    opts: [
+      "좋은 – 나쁜 / 아름다운 – 추한",
+      "빠른 – 느린 / 능동적인 – 수동적인",
+      "큰 – 작은 / 강한 – 약한 / 두꺼운 – 얇은",
+      "깨끗한 – 더러운 / 가치 있는 – 가치 없는"
+    ],
+    ans: 2,
+    exp: "SD법의 3가지 차원: ① 평가차원 — 좋은/나쁜, 아름다운/추한, 깨끗한/더러운 등 ② 능력차원(역능차원) — 큰/작은, 강한/약한, 깊은/얕은, 두꺼운/얇은 ③ 활동차원 — 빠른/느린, 날카로운/둔한, 능동적인/수동적인"
+  },
+  {
+    tag: "SD법 · 형용사 평가차원",
+    text: "SD법의 형용사 평가척도 중 '활동차원(activity dimension)'에 해당하는 형용사 쌍으로 옳은 것은?",
+    opts: [
+      "좋은 – 나쁜, 아름다운 – 추한",
+      "빠른 – 느린, 날카로운 – 둔한, 능동적인 – 수동적인",
+      "큰 – 작은, 강한 – 약한",
+      "깨끗한 – 더러운, 가치 있는 – 가치 없는"
+    ],
+    ans: 1,
+    exp: "활동차원(activity dimension)은 빠른–느린, 날카로운–둔한, 능동적인–수동적인 형용사 쌍이 해당된다."
+  },
+  {
+    tag: "표본추출법 (2013년 1회 산업기사)",
+    text: "표본추출법 중 '군집추출법'에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "각 표본에 일련번호를 부여하고 무작위로 추출하는 방법",
+      "유사한 특성을 가진 모집단을 묶어 군집으로 분류한 후 무작위로 추출하는 방법",
+      "전문지식을 가진 전문가가 표본을 임의로 추출하는 방법",
+      "모집단 추출 시 1차로 표본을 추출하고 그중에서 다시 추출하는 방법"
+    ],
+    ans: 1,
+    exp: "군집추출법은 유사한 특성을 가진 모집단을 묶어 군집으로 분류한 후 무작위로 추출하는 방법이다. ①은 단순무작위추출법, ③은 판단추출법, ④는 다단추출법에 대한 설명이다."
+  },
+  {
+    tag: "표본추출법",
+    text: "표본추출법 중 '판단추출법'에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "모집단을 소그룹으로 분할한 후 그룹별로 비율을 정해 조사하는 방법",
+      "모집단 내 모든 개체를 계통적으로 여러 하위집단으로 분류한 후 비례적으로 추출하는 방법",
+      "전문지식을 가진 전문가가 표본을 임의로 추출하는 방법",
+      "공평하게 모집단의 특성에 따라 표본을 추출하는 방법"
+    ],
+    ans: 2,
+    exp: "판단추출법은 전문지식을 가진 전문가가 표본을 임의로 추출하는 방법이다. ①은 국화추출법, ②는 계통추출법, ④는 할당추출법에 해당한다."
+  },
+  {
+    tag: "포지셔닝 (2010~2024 다수 기출)",
+    text: "포지셔닝(positioning)의 의미로 가장 적절한 것은?",
+    opts: [
+      "제품의 원가를 절감하여 가격 경쟁력을 확보하는 전략이다",
+      "소비자의 마음속에 자사 제품·기업이 가장 유리한 포지션에 있도록 노력하는 과정이다",
+      "경쟁사의 제품과 동일한 포지션을 모방하여 시장 점유율을 높이는 방법이다",
+      "제품의 유통 경로를 최소화하여 배송 비용을 절감하는 전략이다"
+    ],
+    ans: 1,
+    exp: "포지셔닝은 소비자의 마음속에 자사 제품이나 기업이 표적시장·경쟁·기업 능력과 관련하여 가장 유리한 포지션에 있도록 노력하는 과정, 즉 어떤 제품을 고객들의 머리에 확실하게 기억시키는 과정이다."
+  },
+  {
+    tag: "포지셔닝 차별화 (2023년 4회)",
+    text: "포지셔닝 차별화의 종류 중 '이미지 차별화'에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "제품의 특징·성능·디자인 등을 경쟁업체와 구별되게 강조하는 전략이다",
+      "배송·설치·유지보수 등의 서비스를 경쟁업체보다 더 나은 수준으로 제공하는 전략이다",
+      "판매원의 상담능력·전문성·친절함 등을 경쟁우위로 활용하는 전략이다",
+      "기업의 철학·문화·역사 등을 강조하여 브랜드 이미지를 구축하고 인식과 평판을 형성하는 전략이다"
+    ],
+    ans: 3,
+    exp: "이미지 차별화는 기업이 소비자들에게 전달하려는 이미지를 경쟁업체와 구별되게 만들어 브랜드 가치를 강화하는 전략으로, 기업의 철학·문화·역사 등을 강조하여 광고·마케팅 활동으로 인식을 형성한다."
+  },
+  {
+    tag: "포지셔닝 · 지각도",
+    text: "지각도(perceptual map)에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "시장 세분화의 조건을 평가하기 위한 수치 분석 표이다",
+      "제품·브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자가 중요하게 생각하는 평가 차원을 축으로 나타낸 그래프이다",
+      "SD법에서 형용사 쌍의 점수를 정리하는 데이터 표이다",
+      "SWOT 분석의 결과를 시각적으로 표시하는 매트릭스이다"
+    ],
+    ans: 1,
+    exp: "지각도(perceptual map)는 제품·브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자들이 중요하게 생각하는 평가 차원을 축으로 나타낸 그래프 형태의 도표이다. 제품의 심리적 포지셔닝 개발을 위한 강력한 도구로 사용된다."
+  },
+  {
+    tag: "SWOT 분석",
+    text: "SWOT 분석에서 'WO 전략'에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "시장의 기회를 활용하기 위해 강점을 사용하는 전략",
+      "시장의 위협을 회피하기 위해 강점을 사용하는 전략",
+      "약점을 극복함으로써 시장의 기회를 활용하는 전략",
+      "시장의 위협을 회피하고 약점을 최소화하는 전략"
+    ],
+    ans: 2,
+    exp: "SWOT 전략: ① SO — 강점으로 기회 활용 ② ST — 강점으로 위협 회피 ③ WO — 약점 극복으로 기회 활용 ④ WT — 위협 회피 + 약점 최소화"
+  },
+  {
+    tag: "척도 · 명목척도",
+    text: "명목척도(nominal scale)의 예시로 가장 적절한 것은?",
+    opts: [
+      "올림픽 경기에서 선수들의 등수",
+      "리커트 5점 척도(매우 좋다~매우 나쁘다)",
+      "성별·혈액형·스포츠 선수 등번호",
+      "키·몸무게 등 물리적 측정치"
+    ],
+    ans: 2,
+    exp: "명목척도(nominal scale)는 단순한 분류를 목적으로 숫자를 사용하는 척도로, 성별·혈액형·인종·스포츠선수 등번호 등이 해당한다. 수치적 크기나 순서는 의미가 없다."
+  },
+  {
+    tag: "척도 · 서열척도",
+    text: "서열척도(ordinal scale)에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "절대적인 기준(0)이 있어 곱셈·나눗셈 연산이 가능하다",
+      "속성 크기에 따라 순위를 나타내지만, 서열 간의 차이는 의미가 없다",
+      "리커트 척도처럼 변수들 간의 가감연산이 가능하다",
+      "성별·혈액형처럼 단순 분류에 사용하며 수치적 크기는 무의미하다"
+    ],
+    ans: 1,
+    exp: "서열척도는 관찰 대상의 속성 크기에 따라 순위를 나타내는 수치를 부여하는 척도이다. 상대적 순위만을 구분할 뿐, 서열 간의 차이는 의미가 없다. 예: 올림픽 선수 등수, 대학 입시 합격순위 등"
+  },
+  {
+    tag: "척도 · 등간척도",
+    text: "등간척도(interval scale)에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "0이 절대적 기준이 되어 곱셈·나눗셈 연산이 가능하다",
+      "단순 분류 목적으로 수치적 크기나 순서는 의미가 없다",
+      "속성 크기의 순서와 상대적 차이를 측정하며 가감연산이 가능하고, 의미분별법(SD법)에서도 사용된다",
+      "상대적 순위만 구분하며 서열 간 차이는 의미가 없다"
+    ],
+    ans: 2,
+    exp: "등간척도(interval scale)는 속성 크기의 순서뿐 아니라 상대적인 차이도 고려하며 가감연산(더하고 빼기)이 가능하다. 리커트 5점 척도, SD법(의미분별법)에서 사용되는 척도가 해당한다."
+  },
+  {
+    tag: "척도 · 비율척도",
+    text: "비율척도(ratio scale)에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "서열만 구분하고 서열 간 차이는 의미가 없다",
+      "0이 절대적 기준이 되어 가감연산은 물론 곱셈·나눗셈도 가능하며 키·몸무게 등이 해당한다",
+      "리커트 척도처럼 가감연산만 가능하다",
+      "성별·혈액형처럼 단순 분류에 사용된다"
+    ],
+    ans: 1,
+    exp: "비율척도는 0이 절대적 기준이 되므로 가감연산뿐 아니라 곱셈·나눗셈도 가능하다. 절대적 크기까지 측정할 수 있으며, 키·몸무게 등 물리적 측정치가 해당한다."
+  },
+  {
+    tag: "분석방법 · SWOT·통계",
+    text: "SWOT 분석에 대한 설명으로 옳지 않은 것은?",
+    opts: [
+      "내부적 요인인 강점(Strength)과 약점(Weakness)을 분석한다",
+      "외부적 요인인 기회(Opportunity)와 위협(Threat)을 분석한다",
+      "기업의 색채마케팅 전략 수립에 활용된다",
+      "SWOT는 반드시 SO 전략만 선택해야 한다"
+    ],
+    ans: 3,
+    exp: "SWOT 분석에서는 SO·ST·WO·WT 등 4가지 전략 방향을 도출할 수 있다. 반드시 SO 전략만 선택해야 하는 것이 아니라, 상황에 따라 적절한 전략을 선택한다."
+  },
+  {
+    tag: "분석방법 · 통계분석",
+    text: "다음 중 '회귀분석(regression analysis)'에 대한 설명으로 가장 적절한 것은?",
+    opts: [
+      "변수들 간의 상호 연관성을 분석하여 공통적으로 작용하는 내재된 요인을 추출하는 방법이다",
+      "유사한 속성을 지닌 개체를 몇 개의 집단으로 그룹화하여 데이터 구조를 파악하는 방법이다",
+      "독립변수가 종속변수에 미치는 영향력의 크기를 파악하여 종속변수의 값을 예측하는 선형모형을 산출하는 방법이다",
+      "변수 간의 선형 관계 정도를 분석하는 통계기법으로, 두 변수 간 상관관계 강도를 수치로 나타내는 방법이다"
+    ],
+    ans: 2,
+    exp: "회귀분석(regression analysis)은 독립변수가 종속변수에 미치는 영향력의 크기를 파악하여 독립변수의 특정 값에 대응하는 종속변수의 값을 예측하는 선형모형을 산출하는 방법이다. ①은 요인분석, ②는 군집분석, ④는 상관분석이다."
+  }
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+let submitted = false;
+
+function buildQuiz() {
+  const wrap = document.getElementById('quizWrap');
+  wrap.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `q${qi}`;
+
+    const optsHTML = q.opts.map((o, oi) => `
+      <div class="opt" id="opt_${qi}_${oi}" onclick="pick(${qi},${oi})">
+        <div class="opt-label">${['①','②','③','④'][oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-head">
+        <div class="q-num">${String(qi+1).padStart(2,'0')}</div>
+        <div class="q-meta">
+          <div class="q-tag">${q.tag}</div>
+          <div class="q-text">${q.text}</div>
+        </div>
+      </div>
+      <div class="q-opts">${optsHTML}</div>
+      <div class="q-explain" id="exp_${qi}">
+        <div class="explain-label">📌 해설</div>
+        <div class="explain-text">${q.exp}</div>
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+  updateUI();
+}
+
+function pick(qi, oi) {
+  if (submitted) return;
+  userAnswers[qi] = oi;
+
+  for (let i = 0; i < questions[qi].opts.length; i++) {
+    const el = document.getElementById(`opt_${qi}_${i}`);
+    el.classList.remove('selected','correct','wrong','show-correct');
+  }
+  document.getElementById(`opt_${qi}_${oi}`).classList.add('selected');
+  updateUI();
+}
+
+function updateUI() {
+  const done = userAnswers.filter(a => a !== null).length;
+  const pct = done / questions.length * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progLabel').textContent = `${done} / ${questions.length}`;
+  document.getElementById('floatNum').textContent = done;
+}
+
+function submitQuiz() {
+  submitted = true;
+  let c = 0, w = 0, s = 0;
+
+  questions.forEach((q, qi) => {
+    const ua = userAnswers[qi];
+    const ans = q.ans;
+    for (let i = 0; i < q.opts.length; i++) {
+      const el = document.getElementById(`opt_${qi}_${i}`);
+      el.classList.remove('selected','correct','wrong','show-correct');
+      el.classList.add('disabled');
+    }
+    if (ua === null) {
+      s++;
+      document.getElementById(`opt_${qi}_${ans}`).classList.add('show-correct');
+    } else if (ua === ans) {
+      c++;
+      document.getElementById(`opt_${qi}_${ua}`).classList.add('correct');
+    } else {
+      w++;
+      document.getElementById(`opt_${qi}_${ua}`).classList.add('wrong');
+      document.getElementById(`opt_${qi}_${ans}`).classList.add('show-correct');
+    }
+    document.getElementById(`exp_${qi}`).classList.add('show');
+  });
+
+  const score = c * 4;
+  let grade = '';
+  if (score >= 80) grade = '🏆 우수 — 합격 안정권';
+  else if (score >= 60) grade = '✅ 양호 — 조금 더 노력!';
+  else if (score >= 40) grade = '📖 보통 — 복습이 필요합니다';
+  else grade = '⚠️ 미흡 — 반복 학습 필요';
+
+  document.getElementById('resultScore').textContent = score + '점';
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('rbC').textContent = c;
+  document.getElementById('rbW').textContent = w;
+  document.getElementById('rbS').textContent = s;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('resultBanner').classList.add('show');
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('btnRetry').style.display = 'inline-block';
+  document.getElementById('progFill').style.width = '100%';
+  document.getElementById('progLabel').textContent = '25 / 25';
+  document.getElementById('resultBanner').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  userAnswers = new Array(questions.length).fill(null);
+  submitted = false;
+  document.getElementById('resultBanner').classList.remove('show');
+  document.getElementById('btnSubmit').style.display = '';
+  document.getElementById('btnRetry').style.display = 'none';
+  document.getElementById('scoreNum').textContent = '—';
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
