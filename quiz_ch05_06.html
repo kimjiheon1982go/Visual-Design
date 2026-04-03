@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT 모의고사 — CH.05~06 디자인 트렌드 & 사용자 조사</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --cream: #f7f3ec;
+    --warm: #fdfaf5;
+    --accent: #8b3a2a;
+    --accent2: #c4614d;
+    --gold: #b8924a;
+    --gold-light: #d4b06a;
+    --muted: #7a6e62;
+    --border: #d9d0c4;
+    --correct: #2d6a4f;
+    --correct-bg: #d8f3dc;
+    --wrong: #8b2a2a;
+    --wrong-bg: #fde8e8;
+    --opt-hover: #ede8df;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: var(--ink);
+    color: #fff;
+    padding: 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 20px rgba(0,0,0,.3);
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .header-sub {
+    font-size: 10px;
+    color: var(--gold-light);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .progress-wrap {
+    flex: 1;
+    max-width: 200px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-track {
+    height: 4px;
+    background: rgba(255,255,255,.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--gold));
+    border-radius: 2px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .score-display {
+    text-align: right;
+    font-size: 12px;
+    color: rgba(255,255,255,.5);
+    white-space: nowrap;
+  }
+  .score-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+    line-height: 1;
+    display: block;
+  }
+
+  /* ── MAIN ── */
+  .app-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--warm);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+    animation: fadeUp .35s ease both;
+  }
+  .q-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,.07); }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(12px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .q-card:nth-child(1)  { animation-delay: .02s; }
+  .q-card:nth-child(2)  { animation-delay: .04s; }
+  .q-card:nth-child(3)  { animation-delay: .06s; }
+  .q-card:nth-child(4)  { animation-delay: .08s; }
+  .q-card:nth-child(5)  { animation-delay: .10s; }
+  .q-card:nth-child(6)  { animation-delay: .12s; }
+  .q-card:nth-child(7)  { animation-delay: .14s; }
+  .q-card:nth-child(8)  { animation-delay: .16s; }
+  .q-card:nth-child(9)  { animation-delay: .18s; }
+  .q-card:nth-child(10) { animation-delay: .20s; }
+
+  .q-head {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    min-width: 32px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .q-meta {
+    flex: 1;
+  }
+  .q-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  /* ── OPTIONS ── */
+  .q-opts {
+    padding: 6px 0 8px;
+  }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: background .15s;
+    border-bottom: 1px solid rgba(217,208,196,.3);
+  }
+  .opt:last-child { border-bottom: none; }
+  .opt:hover:not(.disabled) { background: var(--opt-hover); }
+  .opt.disabled { cursor: default; }
+
+  .opt-label {
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: all .2s;
+    margin-top: 1px;
+  }
+  .opt-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #3a332c;
+    padding-top: 2px;
+  }
+
+  /* ── STATES ── */
+  .opt.correct {
+    background: var(--correct-bg);
+  }
+  .opt.correct .opt-label {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #fff;
+  }
+  .opt.correct .opt-text { color: var(--correct); font-weight: 500; }
+
+  .opt.wrong {
+    background: var(--wrong-bg);
+  }
+  .opt.wrong .opt-label {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: #fff;
+  }
+  .opt.wrong .opt-text { color: var(--wrong); }
+
+  .opt.show-correct .opt-label {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #fff;
+  }
+  .opt.show-correct .opt-text { color: var(--correct); font-weight: 500; }
+
+  /* ── EXPLANATION ── */
+  .q-explain {
+    display: none;
+    padding: 14px 24px 18px 60px;
+    border-top: 1px dashed var(--border);
+    background: #f0ebe0;
+  }
+  .q-explain.show { display: block; }
+  .explain-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .explain-text {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #3a332c;
+  }
+
+  /* ── RESULT BANNER ── */
+  .result-banner {
+    display: none;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 4px;
+    padding: 32px 36px;
+    margin-bottom: 28px;
+    text-align: center;
+    animation: fadeUp .5s ease;
+  }
+  .result-banner.show { display: block; }
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 56px;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .result-label {
+    font-size: 13px;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 20px;
+  }
+  .result-grade {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: .1em;
+  }
+  .result-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  .rb-item { text-align: center; }
+  .rb-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rb-num.c { color: #74c69d; }
+  .rb-num.w { color: #e07070; }
+  .rb-label { font-size: 11px; color: rgba(255,255,255,.45); }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-row {
+    text-align: center;
+    margin-top: 28px;
+  }
+  .btn-submit {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background .2s, transform .1s;
+  }
+  .btn-submit:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-retry {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 10px 32px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 14px;
+    transition: background .2s;
+  }
+  .btn-retry:hover { background: var(--ink); color: #fff; }
+
+  /* ── FLOAT INDICATOR ── */
+  .float-indicator {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 24px;
+    font-size: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    transition: opacity .3s;
+  }
+  .float-indicator span { color: var(--gold-light); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .header-inner { flex-wrap: wrap; }
+    .progress-wrap { max-width: 100%; order: 3; flex: 1 0 100%; }
+    .q-head { padding: 18px 16px 14px; }
+    .q-opts { padding: 0; }
+    .opt { padding: 12px 16px; }
+    .q-explain { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <div class="header-sub">시각디자인기사 CBT</div>
+      CH.05–06 디자인 트렌드 &amp; 사용자 조사
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>진행률</span>
+        <span id="progressLabel">0 / 25</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="score-display">
+      <span class="score-num" id="scoreNum">—</span>
+      점
+    </div>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- RESULT BANNER -->
+  <div class="result-banner" id="resultBanner">
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-label">25문항 · 문항당 4점</div>
+    <div class="result-grade" id="resultGrade">—</div>
+    <div class="result-breakdown">
+      <div class="rb-item">
+        <span class="rb-num c" id="rbCorrect">0</span>
+        <span class="rb-label">정답</span>
+      </div>
+      <div class="rb-item">
+        <span class="rb-num w" id="rbWrong">0</span>
+        <span class="rb-label">오답</span>
+      </div>
+      <div class="rb-item">
+        <span class="rb-num" id="rbSkip" style="color:rgba(255,255,255,.4)">0</span>
+        <span class="rb-label">미응답</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="quizContainer"></div>
+
+  <div class="submit-row" id="submitRow">
+    <button class="btn-submit" id="btnSubmit" onclick="submitQuiz()">채점하기</button>
+    <br>
+    <button class="btn-retry" id="btnRetry" style="display:none" onclick="resetQuiz()">다시 풀기</button>
+  </div>
+</div>
+
+<div class="float-indicator" id="floatIndicator">
+  <span id="floatCount">0</span> / 25 응답 완료
+</div>
+
+<script>
+const questions = [
+  {
+    chapter: "CH.05 · 제1강",
+    text: "트렌드(trend)의 일반적인 주기로 가장 적절한 것은?",
+    options: ["1~3년", "3~5년", "5~10년", "10~15년"],
+    answer: 2,
+    explain: "트렌드의 주기는 일반적으로 5~10년 정도이다. 이에 비해 유행(fashion)은 6개월~1년으로 지속 기간이 짧다."
+  },
+  {
+    chapter: "CH.05 · 제1강",
+    text: "트렌드(trend)의 의미로 가장 적절하지 않은 것은?",
+    options: ["방향·경향·동향을 뜻한다", "사회와 문화, 시장이 변화하는 경향이다", "특정 집단에만 나타나는 일시적 현상이다", "사상이나 행동에서 나타나는 일정한 방향이다"],
+    answer: 2,
+    explain: "트렌드는 특정 집단에 한정된 현상이 아니라 사회 전반의 변화 방향과 경향을 의미하며, 대부분의 소비자가 관심을 가진다."
+  },
+  {
+    chapter: "CH.05 · 제1강",
+    text: "트렌드 조사(research)의 주요 목적으로 가장 적절한 것은?",
+    options: [
+      "과거 소비자 행동을 기록하고 분류하는 것",
+      "소비자가 미래에 어떤 구매습관을 가질지 연구·예측하는 것",
+      "기업 내부 업무 프로세스를 최적화하는 것",
+      "제품의 생산 원가를 절감하는 것"
+    ],
+    answer: 1,
+    explain: "트렌드 조사는 사회·경제·기술·문화 등의 변화 요인이 소비자 라이프 스타일에 미치는 영향을 파악하여 미래의 구매습관을 연구하고 예측하는 과정이다."
+  },
+  {
+    chapter: "CH.05 · 제1강",
+    text: "트렌드(5~10년)와 유행(fashion)의 지속 기간이 올바르게 짝지어진 것은?",
+    options: [
+      "트렌드: 1~3년 / 유행: 6개월~1년",
+      "트렌드: 5~10년 / 유행: 6개월~1년",
+      "트렌드: 5~10년 / 유행: 2~3년",
+      "트렌드: 3~5년 / 유행: 1~2년"
+    ],
+    answer: 1,
+    explain: "트렌드는 5~10년, 유행(fashion)은 6개월~1년으로 트렌드가 더 길기 때문에 새로운 제품을 예측·개발하는 데 매우 중요한 조사이다."
+  },
+  {
+    chapter: "CH.05 · 제2강",
+    text: "트렌드 예측(trend forecasting) 과정에서 활용될 수 있는 기술로 옳은 것을 모두 고른 것은?",
+    options: [
+      "빅데이터",
+      "인공지능(AI)",
+      "빅데이터와 인공지능(AI) 모두",
+      "AR/VR 기술"
+    ],
+    answer: 2,
+    explain: "트렌드 예측은 정확한 정보와 데이터를 바탕으로 수행되어야 하며, 빅데이터나 인공지능(AI) 등의 기술이 활용되기도 한다."
+  },
+  {
+    chapter: "CH.05 · 제2강",
+    text: "스타일 트렌드 조사에서 수집·분석해야 할 디자인 요소로 가장 거리가 먼 것은?",
+    options: ["색상", "질감", "분위기", "생산 공정"],
+    answer: 3,
+    explain: "스타일 트렌드 조사에서는 색상, 질감, 분위기 등 다양한 디자인적 요소들을 반영할 수 있도록 자료를 수집하고 분석해야 한다. 생산 공정은 디자인 요소가 아니다."
+  },
+  {
+    chapter: "CH.05 · 제3강",
+    text: "트렌드 전략화 과정의 순서로 올바른 것은?",
+    options: [
+      "시장 환경 분석 → 경쟁사 분석 → 스타일 트렌드 분석 → 전략 방향 수립 → 디자인 개발·테스트 → 마케팅·출시",
+      "경쟁사 분석 → 시장 환경 분석 → 전략 방향 수립 → 스타일 트렌드 분석 → 마케팅·출시 → 디자인 개발·테스트",
+      "전략 방향 수립 → 시장 환경 분석 → 경쟁사 분석 → 스타일 트렌드 분석 → 디자인 개발·테스트 → 마케팅·출시",
+      "스타일 트렌드 분석 → 시장 환경 분석 → 경쟁사 분석 → 전략 방향 수립 → 마케팅·출시 → 디자인 개발·테스트"
+    ],
+    answer: 0,
+    explain: "트렌드 전략화 6단계: ① 시장 환경 트렌드 분석 → ② 경쟁사·제품 분석 → ③ 스타일 트렌드 분석 → ④ 전략 방향 수립 → ⑤ 디자인 개발·테스트 → ⑥ 마케팅·출시"
+  },
+  {
+    chapter: "CH.05 · 제3강",
+    text: "디자인 전략 구체화 과정의 첫 번째 단계는?",
+    options: ["시장 분석", "디자인 혁신 테마 설정", "비즈니스 목표 설정", "실행과 평가"],
+    answer: 2,
+    explain: "디자인 전략 구체화 5단계: ① 비즈니스 목표 설정 → ② 시장 분석 → ③ 디자인 혁신 테마 설정 → ④ 디자인 전략 수립 → ⑤ 실행과 평가"
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "시장 세분화(market segmentation)에 대한 설명으로 가장 적절한 것은?",
+    options: [
+      "하나의 마케팅 전략으로 모든 고객을 만족시키는 방법이다",
+      "유사한 욕구를 갖는 고객을 일정한 기준에 따라 그룹으로 나누어 마케팅 전략을 수립하는 방법이다",
+      "경쟁사를 분석하여 가격을 낮추는 전략이다",
+      "제품의 기능을 다양화하여 전체 시장을 공략하는 방법이다"
+    ],
+    answer: 1,
+    explain: "시장 세분화란 시장의 이질성을 파악하여 유사한 욕구를 갖는 고객을 일정한 기준에 따라 그룹으로 나누어 마케팅 전략을 수립하는 방법이다."
+  },
+  {
+    chapter: "CH.06 · 제1강 POINT",
+    text: "시장 세분화 조건 중 '실행가능성(feasibility)'의 의미로 가장 적절한 것은?",
+    options: [
+      "세분화된 시장에 대한 정보와 결과를 신뢰할 수 있는가?",
+      "세분화된 시장이 충분히 크고 수익성이 있는가?",
+      "세분화된 시장에 대한 세분된 전략을 실제로 실행할 수 있는가?",
+      "세분화된 시장이 지속적으로 존재할 가능성이 있는가?"
+    ],
+    answer: 2,
+    explain: "실행가능성(feasibility)은 세분화된 시장에 대한 세분된 전략을 실제로 실행할 수 있는가를 묻는 조건이다."
+  },
+  {
+    chapter: "CH.06 · 제1강 POINT",
+    text: "시장 세분화 조건 중 '실질성(substantiality)'의 의미로 가장 적절한 것은?",
+    options: [
+      "세분화된 시장에 대한 정보와 마케팅 전략을 전달할 수 있는가?",
+      "세분화된 시장이 충분히 크고 수익성이 있는가?",
+      "세분화된 시장에서 경쟁이 심화되어 있는가?",
+      "세분화된 시장이 진짜 존재하는가?"
+    ],
+    answer: 1,
+    explain: "실질성(substantiality)은 세분화된 시장이 충분히 크고 수익성이 있는가를 묻는 조건이다."
+  },
+  {
+    chapter: "CH.06 · 제1강 POINT",
+    text: "시장 세분화 조건 8가지에 해당하지 않는 것은?",
+    options: ["접근가능성", "측정가능성", "수익극대화", "안정성"],
+    answer: 2,
+    explain: "시장 세분화 8가지 조건: 실행가능성, 측정가능성, 접근가능성, 실질성, 유효정당성, 경쟁성, 신뢰성, 안정성. '수익극대화'는 해당되지 않는다."
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "사용자의 구매행동·소비패턴에 따라 시장을 세분화하는 방법은?",
+    options: [
+      "지리적 특성별 세분화 (geographic segmentation)",
+      "인구학적 특성별 세분화 (demographic segmentation)",
+      "사용자 행동 특성별 세분화 (behavioral segmentation)",
+      "심리 분석적 세분화 (psychographic segmentation)"
+    ],
+    answer: 2,
+    explain: "사용자 행동 특성별 세분화(behavioral segmentation)는 소비자의 구매행동·소비패턴에 따라 시장을 세분화하는 것으로, 제품의 사용빈도·상표 충성도·가격 민감도·구매결정 과정 등으로 분류한다."
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "인구학적 특성별 세분화(demographic segmentation)의 기준으로 가장 거리가 먼 것은?",
+    options: ["연령·성별·수입", "가치관·생활방식", "직업·학력·교육수준", "거주지역·소득"],
+    answer: 1,
+    explain: "가치관·생활방식 등 심리적 특성에 따른 세분화는 심리 분석적 세분화(psychographic segmentation)에 해당한다. 인구학적 세분화는 연령·성별·수입·직업·거주지역·학력·교육수준·소득 등을 기준으로 한다."
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "심리 분석적 세분화(psychographic segmentation)의 예시로 가장 적절하지 않은 것은?",
+    options: ["여피족", "오렌지족", "386세대", "도시 거주자"],
+    answer: 3,
+    explain: "도시 거주자는 지리적 특성별 세분화에 해당한다. 심리 분석적 세분화는 성격·가치관·생활방식 등에 따른 분류로, 여피족·오렌지족·386세대 등이 예시이다."
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "기념일·계절·휴가·이벤트 등을 고려하여 소비자의 상황·시기·목적에 따라 시장을 세분화하는 방법은?",
+    options: [
+      "행동 특성별 세분화 (behavioral segmentation)",
+      "상황적 세분화 (occasion segmentation)",
+      "심리 분석적 세분화 (psychographic segmentation)",
+      "지리적 특성별 세분화 (geographic segmentation)"
+    ],
+    answer: 1,
+    explain: "상황적 세분화(occasion segmentation)는 소비자의 상황·시기·목적 등에 따라 시장을 세분화하는 것으로, 기념일·계절·휴가·이벤트 등을 고려하여 시장을 분할한다."
+  },
+  {
+    chapter: "CH.06 · 제1강",
+    text: "시장 세분화로 인한 기업의 이점으로 가장 적절하지 않은 것은?",
+    options: [
+      "소비자의 욕구·구매동기를 파악할 수 있다",
+      "마케팅 자원을 효율적으로 배분할 수 있다",
+      "경쟁사의 생산 비용을 직접적으로 절감할 수 있다",
+      "기업의 수익을 증대할 수 있다"
+    ],
+    answer: 2,
+    explain: "시장 세분화는 자사의 마케팅 효율성을 높이는 것이지, 경쟁사의 비용을 절감하는 것과는 무관하다."
+  },
+  {
+    chapter: "CH.06 · 제1강 POINT",
+    text: "표적시장 선택 전략 중 '집중마케팅'에 대한 설명으로 가장 적절한 것은?",
+    options: [
+      "세분시장 간 차이를 무시하고 하나의 제품으로 전체 시장을 공략하는 전략이다",
+      "표적시장을 선정하여 고객 욕구에 부합하는 제품과 마케팅 전략을 수립하는 전략이다",
+      "소수의 세분시장에서 시장 점유율을 높이기 위해 특화된 제품과 전략으로 집중하는 전략이다",
+      "모든 세분시장에 동일한 마케팅 믹스를 적용하는 전략이다"
+    ],
+    answer: 2,
+    explain: "집중마케팅은 소수의 세분시장에서 시장 점유율을 높이기 위해 전략적으로 집중하는 것으로, 매우 특화된 제품과 마케팅 전략이 필요하며 성공 시 강한 충성도와 이익을 확보할 수 있다."
+  },
+  {
+    chapter: "CH.06 · 제1강 STP",
+    text: "STP 전략의 세 가지 요소가 올바르게 나열된 것은?",
+    options: [
+      "Survey(조사) – Targeting(표적) – Planning(계획)",
+      "Segmentation(세분화) – Targeting(표적) – Positioning(포지셔닝)",
+      "Segmentation(세분화) – Testing(테스트) – Positioning(포지셔닝)",
+      "Strategy(전략) – Targeting(표적) – Promotion(프로모션)"
+    ],
+    answer: 1,
+    explain: "STP는 시장 세분화(Segmentation)·표적 시장(Targeting)·포지셔닝(Positioning)의 약자로, 총체적인 디자인 마케팅을 수립하는 전략이다."
+  },
+  {
+    chapter: "CH.06 · 제2강",
+    text: "사용자 행동패턴 조사기법이 아닌 것은?",
+    options: ["포커스 그룹 인터뷰(FGI)", "섀도잉(shadowing)", "디자인 민족지학(ethnography)", "벤치마킹(benchmarking)"],
+    answer: 3,
+    explain: "사용자 행동패턴 조사기법은 설문조사·포커스 그룹인터뷰·섀도잉·디자인 민족지학(에스노그래피)·멘탈 모델 등이다. 벤치마킹은 사용자 조사 기법이 아니다."
+  },
+  {
+    chapter: "CH.06 · 제2강 TIP",
+    text: "멘탈 모델(mental model) 조사기법에 대한 설명으로 가장 적절한 것은?",
+    options: [
+      "대규모 사용자들로부터 정형화된 질문으로 정량적 데이터를 수집하는 방법이다",
+      "소그룹 사용자들이 자유로운 토론을 통해 의견을 나누는 방법이다",
+      "사용자가 제품·서비스를 사용할 때의 생각과 이해 방식을 파악하는 방법이다",
+      "조사 대상자를 따라다니면서 행동을 관찰·기록하는 방법이다"
+    ],
+    answer: 2,
+    explain: "멘탈 모델(mental model)은 사용자가 제품·서비스를 사용할 때의 생각과 이해하는 방식을 파악하는 방법으로, 사용자의 내적 모델을 파악하여 UI 디자인에 반영할 수 있다."
+  },
+  {
+    chapter: "CH.06 · 제3강",
+    text: "심층 인터뷰(in-depth interview)의 진행 방법으로 가장 적절하지 않은 것은?",
+    options: [
+      "질의응답, 과업수행(task test), 보여주고 말하기(show & tell) 방법으로 진행한다",
+      "인터뷰 내용은 사진·비디오·녹음으로 기록한다",
+      "한 시간 정도 진행하는 것이 일반적이다",
+      "면접자가 일방적으로 답변을 유도하는 방식으로 진행한다"
+    ],
+    answer: 3,
+    explain: "심층 인터뷰는 조사 대상이 자유롭게 자신의 의견을 표현할 수 있도록 분위기를 조성하며, 진정성 있는 답변을 위해 사전 교감을 이루는 것이 중요하다. 일방적인 유도 방식은 적절하지 않다."
+  },
+  {
+    chapter: "CH.06 · 제3강",
+    text: "디자인 민족지학(Ethnography)을 처음 개발하여 정황조사(Contextual inquiry)로 소개한 사람들은?",
+    options: [
+      "도널드 노먼 & 제이콥 닐슨",
+      "휴 바이어(Hugh Beyer) & 캐런 홀츠블랫(Karen Holtzblatt)",
+      "팀 브라운 & 데이비드 켈리",
+      "빅터 파파넥 & 찰스 임스"
+    ],
+    answer: 1,
+    explain: "휴 바이어(Hugh Beyer)와 캐런 홀츠블랫(Karen Holtzblatt)이 에스노그래피 방법론을 처음 개발하여 정황조사(Contextual inquiry)라고 소개하였다."
+  },
+  {
+    chapter: "CH.06 · 제3강",
+    text: "섀도잉(shadowing) 기법에 대한 설명으로 가장 적절하지 않은 것은?",
+    options: [
+      "'그림자 따라다니기'라는 뜻으로 조사 대상자를 따라다니며 행동을 관찰·기록한다",
+      "조사 대상의 일상생활에 거슬리지 않도록 비대면 방식으로 이루어져야 한다",
+      "섀도잉은 특이한 행동에 대해 인터뷰를 병행하면 신뢰성을 높일 수 있다",
+      "조사 대상자와 직접 대면하여 질문에 답하게 하는 방식으로 진행한다"
+    ],
+    answer: 3,
+    explain: "섀도잉은 비대면적으로 조사가 이루어져야 한다. 대면조사가 아니며, 조사 대상이 일상생활을 방해받지 않도록 배려해야 한다."
+  },
+  {
+    chapter: "CH.06 · POINT Kano",
+    text: "Kano 모델에서 제품·서비스의 기능 요소로 분류하는 항목의 수는?",
+    options: ["3가지", "4가지", "5가지", "6가지"],
+    answer: 2,
+    explain: "Kano model은 제품·서비스의 기능 요소를 기본 요소·선호 요소·기대 요소·반전 요소·무관 요소의 5가지로 분류하여 사용자 만족도를 파악하는 방법론이다."
+  }
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+let submitted = false;
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `q${qi}`;
+
+    const optionsHTML = q.options.map((opt, oi) => `
+      <div class="opt" id="opt_${qi}_${oi}" onclick="selectOpt(${qi}, ${oi})">
+        <div class="opt-label">${['①','②','③','④'][oi]}</div>
+        <div class="opt-text">${opt}</div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-head">
+        <div class="q-num">${String(qi+1).padStart(2,'0')}</div>
+        <div class="q-meta">
+          <div class="q-tag">${q.chapter}</div>
+          <div class="q-text">${q.text}</div>
+        </div>
+      </div>
+      <div class="q-opts">${optionsHTML}</div>
+      <div class="q-explain" id="explain_${qi}">
+        <div class="explain-label">📌 해설</div>
+        <div class="explain-text">${q.explain}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function selectOpt(qi, oi) {
+  if (submitted) return;
+  userAnswers[qi] = oi;
+
+  // Clear all opts for this question
+  for (let i = 0; i < questions[qi].options.length; i++) {
+    const el = document.getElementById(`opt_${qi}_${i}`);
+    el.classList.remove('correct','wrong','show-correct');
+  }
+
+  // Mark selected
+  const selected = document.getElementById(`opt_${qi}_${oi}`);
+  selected.classList.add('correct'); // tentatively highlight as selected
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const pct = answered / questions.length * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${answered} / ${questions.length}`;
+  document.getElementById('floatCount').textContent = answered;
+}
+
+function submitQuiz() {
+  submitted = true;
+  let correct = 0, wrong = 0, skip = 0;
+
+  questions.forEach((q, qi) => {
+    const ua = userAnswers[qi];
+    const ans = q.answer;
+
+    // Disable all opts
+    for (let i = 0; i < q.options.length; i++) {
+      const el = document.getElementById(`opt_${qi}_${i}`);
+      el.classList.remove('correct','wrong','show-correct');
+      el.classList.add('disabled');
+    }
+
+    if (ua === null) {
+      skip++;
+      // Show correct answer
+      document.getElementById(`opt_${qi}_${ans}`).classList.add('show-correct');
+    } else if (ua === ans) {
+      correct++;
+      document.getElementById(`opt_${qi}_${ua}`).classList.add('correct');
+    } else {
+      wrong++;
+      document.getElementById(`opt_${qi}_${ua}`).classList.add('wrong');
+      document.getElementById(`opt_${qi}_${ans}`).classList.add('show-correct');
+    }
+
+    // Show explanation
+    document.getElementById(`explain_${qi}`).classList.add('show');
+  });
+
+  const score = correct * 4;
+  let grade = '';
+  if (score >= 80) grade = '🏆 우수 — 합격권';
+  else if (score >= 60) grade = '✅ 양호 — 조금 더 노력!';
+  else if (score >= 40) grade = '📖 보통 — 복습이 필요합니다';
+  else grade = '⚠️ 미흡 — 반복 학습이 필요합니다';
+
+  document.getElementById('resultScore').textContent = score + '점';
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('rbCorrect').textContent = correct;
+  document.getElementById('rbWrong').textContent = wrong;
+  document.getElementById('rbSkip').textContent = skip;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('resultBanner').classList.add('show');
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('btnRetry').style.display = 'inline-block';
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = '25 / 25';
+
+  document.getElementById('resultBanner').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  userAnswers = new Array(questions.length).fill(null);
+  submitted = false;
+  document.getElementById('resultBanner').classList.remove('show');
+  document.getElementById('btnSubmit').style.display = '';
+  document.getElementById('btnRetry').style.display = 'none';
+  document.getElementById('scoreNum').textContent = '—';
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+buildQuiz();
+</script>
+</body>
+</html>
