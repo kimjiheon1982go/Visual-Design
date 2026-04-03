@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시각디자인 조사 및 분석 — 전자책</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --ink-soft: #3d342a;
+    --paper: #faf7f2;
+    --paper-warm: #f3ede3;
+    --accent: #8b3a1e;
+    --accent-light: #c4633d;
+    --gold: #b08c4a;
+    --gold-light: #d4ac6a;
+    --rule: #d4c8b8;
+    --sidebar-bg: #1a1410;
+    --sidebar-text: #e8e0d4;
+    --sidebar-accent: #c4633d;
+    --point-bg: #fdf5ec;
+    --point-border: #b08c4a;
+    --table-head: #2a1f16;
+    --table-head-text: #faf7f2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif KR', serif;
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar-header {
+    padding: 32px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #sidebar-header .book-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--sidebar-accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  #sidebar-header h1 {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #f0e8dc;
+  }
+
+  #sidebar nav {
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .nav-chapter {
+    padding: 10px 24px 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 8px 24px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12.5px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all 0.2s;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    opacity: 1;
+    color: #f0e8dc;
+    border-left-color: var(--sidebar-accent);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .nav-item.sub {
+    padding-left: 36px;
+    font-size: 11.5px;
+    opacity: 0.55;
+  }
+
+  .nav-item.sub:hover, .nav-item.sub.active {
+    opacity: 0.9;
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: 280px;
+    flex: 1;
+    max-width: calc(100% - 280px);
+  }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+  }
+
+  #topbar .breadcrumb {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    opacity: 0.6;
+  }
+
+  #topbar .page-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  /* ── PAGE SECTIONS ── */
+  .page-section {
+    display: none;
+    padding: 64px;
+    max-width: 900px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .page-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COVER PAGE ── */
+  #cover {
+    min-height: calc(100vh - 50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px;
+  }
+
+  #cover .cover-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  #cover h1 {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  #cover h2 {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+
+  #cover .cover-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    margin-bottom: 40px;
+  }
+
+  #cover .cover-desc {
+    font-size: 15px;
+    line-height: 2;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin-bottom: 48px;
+  }
+
+  #cover .cover-toc {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 600px;
+  }
+
+  #cover .cover-toc-item {
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    padding: 14px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  #cover .cover-toc-item:hover {
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  #cover .cover-toc-item .chap-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  #cover .cover-toc-item .chap-name {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── CHAPTER HEADER ── */
+  .chap-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chap-num-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .chap-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .chap-subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--ink-soft);
+  }
+
+  /* ── SECTION HEADERS ── */
+  .sec-label {
+    display: inline-block;
+    background: var(--table-head);
+    color: var(--table-head-text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  h2.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 24px;
+    margin-top: 40px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  h2.section-title .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  h3.subsection-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 32px;
+    margin-bottom: 14px;
+    padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+
+  h4.sub2-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  /* ──강 제목 ── */
+  .gang-header {
+    background: linear-gradient(135deg, var(--table-head) 0%, #3d2a1a 100%);
+    color: #f0e8dc;
+    padding: 20px 28px;
+    margin: 48px 0 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .gang-header .gang-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .gang-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f0e8dc;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── PARAGRAPHS ── */
+  p, .para {
+    font-size: 14.5px;
+    line-height: 2;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+
+  /* ── NUMBERED ITEMS ── */
+  .num-list { margin: 16px 0; }
+
+  .num-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+
+  .num-item .num-badge {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 5px;
+  }
+
+  .num-item .num-badge.circle-gold {
+    background: var(--gold);
+  }
+
+  .num-item .num-text {
+    font-size: 14.5px;
+    line-height: 2;
+    color: var(--ink-soft);
+  }
+
+  /* ── POINT BOX ── */
+  .point-box {
+    background: var(--point-bg);
+    border: 1px solid var(--point-border);
+    border-left: 4px solid var(--gold);
+    padding: 20px 24px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .point-box .point-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .point-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .point-box li {
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .point-box li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .point-box .sub-list {
+    margin-left: 16px;
+    margin-top: 4px;
+  }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+
+  .data-table th {
+    background: var(--table-head);
+    color: var(--table-head-text);
+    padding: 12px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .data-table td {
+    padding: 12px 16px;
+    border: 1px solid var(--rule);
+    line-height: 1.85;
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+
+  .data-table tr:nth-child(even) td { background: var(--paper-warm); }
+
+  .data-table td.row-head {
+    background: #2a1f16;
+    color: #f0e8dc;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ── TIP BOX ── */
+  .tip-box {
+    background: #f0f4f8;
+    border-left: 4px solid #4a7fb5;
+    padding: 18px 22px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .tip-box .tip-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4a7fb5;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  /* ── 기출 표시 ── */
+  .exam-tags {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    opacity: 0.7;
+    margin-bottom: 8px;
+    line-height: 1.8;
+  }
+
+  /* ── 흐름도 ── */
+  .flow-chart {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  .flow-step {
+    background: var(--table-head);
+    color: #f0e8dc;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* ── SWOT TABLE ── */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 20px 0;
+  }
+
+  .swot-cell {
+    padding: 16px 18px;
+    background: var(--paper);
+  }
+
+  .swot-cell .swot-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .swot-cell.S .swot-label { color: #2e7d32; }
+  .swot-cell.W .swot-label { color: #c62828; }
+  .swot-cell.O .swot-label { color: #1565c0; }
+  .swot-cell.T .swot-label { color: #e65100; }
+
+  .swot-cell p {
+    font-size: 13px;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  /* ── NEXT/PREV BUTTONS ── */
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .page-nav button {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--accent);
+    background: none;
+    border: 1px solid var(--accent);
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .page-nav button:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .page-nav button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .page-nav button:disabled:hover {
+    background: none;
+    color: var(--accent);
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 280px; right: 0;
+    height: 3px;
+    background: var(--rule);
+    z-index: 200;
+  }
+
+  #progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; }
+    #main { margin-left: 220px; }
+    .page-section { padding: 40px 32px; }
+    #cover { padding: 40px 32px; }
+    #topbar { padding: 12px 32px; }
+    #cover h1 { font-size: 30px; }
+    #cover .cover-toc { grid-template-columns: 1fr; }
+  }
+
+  /* ── INLINE HIGHLIGHT ── */
+  .hl { 
+    background: linear-gradient(transparent 60%, rgba(176,140,74,0.25) 60%);
+    font-weight: 500;
+  }
+
+  kbd {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <div class="book-label">전자책 · E-Book</div>
+    <h1>시각디자인<br>조사 및 분석</h1>
+  </div>
+  <nav>
+    <div class="nav-chapter">시작</div>
+    <a class="nav-item active" onclick="showPage('cover')">📖 표지 및 목차</a>
+
+    <div class="nav-chapter">PART 03</div>
+    <a class="nav-item" onclick="showPage('p03')">시각디자인 관리</a>
+    <a class="nav-item sub" onclick="showPage('p03')">디자인 관리 · 정책 · 경영</a>
+
+    <div class="nav-chapter">PART 04</div>
+    <a class="nav-item" onclick="showPage('p04-1')">시장 환경 조사 및 분석 ①</a>
+    <a class="nav-item sub" onclick="showPage('p04-1')">시장조사 · 자료조사 · SD법</a>
+    <a class="nav-item" onclick="showPage('p04-2')">시장 환경 조사 및 분석 ②</a>
+    <a class="nav-item sub" onclick="showPage('p04-2')">표본조사 · 조사방법 · 포지셔닝</a>
+    <a class="nav-item" onclick="showPage('p04-3')">시장 환경 조사 및 분석 ③</a>
+    <a class="nav-item sub" onclick="showPage('p04-3')">척도 · SWOT · 분석방법</a>
+
+    <div class="nav-chapter">PART 05</div>
+    <a class="nav-item" onclick="showPage('p05')">디자인 트렌드 조사 및 분석</a>
+    <a class="nav-item sub" onclick="showPage('p05')">트렌드 조사 · 예측 · 전략</a>
+
+    <div class="nav-chapter">PART 06</div>
+    <a class="nav-item" onclick="showPage('p06-1')">사용자 조사 및 분석 ①</a>
+    <a class="nav-item sub" onclick="showPage('p06-1')">시장 세분화 · STP</a>
+    <a class="nav-item" onclick="showPage('p06-2')">사용자 조사 및 분석 ②</a>
+    <a class="nav-item sub" onclick="showPage('p06-2')">인터뷰 · 관찰 · 섀도잉</a>
+  </nav>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <span class="breadcrumb" id="breadcrumb">표지 및 목차</span>
+    <span class="page-label" id="page-label">1 / 8</span>
+  </div>
+
+  <!-- ═══════════════ COVER ═══════════════ -->
+  <div id="cover" class="page-section active">
+    <div class="cover-tag">시각디자인산업기사 필기 · 핵심 요약</div>
+    <h1>시각디자인<br>조사 및 분석</h1>
+    <h2>Visual Design Research &amp; Analysis</h2>
+    <div class="cover-divider"></div>
+    <p class="cover-desc">시각디자인 조사분석 파트의 핵심 이론을 체계적으로 정리한 전자책입니다. 시장조사, 포지셔닝, 트렌드, 사용자 조사 등 시험 출제 핵심 내용을 포함합니다.</p>
+    <div class="cover-toc">
+      <div class="cover-toc-item" onclick="showPage('p03')">
+        <div class="chap-num">PART 03</div>
+        <div class="chap-name">시각디자인 관리</div>
+      </div>
+      <div class="cover-toc-item" onclick="showPage('p04-1')">
+        <div class="chap-num">PART 04</div>
+        <div class="chap-name">시장 환경 조사 및 분석</div>
+      </div>
+      <div class="cover-toc-item" onclick="showPage('p05')">
+        <div class="chap-num">PART 05</div>
+        <div class="chap-name">디자인 트렌드 조사 및 분석</div>
+      </div>
+      <div class="cover-toc-item" onclick="showPage('p06-1')">
+        <div class="chap-num">PART 06</div>
+        <div class="chap-name">사용자 조사 및 분석</div>
+      </div>
+    </div>
+    <div class="page-nav">
+      <button disabled>← 이전</button>
+      <button onclick="showPage('p03')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P03 ═══════════════ -->
+  <div id="p03" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 03</span>
+      <div class="chap-title">시각디자인 관리</div>
+      <div class="chap-subtitle">기업과 디자인 · 디자인 관리 · 정책 · 경영</div>
+    </div>
+
+    <div class="gang-header">
+      <span class="gang-badge">제 1 강</span>
+      <h2>기업과 디자인</h2>
+    </div>
+
+    <h2 class="section-title"><span class="num">01</span> 디자인 관리(design management)</h2>
+
+    <h3 class="subsection-title">(1) 계획과 기획의 개념</h3>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-badge">①</div>
+        <div class="num-text">최근에 '기획과 계획'이라는 용어가 자주 사용되고 있다. 이 두 가지 용어는 비슷한 의미를 가져 명확한 정의를 하지 못하고 사용되는 경우가 많다. <span class="hl">계획은 미래의 목표이며, 그 목표를 위해 사전에 준비하는 행위 또는 아이디어를 내는 행위를 기획</span>이라 한다.</div>
+      </div>
+      <div class="num-item">
+        <div class="num-badge">②</div>
+        <div class="num-text">사전적으로 기획은 '어떤 일을 꾸며 계획함', 계획은 '일을 함에 앞서서 방법, 차례, 규모 등을 미리 생각하여 세운 내용'이라고 정의할 수 있다. <span class="hl">기획은 계획을 위한 사전준비 차원의 '행위'이고, 계획은 기획에 따라 나타나는 '결과'</span>라 할 수 있다.</div>
+      </div>
+    </div>
+    <div class="flow-chart">
+      <div class="flow-step">계획 (목표)</div>
+      <div class="flow-arrow">⇩</div>
+      <div class="flow-step">기획 (아이디어)</div>
+    </div>
+
+    <h3 class="subsection-title">(2) 전략의 개념</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">전략은 군사적인 용어로 '군대'라는 의미의 <kbd>stratis</kbd>와 '끈다'라는 의미의 <kbd>ago</kbd>가 결합한 것으로 지휘능력 또는 전략가라는 의미로 장군을 의미하는 고대 그리스어인 '스트라테고스(strategos)'로부터 직접 유래되었다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">전략은 계획행위 중 하나이며 다른 기획행위보다 절박하고 신중할 필요가 있다. 그 이유는 전쟁에서는 한 번의 잘못된 기획으로 많은 사람들이 목숨까지 잃을 수 있기 때문이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">전략은 기본적으로 수단과 방법을 가리지 않고 목적을 이루기 위한 것으로 결과와 성과 중심적 특성을 가진다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><span class="hl">디자인 전략은 한 기업의 디자인 활동이 지향해야 할 목표를 설정해주는 종합적이며 장기적인 디자인 기획</span>이다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(3) 디자인 관리의 개념</h3>
+    <p>조직의 경영을 디자인을 통해 계획하고 조정 및 통제, 추진하는 개념으로 디자인 과정을 제정, 작업의 성과에 대한 합리적 보수, 디자인에 관련하는 작업조건의 표준과 같은 것들을 종합적으로 디자인을 통해 기획하는 과정을 말한다.</p>
+
+    <div class="point-box">
+      <div class="point-title">POINT 디자인 관리 순환도구</div>
+      <ul>
+        <li><strong>계획(planning)</strong>: 목표설정, 전략수립, 예산편성, 의사결정 등</li>
+        <li><strong>조직(organizing)</strong>: 구조설계, 역할과 책임부여, 소통채널 설정 등</li>
+        <li><strong>통제(controlling)</strong>: 성과측정, 예산모니터링, 문제해결 등</li>
+      </ul>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT 디자인 관리 측면의 프로세스</div>
+      <div class="flow-chart" style="background:transparent; border:none; padding:0; margin:0;">
+        <div class="flow-step">계획</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">시장조사</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">아이디어 수집</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">아이디어 확정</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">시안 제작</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">프레젠테이션</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">생산/품질관리</div><div class="flow-arrow">⇨</div>
+        <div class="flow-step">종합평가</div>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">(4) 디자인 전략의 구성요소</h3>
+    <p>디자인 전략은 기업이 디자인을 통해 경쟁우위를 확보하고 브랜드의 가치를 향상시키는 것을 목적으로 하는 전략이다.</p>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>기업 디자인 목표(corporate design objective)</strong>: 기업이 디자인을 통해 달성하고자 하는 목표로 브랜드 가치 향상, 제품과 서비스의 혁신, 시각디자인의 일관성 등이 있다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>기업 디자인 범주(corporate design scope)</strong>: 기업의 디자인 활동 범위를 규정하는 요소이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>디자인 운영 정책(design operating policy)</strong>: 기업이 어떻게 디자인을 통해 전략적으로 운영할지를 정하는 것으로 디자인 프로세스, 조직구성, 디자인 가이드라인 등이 있다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 디자인 정책(design policy)</h2>
+
+    <h3 class="subsection-title">(1) 정책의 어원</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">정책의 어원은 <kbd>polis(폴리스)</kbd>로 '도시국가'를 뜻하는 그리스어이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">산스크리트어로 <kbd>Pur(퍼)</kbd>라는 '도시'의 의미이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">라틴어인 <kbd>Politia</kbd>가 국가의 의미로 변화했다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">중세 영어로는 공공문제에 대한 처리, 정부의 운영의 의미의 <kbd>policie</kbd>로 표기한다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 정책의 개념</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">정책이란 '공적인 일'에 대한 처리와 같은 일반적인 의미로 안보정책, 복지정책, 산업정책, 보건정책 등이 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">정부, 단체, 집단, 개인 등에 의해 다양한 대안 중에서 결정된 행동경로 또는 방법으로 사회 구성원의 생활의 질과 공익을 향상시키고자 하는 공공조직의 미래지향적 활동 지침 또는 활동목표를 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">정책은 <kbd>Politics(정책, 폴리틱스)</kbd>와 같은 의미로서 정치와 밀접한 관계를 가진다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">정책의 범위: <span class="hl">계획(plan) > 사업(program) > 단위사업(project) > 세부활동(action)</span></div></div>
+    </div>
+
+    <h3 class="subsection-title">(3) 디자인 정책의 정의</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">전반적인 시민의 문화활동을 배경으로 문화적 가치성과 경제적 가치획득을 정부의 중·장기적 목표의 형성과 목표달성을 위한 의도적이며 계획적인 행동 및 지침을 의미한다. <em>(고신대 금진우 교수)</em></div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">디자인을 위한 제반 진흥활동이 실질적으로 이루어지도록 하는 육성 및 지원체계 <em>(카이스트 정경원 교수)</em></div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">디자인이라는 특정 주제에 대한 정부 의도에 관한 일련의 원칙, 목적, 절차 <em>(홍콩홀리테크닉대 존 해스켓)</em></div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><span class="hl">디자인 정책이란 디자인과 정책의 합성어로 디자인을 통한 문화적·경제적 가치 창출을 위한 정부의 의도적이며 계획적인 행동 및 절차를 의미한다.</span></div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">03</span> 디자인 경영</h2>
+
+    <h3 class="subsection-title">(1) 디자인과 기업</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">기업의 존재 이유와 목적은 무엇보다 수익 창출과 기업의 발전에 있다. 날로 경쟁이 심화되는 현대에는 기업이 시장과 소비자들의 행태와 요구를 항상 파악하여 생존을 위한 노력을 끝없이 해야 한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">기업의 디자인 정책은 디자인을 통해 구매자로 하여금 제품에 대해 구매욕을 높이고, 다른 기업과 차별화와 세련된 제품을 소비자에게 공급함으로써 소비자들의 욕구를 충족시켜 기업의 수익 증대를 도모하기 위함이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">기업이 치열한 경쟁 속에서 살아남는 방법 중 가장 중요한 것은 <span class="hl">타 회사와의 차별화</span>이다. 시장에 근거를 둔 기업 내에서 디자인은 마케팅과 밀접한 관계를 갖는다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 디자인 경영의 의미</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">디자인(design)과 경영(management)이라는 복합적인 단어인 디자인 경영은 <span class="hl">디자인에 관한 최고 경영자의 사상이나 기업경영의 전략적 수단</span>을 의미한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">경영이란 <kbd>man + age + ment</kbd> 세 단어가 결합된 말로 나이를 먹어가면서 이해하고 습득하게 되는 조직운영에 관한 지혜를 의미하는데, 설정된 목표를 달성하기 위해 필요한 자원을 획득하고 다루는 일련의 행동을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">디자인 경영은 전통적인 경영방식과는 다른 개념으로 시뮬레이션(Simulation), 시각화(Visualization), 유용성(Usability), 기능성(Functionality), 창의성(Creativity), 감성(Emotion) 등의 경영기술과 디자인프로세스에 기초를 두고 있다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">디자인 경영은 디자인을 경영전략적 수단으로 활용하여 새로운 비전과 가치를 창출함으로써 조직의 목표를 달성하고 생활문화를 창달하기 위해 경영자, 디자이너와 전문가들이 활용할 수 있는 지식체계를 연구하는 분야라 정의할 수 있다.</div></div>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('cover')">← 이전</button>
+      <button onclick="showPage('p04-1')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P04-1 ═══════════════ -->
+  <div id="p04-1" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 04 — 제1강</span>
+      <div class="chap-title">시장 환경 조사 및 분석 ①</div>
+      <div class="chap-subtitle">시장조사방법과 자료수집기법</div>
+    </div>
+
+    <h2 class="section-title"><span class="num">01</span> 시장조사(marketing research)</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">조사는 모든 학문 분야에서 사용되는 방법으로 현재의 환경 분석 및 필요로 하는 분석 자료와 결과물을 찾아가는 과정을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">시장조사란 생산자로부터 소비자에게 이전되는 재화, 서비스 판매에 따라 일어나는 마케팅 전반에 관한 사실의 수정, 기록, 분석 등을 조사하는 과정을 말하며 상품 및 마케팅에 관련된 문제에 관해서 과학적으로 자료를 계획, 수집, 분석, 보고하는 등의 활동을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">시장조사방법에는 <span class="hl">시장분석(market analysis), 시장실사(marketing survey), 시장실험(test marketing)의 3단계</span>가 있다.
+        <br>• 시장분석: 시장의 크기, 경쟁사들의 동향, 소비자들의 니즈와 선호도 등을 조사하는 과정
+        <br>• 시장실사: 소규모로 진행되는 조사로 제품이나 서비스의 출시 전에 소비자들의 반응과 피드백을 수집하는 과정
+        <br>• 시장실험: 실제 시장에서 제품을 출시하고, 성과를 측정하는 과정
+      </div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">시장조사를 통해 논리적으로 합리적인 근거를 찾고 다양한 현상을 개념화할 뿐만 아니라, 수집된 자료를 분석 및 평가할 수 있다. 이 과정에서 발표된 논문, 언론 기사 등의 문헌자료만이 아니라 관찰, 인터뷰, 설문조사 등의 자료를 활용할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text">기업은 소비자가 무엇을 필요로 하고 원하며 선호하는지를 분석, 결정하고 실행하여 시장을 세분화하고 효율적인 관리를 위한 자료를 확보해 효과적으로 이윤을 창출할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑥</div><div class="num-text">시장조사를 통해 소비자의 니즈와 경쟁업체 등을 파악할 수 있으며 판매촉진의 효과를 높일 수 있고, 의사결정과정에서 오류를 줄일 수 있으며, 유통과정에서 효과적으로 비용을 절약할 수 있다. 그리고 <span class="hl">시장규모 파악 및 마케팅 전략수립</span>을 할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑦</div><div class="num-text">시장조사의 내용에는 상품조사, 판매조사, 소비자조사, 광고조사, 잠재수요자조사, 판로조사 등 각 분야를 포괄한다. 상품조사는 제품의 품질, 가격, 패키지, 디자인 등을 조사하고, 판매조사는 판매자와 구매자의 관계, 판매채널 등을 분석한다. 소비자조사는 소비자의 니즈와 선호도, 구매결정에 영향을 미치는 요인 등을 파악하며, 광고조사는 광고의 효과성과 인지도를 측정한다. 잠재수요자조사는 시장의 잠재적 수요자들을 파악하고, 판로조사는 시장 내 경쟁자들과 기업의 판로 전략을 분석한다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 자료조사(research)와 자료수집방법</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">연구결과는 어떤 자료를 사용했느냐에 따라 달라질 수 있다. <span class="hl">인구의 성별, 소득정보, 인구의 연령구성, 점포의 분포율 등은 시장조사의 기초자료로 사용된다.</span></div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">자료조사방법은 출판물, 논문, 신문·잡지 기사 등을 조사하는 <strong>문헌 조사</strong>, 사물의 속성을 수치화하는 대상물을 측정하는 조사, 사람들의 행동과 생각을 물어보는 <strong>사용자 조사</strong>로 나눌 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">자료에는 <span class="hl">1차 자료(primary data)와 2차 자료(secondary data)</span> 두 가지 종류가 있다. 1차 자료는 기존의 2차 자료로부터 얻을 수 없어 직접 조사하여 수집한 자료, 2차 자료는 과거의 다른 연구목적으로 조사되어 수집된 자료이다.</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>구분</th><th>장단점</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="row-head">1차 자료</td>
+          <td>① 현재의 직접적인 연구와 직결되므로 분석결과를 직접 활용할 수 있다.<br>② 2차 자료에 비해 시간과 노력, 비용이 많이 들어가므로 먼저 2차 자료를 활용할 수 있는지를 우선적으로 파악한 후 부족한 부분에 1차 자료를 수집하는 것이 유리하다.</td>
+        </tr>
+        <tr>
+          <td class="row-head">2차 자료</td>
+          <td>① 1차 자료에 비해 시간과 비용, 노력이 적게 들어간다.<br>② 1차 자료에 비해 시간이 흐름에 따라 정확성이 떨어지며 현재에 필요한 자료를 제공받지 못하므로 적합성을 평가하여 연구에 활용해야 한다.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><strong>설문지법(questionnaire method)</strong>: 가장 대표적인 1차 자료 수집방법으로 응답자의 답변을 요하는 일련의 질문들로 구성된 설문지를 이용하여 조사하는 방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text"><strong>면접법(interview method)</strong>: 조사의 목적을 공개하면서 자료를 수집하는 방법으로 응답자의 자유로운 의사표현을 조사자가 기록하는 식의 조사방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">⑥</div><div class="num-text"><strong>서베이법(survey method)</strong>: 조사에서 가장 많이 활용되는 방법 중 하나로 개별면접조사(대인조사), 전화조사, 우편조사, 인터넷조사 등을 이용하여 응답자들에게 연구주제와 관련된 질문에 응답하게 함으로써 자료를 체계적으로 수집하고 분석하는 조사설계방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">⑦</div><div class="num-text"><strong>관찰법(observation method)</strong>: 조사의 신뢰도를 높이기 위해 소비자의 행동을 직접적으로 관찰하는 방법으로 특정 지역의 유동인구를 분석하거나 시청률이나 시간 집중도 등을 조사하는 데 적합하다.</div></div>
+      <div class="num-item"><div class="num-badge">⑧</div><div class="num-text"><strong>양적 연구방법과 질적 연구방법</strong>: 양적 연구방법은 척도화되고 계량화된 자료를 통하여 분석하고 논리적으로 증거를 제시하는 연구방법이다. 질적 연구방법은 연구자의 직관적 통찰과 공감적 이해가 많이 활용된다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT 양적 · 질적 연구방법의 종류</div>
+      <ul>
+        <li><strong>양적 연구방법</strong>: 개별면접조사법, 전화조사법, 우편조사법 등</li>
+        <li><strong>질적 연구방법</strong>: 심층면접법, 포커스그룹조사법 등<br>
+        <span style="font-size:11px; color:var(--accent); font-family:'IBM Plex Mono',monospace;">(2017년 1회 산업기사) (2019년 1회 산업기사) (2018년 2회 산업기사) (2024년 3회 산업기사)</span></li>
+      </ul>
+    </div>
+
+    <h2 class="section-title"><span class="num">03</span> SD법 (언어척도법, 의미분화법, 의미미분법)</h2>
+    <div class="exam-tags">(2011년 4회 산업기사) (2013년 2회 기사) (2014년 2회 기사) (2014년 4회 산업기사) (2016년 1회 산업기사) (2018년 2회 산업기사) (2024년 1회 산업기사) (2024년 2회 기사) (2024년 2회 산업기사)</div>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><span class="hl">1959년 미국의 심리학자 오스굿(C.E. Osgoods)</span>이 경관이나 제품, 색, 음향, 감촉, 유행색 경향 및 선호도 비교분석과 여러 가지 대상의 인상을 파악하기 위해 고안한 조사 방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">조사 대상자의 주관적인 의미를 객관적으로 평가하여 <span class="hl">정성적(문자로 분석하여 설명) 이미지를 정량적(수치로 분석하여 설명)이며 객관적으로 측정</span>하는 방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">색채조사방법 중 형용사의 반대어쌍, 즉 <span class="hl">상반되는 형용사군 10~50개</span>를 이용하여 이미지 맵과 이미지 프로필과 같은 좌표계로 결과를 볼 수 있으며 정서를 언어스케일로 나타낼 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">일정 점수를 지니는 척도를 주어 각 형용사에 해당하는 점수를 부여하는 방식으로, 이미지 분석법으로 널리 사용되고 있으며 색채의 시각현상과 감정효과를 다면적으로 분석할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text">보통 <span class="hl">5단계 척도</span>를 사용하지만 만약 세밀한 차이를 필요로 할 경우 <span class="hl">7단계 평가</span>를 척도화하여 조사할 수 있다. 요인분석에 있어 평가차원, 능력차원, 활동차원을 의미공간으로 구성하여 조사한다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT SD법 형용사 평가척도</div>
+      <ul>
+        <li><strong>① 평가차원(evaluative dimension)</strong>: 좋은 – 나쁜, 깨끗한 – 더러운, 아름다운 – 추한, 가치 있는 – 가치 없는</li>
+        <li><strong>② 능력차원(역능차원, potency dimension)</strong>: 큰 – 작은, 강한 – 약한, 깊은 – 얕은, 두꺼운 – 얇은</li>
+        <li><strong>③ 활동차원(activity dimension)</strong>: 빠른 – 느린, 날카로운 – 둔한, 능동적인 – 수동적인</li>
+      </ul>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p03')">← 이전</button>
+      <button onclick="showPage('p04-2')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P04-2 ═══════════════ -->
+  <div id="p04-2" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 04 — 제1~3강</span>
+      <div class="chap-title">시장 환경 조사 및 분석 ②</div>
+      <div class="chap-subtitle">표본조사 · 조사방법 · 포지셔닝 분석</div>
+    </div>
+
+    <h2 class="section-title"><span class="num">04</span> 표본조사(sampling survey)</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><strong>표본선정</strong>: 가장 많이 적용되는 연구방법으로 조사 대상을 선정하는 것을 말하며, 의사결정에 필요한 정보를 제공해 줄 수 있는 대상을 정하는 것을 말한다. 표본을 선정할 때는 모집단에 대한 정확한 이해가 선행되어야 하며, 편차를 최대한 줄여야 한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text"><strong>전수조사와 표본조사</strong>: 전수조사는 모집단 구성원 전체에 대해 조사하는 방법, 표본조사는 모집단을 대표할 수 있는 일부 대상을 표본으로 선정하여 조사하는 방법이다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT 표본추출법 <span style="font-size:10px; font-family:'IBM Plex Mono',monospace;">(2013년 1회 산업기사)</span></div>
+      <ul>
+        <li><strong>① 단순무작위추출법</strong>: 각 표본에 일련번호를 부여하고 무작위로 추출하는 방법</li>
+        <li><strong>② 군집추출법</strong>: 유사한 특성을 가진 모집단을 묶어 군집으로 분류한 후 무작위로 추출하는 방법</li>
+        <li><strong>③ 계통추출법</strong>: 모집단 내 모든 개체를 계통적으로 여러 하위집단으로 분류한 후 비례적으로 추출하는 방법</li>
+        <li><strong>④ 다단추출법</strong>: 모집단 추출 시 1차로 표본을 추출하고 다시 그중에서 표본을 추출하면서 접근하는 방법</li>
+        <li><strong>⑤ 국화추출법</strong>: 모집단을 소그룹으로 분할한 후 그룹별로 비율을 정해서 조사하는 방법</li>
+        <li><strong>⑥ 판단추출법</strong>: 전문지식을 가진 전문가가 표본을 임의로 추출하는 방법</li>
+        <li><strong>⑦ 할당추출법</strong>: 공평하게 모집단의 특성에 따라 표본을 추출하는 방법</li>
+      </ul>
+    </div>
+
+    <h2 class="section-title"><span class="num">05</span> 조사 방법과 종류</h2>
+    <h3 class="subsection-title">(1) 디자인 조사</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">주로 활용되는 조사방법론: <span class="hl">시장조사, 문화기술적인 조사, 사용자 경험 조사, 전형적 디자인 조사, 혼합형 조사</span> 등이 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">디자인 조사는 역사, 문화, 철학, 공학, 과학, 마케팅, 경제학, 심리학 등의 분야를 고려하여 조사를 진행하며, 이를 바탕으로 문제해결을 위한 디자인 전략을 수립한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">이를 위해서는 문제를 다각도로 바라볼 수 있는 시야와 깊이 있는 지식, 그리고 창의적인 문제해결 능력이 필요하다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 조사 방법론의 종류</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">1</div><div class="num-text"><strong>시장조사(market research)</strong>: 상품을 판매하거나 서비스를 제공하는 고객에 대한 정보를 모으는 모든 조직적 활동을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">2</div><div class="num-text"><strong>문화 기술적인 조사(Ethnography)</strong>: 인류학의 개념을 기반으로 한 조사방법론 중 하나로, 인간의 행동과 문화 간의 관계를 이해하고자 하는 연구 유형이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">3</div><div class="num-text"><strong>사용자 경험 조사(user experience research)</strong>: '실험(Testing)' 또는 '사용성 테스트'라고도 하며 서비스 개발과정에서 최종 사용자들의 니즈와 행동을 이해하기 위해 직접 사용자들을 대상으로 조사하는 방식이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">4</div><div class="num-text"><strong>전형적인 디자인 조사</strong>: 디자이너나 전문가의 시각적인 판단과 주관적인 분석을 기반으로 조사하는 방식을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">5</div><div class="num-text"><strong>혼합 리서치(mixed research)</strong>: 주관적/객관적 방법, 정성적/정량적 방법, 현장/실험실 조사 방식 등을 복합적으로 사용하여 리서치의 보완과 분석이 이루어지는 방법론이다.</div></div>
+    </div>
+
+    <div class="gang-header">
+      <span class="gang-badge">제 3 강</span>
+      <h2>경쟁사·경쟁 디자인 포지셔닝 분석</h2>
+    </div>
+
+    <h2 class="section-title"><span class="num">01</span> 포지셔닝(positioning)</h2>
+    <h3 class="subsection-title">(1) 포지셔닝의 의미</h3>
+    <div class="exam-tags">(2010년 4회) (2011년 1·2회 산업기사) (2012년 1회) (2013년 4회) (2014년 4회) (2015년 2회 기사) (2016년 4회) (2017년 1회) (2019년 2회 기사) (2024년 2회 기사)</div>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><span class="hl">소비자의 마음속에 자사제품이나 기업이 표적시장·경쟁·기업 능력과 관련하여 가장 유리한 포지션에 있도록 노력하는 과정</span>, 즉 어떤 제품을 고객들의 머리에 확실하게 기억시키는 과정을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">이를 위해서는 경쟁사나 시장환경 등을 고려하여 자사제품이나 기업의 능력을 강조하고, 소비자들이 제품이나 기업을 인지하고 기억하기 쉽도록 마케팅 전략을 수립해야 한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">이러한 포지셔닝은 제품의 브랜드 이미지와 연결되어 소비자들의 구매결정에 영향을 미친다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 포지셔닝 차별화의 종류 <span style="font-size:11px; color:var(--accent);">(2023년 4회 산업기사)</span></h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>제품 차별화</strong>: 기업이 제품의 특징, 성능, 디자인 등을 경쟁업체와 구별되는 차이점을 강조하여 고객의 관심을 끌고 매출을 증대시키는 전략이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>서비스 차별화</strong>: 제품의 특징 외에도 고객에게 제공되는 서비스를 경쟁우위로 활용하는 전략이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>판매원 차별화</strong>: 제품이나 서비스를 판매하는 인력의 역량과 전문성을 경쟁우위로 활용하는 전략이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">④</div><div class="num-text"><strong>이미지 차별화</strong>: 기업이 소비자들에게 전달하려는 이미지를 경쟁업체와 구별되게 만들어 브랜드 가치를 강화하는 전략이다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 포지셔닝의 종류</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><strong>제품과 서비스의 속성을 바탕으로 한 포지셔닝</strong>: 기능, 특성, 장단점 등을 바탕으로 경쟁제품과 비교해 차별화된 위치를 설정하는 방식이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text"><strong>소비자의 사용 상황에 의한 포지셔닝</strong>: 사용 상황, 목적, 용도 등을 고려해 포지셔닝을 결정하는 방식이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text"><strong>제품 사용자에 의한 포지셔닝</strong>: 제품이나 서비스를 사용하는 대상, 즉 고객을 중심으로 포지셔닝을 결정하는 방식이다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><strong>경쟁자에 의한 포지셔닝</strong>: 경쟁자와 비교해 자사 제품이나 서비스가 차별화되는 포지셔닝을 결정하는 방식이다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text"><strong>이미지에 의한 포지셔닝</strong>: 제품이나 서비스의 이미지, 브랜드 가치, 인식 등을 중심으로 포지셔닝을 결정하는 방식이다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">03</span> 포지셔닝 전략의 수립과정</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>경쟁적 강점 파악</strong>: 소비자들의 근간 필요요건(bedrock needs)과 성능 요구사항(performance needs)을 파악하여 자사 제품이나 서비스가 어떤 면에서 경쟁사들보다 더 높은 가치를 제공할 수 있는지 분석해야 한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>적절한 경쟁우위의 선택</strong>: 경쟁적 강점 파악 이후 그중에서도 가장 효과적인 경쟁우위를 선택하는 것을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>선택한 포지션의 전달</strong>: 소비자들에게 포지셔닝이 될 수 있도록 차별점을 전달하고 포지셔닝을 위해 기업의 실질적 행동이 필요한 과정이다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">④</div><div class="num-text"><strong>지각도(perceptual map)</strong>: 제품이나 브랜드의 포지셔닝을 시각적으로 보여주는 도구로, 소비자들이 중요하게 생각하는 평가 차원을 축으로 나타낸 그래프 형태의 도표이다. 제품의 심리적 포지셔닝 개발을 위한 강력한 도구로 사용된다.</div></div>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p04-1')">← 이전</button>
+      <button onclick="showPage('p04-3')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P04-3 ═══════════════ -->
+  <div id="p04-3" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 04 — 자료 조사 및 분석</span>
+      <div class="chap-title">시장 환경 조사 및 분석 ③</div>
+      <div class="chap-subtitle">척도와 변수 · SWOT 분석 · 통계 분석방법</div>
+    </div>
+
+    <h2 class="section-title"><span class="num">04</span> 자료 조사 및 분석 방법</h2>
+    <h3 class="subsection-title">(1) 척도(scale)</h3>
+    <p>척도란 측정하고자 하는 관측 대상의 결과를 수치로 표시하는 것을 말한다. 즉, <span class="hl">질적 자료를 양적 자료로 만들어 사용하는 도구</span>를 말한다. 척도에는 명목척도, 서열척도, 등간척도, 비율척도 등이 있다.</p>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><strong>명목척도(nominal scale)</strong>: 사람들이나 물체들을 단순한 분류를 목적으로 숫자를 사용하는 척도. 성별, 혈액형, 인종, 스포츠선수 등번호 등. 수치적인 크기나 순서는 의미가 없다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text"><strong>서열척도(ordinal scale)</strong>: 속성 크기에 따라 순위를 나타내는 측정도구. <span class="hl">상대적 순위만을 구분</span>할 뿐, 서열 간의 차이는 의미가 없다. 올림픽 등수, 대학 합격순위, 번호 순서 등.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text"><strong>등간척도(interval scale)</strong>: 순서뿐 아니라 상대적인 차이도 고려해 측정하는 척도. <span class="hl">가감연산(더하고 빼고) 가능</span>. 리커트 5척도, 의미분별법(semantic differential method)에서 사용.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><strong>비율척도(ratio scale)</strong>: 0이 절대적인 기준이 되므로 <span class="hl">가감연산뿐만 아니라 곱셈, 나눗셈 연산도 가능</span>. 키와 몸무게 등 물리적 측정치.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 변수(variable)</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>실험변수(독립변수)</strong>: 결과변수의 값에 영향을 미치는 원인을 제공하는 변수. 원인변수, 설명변수, 예측변수라고도 한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>결과변수(종속변수)</strong>: 실험변수의 영향을 받아 특정한 값을 가진다고 가정한 변수. 목적변수, 타깃변수라고도 한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>외생변수(통제변수)</strong>: 실험변수가 아니면서 결과변수에 영향을 주는 일종의 독립변수. 종속변수에 미치는 영향을 제거 또는 통제해야 한다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(3) SWOT 분석</h3>
+    <p>기업의 환경분석을 통해 내부적 요인인 <span class="hl">강점(Strength), 약점(Weakness)</span>과 외부적인 요인인 <span class="hl">기회(Opportunity), 위협(Threat)</span>을 규정하고 이를 토대로 기업의 마케팅 전략을 수립하는 분석기법이다. 학자에 따라서는 TOWS라 부르기도 한다.</p>
+    <div class="swot-grid">
+      <div class="swot-cell S"><div class="swot-label">SO 전략 (강점–기회)</div><p>시장의 기회를 활용하기 위해 강점을 사용하는 전략을 선택한다.</p></div>
+      <div class="swot-cell O"><div class="swot-label">ST 전략 (강점–위협)</div><p>시장의 위협을 회피하기 위해 강점을 사용하는 전략을 선택한다.</p></div>
+      <div class="swot-cell W"><div class="swot-label">WO 전략 (약점–기회)</div><p>약점을 극복함으로써 시장의 기회를 활용하는 전략을 선택한다.</p></div>
+      <div class="swot-cell T"><div class="swot-label">WT 전략 (약점–위협)</div><p>시장의 위협을 회피하고 약점을 최소화하는 전략을 선택한다.</p></div>
+    </div>
+
+    <h3 class="subsection-title">(4) 분석방법</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><strong>요인분석(factor analysis)</strong>: 변수들 간의 상호 연관성(상관관계)을 분석해서 내재된 요인을 추출하여 전체 자료를 대변할 수 있는 변수의 수를 줄이는 분석방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text"><strong>군집분석(cluster analysis)</strong>: 유사한 속성을 지닌 대상을 몇 개의 집단으로 그룹화한 다음 각 집단의 성격을 파악함으로써 데이터 전체의 구조에 대해 이해하고자 하는 탐색적인 분석방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text"><strong>회귀분석(regression analysis)</strong>: 독립변수가 종속변수에 미치는 영향력의 크기를 파악하여 종속변수의 값을 예측하는 선형모형을 산출하는 방법이다. 변수 간의 인과관계 파악에도 활용된다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text"><strong>상관분석(correlation analysis)</strong>: 변수 간의 선형 관계(일정한 비율로 증가 또는 감소하는 관계) 정도를 분석하는 통계기법. 두 변수 간의 상관관계를 수치적으로 나타낼 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text"><strong>판별분석(discriminant analysis)</strong>: 독립변수(설명변수)와 종속변수(판별변수) 간의 관계를 파악하여, 미리 정해진 그룹(범주)에 속하는 개체를 판별하기 위한 분석방법이다. 마케팅, 경영학, 의학 등 다양한 분야에서 활용된다.</div></div>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p04-2')">← 이전</button>
+      <button onclick="showPage('p05')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P05 ═══════════════ -->
+  <div id="p05" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 05</span>
+      <div class="chap-title">디자인 트렌드 조사 및 분석</div>
+      <div class="chap-subtitle">트렌드 조사방법 · 예측 · 전략화</div>
+    </div>
+
+    <div class="gang-header"><span class="gang-badge">제 1 강</span><h2>트렌드 조사방법</h2></div>
+
+    <h2 class="section-title"><span class="num">01</span> 디자인 트렌드</h2>
+    <h3 class="subsection-title">(1) 트렌드(trend)의 이해</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">트렌드는 <span class="hl">'방향, 경향, 동향, 추세, 유행'</span> 등을 뜻하며 사회와 특정 문화, 시장이 변화하는 현상과 경향으로 사상이나 행동 또는 어떤 현상에서 나타나는 일정한 방향이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">트렌드의 주기는 일반적으로 <span class="hl">5~10년</span> 정도로, 신문, 잡지, 책, 보고서, 전시, 세미나 또는 다양한 관련 기사 검색과 트렌드 정보 발표기관에서 제공하는 동향 자료를 참고하여 관련된 자료를 지속적으로 수집, 조사해야 한다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 트렌드 조사(research) <span style="font-size:11px; color:var(--accent);">(2024년 2회 산업기사)</span></h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">트렌드 조사는 사회, 경제, 기술, 문화 등의 다양한 변화 요인을 소비자의 라이프 스타일에 영향을 끼치는 다양한 요인들의 총체적 흐름과 상세한 적용 요인으로 나누어 파악해 <span class="hl">소비자들이 미래에 어떤 구매습관을 할 것인지를 연구하고 예측하는 과정</span>이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">트렌드(5~10년)는 유행(6개월~1년)보다 지속 기간이 길기 때문에 새로운 제품을 예측하고 개발하는 데 매우 중요한 조사이다. 경쟁업체의 제품과 비교하여 시장 선점 전략을 수립하는 데에도 활용된다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 스타일 트렌드 조사</h2>
+    <p>스타일 트렌드 조사는 디자인 작업에 매우 중요한 역할을 한다. 디자이너는 소비자들이 선호하는 스타일과 트렌드를 파악하고, 그것을 디자인에 반영하여 제품의 경쟁력을 높이기 위해 노력해야 한다. 색상, 질감, 분위기 등 다양한 디자인적 요소들을 반영할 수 있도록 자료를 수집하고 분석해야 한다.</p>
+
+    <div class="gang-header"><span class="gang-badge">제 2 강</span><h2>트렌드 예측방법</h2></div>
+
+    <h2 class="section-title"><span class="num">01</span> 트렌드 예측(trend forecasting)</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">트렌드 예측은 소비자들의 니즈(needs)와 구매습관을 파악하고 분석하여 미래의 트렌드를 예측하는 것이다. 이를 통해 기업은 소비자들의 요구에 맞는 제품과 서비스를 개발하고 경쟁우위를 확보할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">트렌드 예측은 다양한 정보와 데이터를 수집하고 분석하는 과정에서 인과관계를 파악하고 창의적인 아이디어를 도출하는 과정이 필요하다. <span class="hl">빅데이터나 인공지능 등의 기술이 활용</span>되기도 한다.</div></div>
+    </div>
+
+    <div class="gang-header"><span class="gang-badge">제 3 강</span><h2>디자인 트렌드 조사결과물 디자인 포지셔닝 설정</h2></div>
+
+    <h2 class="section-title"><span class="num">01</span> 트렌드의 전략화</h2>
+    <h3 class="subsection-title">(1) 트렌드의 전략 — 5단계 프로세스</h3>
+    <div class="flow-chart" style="flex-direction:column; align-items:flex-start; gap:6px;">
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">① 시장 환경에 대한 트렌드 분석</div><span style="font-size:12px; color:var(--ink-soft);">시장 환경에서 발생하는 변화를 파악하고 데이터 수집</span></div>
+      <div class="flow-arrow" style="padding-left:12px;">↓</div>
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">② 경쟁사 및 경쟁 제품 분석</div><span style="font-size:12px; color:var(--ink-soft);">경쟁사의 서비스나 제품을 분석하고 장단점 파악</span></div>
+      <div class="flow-arrow" style="padding-left:12px;">↓</div>
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">③ 스타일 트렌드 분석</div><span style="font-size:12px; color:var(--ink-soft);">색상, 소재, 형태 등 스타일 트렌드 파악</span></div>
+      <div class="flow-arrow" style="padding-left:12px;">↓</div>
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">④ 전략 방향 수립</div><span style="font-size:12px; color:var(--ink-soft);">분석 결과를 종합하여 디자인 개발의 전략 방향 수립</span></div>
+      <div class="flow-arrow" style="padding-left:12px;">↓</div>
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">⑤ 디자인 개발 및 테스트</div><span style="font-size:12px; color:var(--ink-soft);">전략 방향을 기반으로 디자인 개발하고 테스트</span></div>
+      <div class="flow-arrow" style="padding-left:12px;">↓</div>
+      <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">⑥ 마케팅 및 출시</div><span style="font-size:12px; color:var(--ink-soft);">제품을 출시하여 소비자들의 반응을 모니터링</span></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 디자인 전략의 구체화 — 5단계</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>비즈니스 목표 설정</strong>: 디자인 전략의 근거가 되는 비즈니스 목표를 설정한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>시장 분석</strong>: 시장 동향, 경쟁사 분석, 고객 요구사항 등을 분석하여 디자인 전략의 기반을 구축한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>디자인 혁신 테마 설정</strong>: 시장 분석 결과를 바탕으로 디자인 혁신 테마를 설정한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">④</div><div class="num-text"><strong>디자인 전략 수립</strong>: 디자인 혁신 테마를 바탕으로 디자인 전략을 수립한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">⑤</div><div class="num-text"><strong>실행과 평가</strong>: 디자인 전략을 실행하고, 그 결과를 평가한다.</div></div>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p04-3')">← 이전</button>
+      <button onclick="showPage('p06-1')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P06-1 ═══════════════ -->
+  <div id="p06-1" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 06 — 제1강</span>
+      <div class="chap-title">사용자 조사 및 분석 ①</div>
+      <div class="chap-subtitle">사용자 세분화 방법 · 시장 세분화 · STP</div>
+    </div>
+
+    <div class="gang-header"><span class="gang-badge">제 1 강</span><h2>사용자 세분화 방법</h2></div>
+
+    <h2 class="section-title"><span class="num">01</span> 시장 세분화(market segmentation)의 의미</h2>
+    <div class="exam-tags">(2010년 1회) (2014년 2회) (2019년 2·4회 산업기사) (2020년 3회) (2023년 2회 산업기사)</div>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">시장 세분화란 효율적인 마케팅을 위해 상이한 제품을 필요로 하는 독특한 구매집단으로 시장을 분할·세분화하는 것이다. <span class="hl">유사한 욕구를 갖는 고객을 일정한 기준에 따라 그룹으로 나누어 마케팅 전략을 수립하는 방법</span>을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">모든 고객을 만족시킬 수 없기 때문에 세분화하여 포지셔닝해야 하며 여러 세분화된 시장 중에서 하나 또는 그 이상의 시장을 선정하는 과정이다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">시장 세분화 조건으로는 실행가능성, 측정가능성, 접근가능성, 실질성, 유효정당성, 경쟁성, 신뢰성, 안정성 등을 고려하여야 한다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT 시장 세분화 조건 <span style="font-size:10px; font-family:'IBM Plex Mono',monospace;">(2024년 2회) (2024년 3회 산업기사)</span></div>
+      <ul>
+        <li><strong>실행가능성(feasibility)</strong>: 세분화된 시장에 대한 세분된 전략을 실제로 실행할 수 있는가?</li>
+        <li><strong>측정가능성(measurability)</strong>: 세분화된 시장에 대한 정보 및 결과를 측정할 수 있는가?</li>
+        <li><strong>접근가능성(accessibility)</strong>: 세분화된 시장에 대한 정보와 마케팅 전략을 전달할 수 있는가?</li>
+        <li><strong>실질성(substantiality)</strong>: 세분화된 시장이 충분히 크고 수익성이 있는가?</li>
+        <li><strong>유효정당성(validity)</strong>: 세분화된 시장이 진짜 존재하는가?</li>
+        <li><strong>경쟁성(competitiveness)</strong>: 세분화된 시장에서 경쟁이 심화되어 있는가?</li>
+        <li><strong>신뢰성(reliability)</strong>: 세분화된 시장에 대한 정보와 결과를 신뢰할 수 있는가?</li>
+        <li><strong>안정성(stability)</strong>: 세분화된 시장이 지속적으로 존재할 가능성이 있는가?</li>
+      </ul>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 시장 세분화의 종류</h2>
+    <div class="exam-tags">(2013년 2회) (2015년 2회) (2019년 2·2회 기사) (2020년 2회) (2023년 2·4회) (2024년 1회 산업기사)</div>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge circle-gold">①</div><div class="num-text"><strong>사용자 행동 특성별 세분화(behavioral segmentation)</strong>: 소비자의 구매행동이나 소비패턴에 따라 시장을 세분화. 제품의 사용빈도, 상표 충성도, 가격의 민감도, 구매결정 과정 등으로 세분화한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">②</div><div class="num-text"><strong>지리적 특성별 세분화(geographic segmentation)</strong>: 지리적 요소를 기준으로 시장을 세분화. 지역, 도시, 국가, 지리적 특성, 인구밀도, 기후 등을 고려하여 시장을 분할한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">③</div><div class="num-text"><strong>인구학적 특성별 세분화(demographic segmentation)</strong>: 인구통계학적 요소를 기준으로 시장을 세분화. 연령, 성별, 결혼 선택, 수입, 직업, 거주지역, 학력, 교육수준, 라이프스타일, 소득별로 세분화한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">④</div><div class="num-text"><strong>심리 분석적 세분화(psychographic segmentation)</strong>: 소비자의 인격, 가치관, 취향, 생활방식 등의 심리적 특성에 따라 시장을 세분화. 여피족, 오렌지족, 386세대 등을 고려하여 시장을 분할한다.</div></div>
+      <div class="num-item"><div class="num-badge circle-gold">⑤</div><div class="num-text"><strong>상황적 세분화(occasion segmentation)</strong>: 소비자의 상황, 시기, 목적 등에 따라 시장을 세분화. 기념일, 계절, 휴가, 이벤트 등을 고려하여 시장을 분할한다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">03</span> 시장 세분화로 인한 기업의 이점</h2>
+    <div class="exam-tags">(2015년 2회 산업기사) (2024년 2회 산업기사)</div>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">소비자의 욕구, 구매동기 등을 파악할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">기업의 강점과 약점 등을 평가하여 유리한 시장을 선택할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">마케팅 자원을 효율적으로 배분할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">기업의 수익을 증대할 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text">기업이 제품 라인업을 다변화할 수 있도록 한다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">04</span> 표적시장(target market) 조사</h2>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">표적시장(target market)은 기업이 제품이나 서비스를 마케팅하기 위해 선택한 특정 시장이며, 이를 조사하는 것은 중요한 마케팅 전략이다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">시장 세분화 조사를 통해 세분화된 표적시장은 집중적인 마케팅을 통해 한정된 자원으로 최대의 효과를 발휘할 수 있는 시장이기도 하다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT 표적시장 선택의 시장공략 전략</div>
+      <ul>
+        <li><strong>무차별적 마케팅</strong>: 세분시장 간 차이를 무시하고 제품 하나로 전체 시장을 대상으로 판매하는 전략. 대량생산과 낮은 가격으로 경쟁력을 확보하고자 하는 경우에 주로 사용.</li>
+        <li><strong>차별적 마케팅</strong>: 표적시장을 선정하고, 그 시장에서 고객의 욕구와 요구사항에 부합하는 제품과 마케팅 전략을 구체적으로 수립하여 판매하는 전략.</li>
+        <li><strong>집중마케팅</strong>: 소수의 세분시장에서 시장 점유율을 높이기 위해 전략적으로 집중하는 것. 성공할 경우 고객들의 강한 충성도와 이익을 보장받을 수 있다.</li>
+      </ul>
+    </div>
+
+    <h2 class="section-title"><span class="num">05</span> STP 전략 수립</h2>
+    <div class="exam-tags">(2011년 4회 산업기사) (2012년 2회 기사) (2015년 4회 산업기사) (2019년 4회 산업기사)</div>
+    <p><span class="hl">STP는 시장 세분화(Segmentation), 표적 시장(Targeting), 포지셔닝(Positioning)</span>을 통해 총체적인 디자인 마케팅을 수립하는 전략으로, 소비자 시장이 세분화될 수 있는가를 살피고 목표 소비자를 결정한 다음 포지셔닝을 해 나가는 시장전략을 말한다.</p>
+    <div class="flow-chart">
+      <div class="flow-step">Segmentation<br><span style="font-size:11px;">시장 세분화</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Targeting<br><span style="font-size:11px;">표적 시장</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Positioning<br><span style="font-size:11px;">포지셔닝</span></div>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p05')">← 이전</button>
+      <button onclick="showPage('p06-2')">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ P06-2 ═══════════════ -->
+  <div id="p06-2" class="page-section">
+    <div class="chap-header">
+      <span class="chap-num-label">CHAPTER 06 — 제2·3강</span>
+      <div class="chap-title">사용자 조사 및 분석 ②</div>
+      <div class="chap-subtitle">사용자 행동패턴 · 인터뷰 · 관찰 · 섀도잉</div>
+    </div>
+
+    <div class="gang-header"><span class="gang-badge">제 2 강</span><h2>사용자 행동패턴 조사기법</h2></div>
+
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">사용자 행동패턴 조사는 인터뷰와 설문조사, 관찰조사 등을 통해 사용자의 행동, 반응, 의견, 니즈 등을 파악하는 조사. 사용자의 환경과 감정에 따라 조사결과가 달라지기 때문에 세심한 준비가 필요하다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">방법: <span class="hl">설문조사, 포커스 그룹인터뷰(focus group interview), 섀도잉(shadowing), 디자인 민족지학(ethnography), 멘탈 모델(mental model)</span> 등의 다양한 방법이 있다.</div></div>
+    </div>
+
+    <div class="gang-header"><span class="gang-badge">제 3 강</span><h2>설문 및 인터뷰 조사 방법 및 설계</h2></div>
+
+    <h2 class="section-title"><span class="num">01</span> 인터뷰 조사 방법 적용</h2>
+
+    <h3 class="subsection-title">(1) 개별 면접 조사(face-to-face Interview)</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">조사자가 면접 대상자를 대상으로 인터뷰하는 방법으로, 집중적인 질문과 구체적인 결과를 얻을 수 있는 장점이 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">인터뷰 진행 시 단순하고 쉬운 질문부터 시작하여 심층적인 질문으로 점진적으로 진행하며, 초반에는 예/아니요 형식의 질문이나 숫자를 적는 질문을 주로 사용한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">사용자 수가 많거나 질문이 많은 경우에는 인력과 시간이 많이 소요되기 때문에 충분한 기간을 확보한 후 진행하는 것이 좋다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(2) 심층 인터뷰(in-depth Interview)</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">개별 인터뷰를 통해 서로 관련 있는 인터뷰 대상자들에게 질의응답, 과업수행(task test) 또는 보여주고 말하기(show & tell)의 방법을 통해 진행하는 인터뷰 방법이다. 인터뷰 내용은 사진, 비디오 또는 녹음을 통해 기록함으로써 심층적인 분석결과를 얻을 수 있다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">면접자의 질문에 조사 대상이 자유롭게 자신의 의견을 표현할 수 있도록 분위기를 조성한다. 조사 대상의 진정성 있는 답변을 위해 충분히 사전 교감을 이룰 수 있는 시간적 여유가 필요하다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text"><span class="hl">한 시간 정도 진행하고 녹음이나 비디오 등으로 기록</span>하여 내용을 면밀하게 분석할 수 있다.</div></div>
+    </div>
+
+    <h3 class="subsection-title">(3) 디자인 민족지학(Ethnography interview)</h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text">에스노그래피 인터뷰는 사회학에서 유래한 문화인류학적 관찰방법론 중 하나로, 사용자와 밀착해서 진행하는 관찰방법론과 직접적인 인터뷰를 조화시킨 리서치 방법이다. 사용자들이 제품 또는 서비스를 어떻게 사용하는지, 그들의 경험과 관점, 문제점 등을 이해하고 디자인 개발에 반영하는 데 활용된다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">휴 바이어(Hugh Beyer)와 캐런 홀츠블랫(Karen Holtzblatt)이 에스노그래피 방법론을 처음 개발하여 <span class="hl">정황조사(Contextual inquiry)</span>라고 소개한 바 있다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">사용자들의 일상생활에서의 경험을 중심으로 사용자의 관찰, 인터뷰, 문서화 등을 통해 사용자의 행동, 환경, 문제점 등을 이해하는 것을 목표로 한다.</div></div>
+    </div>
+
+    <h2 class="section-title"><span class="num">02</span> 사용자 관찰 조사 방법 적용</h2>
+
+    <h3 class="subsection-title">(1) 섀도잉(shadowing) 기법 <span style="font-size:11px; color:var(--accent);">(2023년 1회 산업기사)</span></h3>
+    <div class="num-list">
+      <div class="num-item"><div class="num-badge">①</div><div class="num-text"><span class="hl">섀도잉은 "그림자 따라다니기"</span>라는 뜻을 가지고 있으며, 조사 대상자를 일정 기간 동안 따라다니면서 그들의 행동과 경험을 관찰하고 기록하는 관찰방법을 말한다.</div></div>
+      <div class="num-item"><div class="num-badge">②</div><div class="num-text">섀도잉 기법은 대면조사가 아니라, 리서치 대상자의 행동을 관찰하고 분석하는 <span class="hl">비대면적으로 조사</span>가 이루어져야 한다.</div></div>
+      <div class="num-item"><div class="num-badge">③</div><div class="num-text">섀도잉의 전 과정을 직접 경험하고 결과를 분석하는 것이 매우 중요하다. 대상자의 동선과 행동의 유형을 전체적으로 미리 파악하고 있어야 한다.</div></div>
+      <div class="num-item"><div class="num-badge">④</div><div class="num-text">섀도잉 과정에서 특정 행동을 결정하는 판단의 이유와 근거를 직접적으로 이해할 수 없기 때문에, 특이한 행동에 대한 인터뷰를 병행하는 것이 리서치의 신뢰성을 높일 수 있는 방법이다.</div></div>
+      <div class="num-item"><div class="num-badge">⑤</div><div class="num-text">섀도잉은 조사 대상자의 일반적인 행동 속에서 공통적인 특징을 찾아내는 방법이기 때문에 <span class="hl">행동을 구분하고 일반화하며 유형화</span>하는 것이 중요하다.</div></div>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">POINT Kano 모델</div>
+      <p style="font-size:13.5px; line-height:1.9; color:var(--ink-soft); margin:0;">Kano model은 제품, 서비스의 기능 요소를 분석하여 사용자 만족도를 파악하는 방법론으로, <strong>5가지 기능 요소</strong>로 분류한다.</p>
+      <ul style="margin-top:10px;">
+        <li><strong>기본 요소</strong>: 반드시 충족되어야 하는 요소</li>
+        <li><strong>선호 요소</strong>: 성능이나 기능에 대한 요소</li>
+        <li><strong>기대 요소</strong>: 새로운 기술 등으로 인해 사용자가 놀라게 되는 요소</li>
+        <li><strong>반전 요소</strong>: 부재할 경우 불만족을 초래하는 요소</li>
+        <li><strong>무관 요소</strong>: 사용자에게 영향을 미치지 않는 요소</li>
+      </ul>
+    </div>
+
+    <div class="page-nav">
+      <button onclick="showPage('p06-1')">← 이전</button>
+      <button disabled>다음 →</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const pages = ['cover','p03','p04-1','p04-2','p04-3','p05','p06-1','p06-2'];
+const titles = {
+  'cover': '표지 및 목차',
+  'p03': 'CHAPTER 03 · 시각디자인 관리',
+  'p04-1': 'CHAPTER 04 · 시장 환경 조사 ①',
+  'p04-2': 'CHAPTER 04 · 시장 환경 조사 ②',
+  'p04-3': 'CHAPTER 04 · 시장 환경 조사 ③',
+  'p05': 'CHAPTER 05 · 디자인 트렌드 조사',
+  'p06-1': 'CHAPTER 06 · 사용자 조사 ①',
+  'p06-2': 'CHAPTER 06 · 사용자 조사 ②',
+};
+
+function showPage(id) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(a => {
+    if(a.getAttribute('onclick') && a.getAttribute('onclick').includes("'"+id+"'")) {
+      a.classList.add('active');
+    }
+  });
+
+  const idx = pages.indexOf(id);
+  document.getElementById('breadcrumb').textContent = titles[id] || id;
+  document.getElementById('page-label').textContent = (idx+1) + ' / ' + pages.length;
+  document.getElementById('progress-fill').style.width = ((idx+1)/pages.length*100) + '%';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// init
+showPage('cover');
+</script>
+</body>
+</html>
