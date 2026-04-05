@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 04 · 지식재산권 CBT</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f0e0d;
+    --card: #1a1917;
+    --border: #2e2c29;
+    --accent: #d4a853;
+    --accent2: #8b6914;
+    --text: #e8e4dc;
+    --muted: #7a7469;
+    --correct: #4a8c5c;
+    --wrong: #8c3a3a;
+    --correct-bg: #1a2e20;
+    --wrong-bg: #2e1a1a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif KR', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 60px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .day-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    border: 1px solid var(--accent2);
+    padding: 3px 10px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-size: clamp(18px, 5vw, 26px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  header p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 20px;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  /* ── CARD ── */
+  .card {
+    width: 100%;
+    max-width: 720px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+  }
+
+  .q-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .q-text {
+    font-size: clamp(14px, 3.5vw, 16px);
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 22px;
+    word-break: keep-all;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .opt-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(13px, 3vw, 14px);
+    line-height: 1.6;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.15s, background 0.15s;
+    word-break: keep-all;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent2);
+    background: rgba(212,168,83,0.05);
+  }
+  .opt-btn .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 18px;
+    padding-top: 1px;
+  }
+
+  .opt-btn.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+    color: #9dccad;
+  }
+  .opt-btn.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+    color: #cc9d9d;
+  }
+  .opt-btn:disabled { cursor: default; }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent2);
+    background: rgba(212,168,83,0.06);
+    font-size: 13px;
+    line-height: 1.8;
+    color: #b8aa92;
+    word-break: keep-all;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--accent); }
+
+  /* ── NAV ── */
+  .nav {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    padding: 10px 22px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .nav-btn.primary:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* ── RESULT ── */
+  #result-screen {
+    display: none;
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+  }
+  #result-screen.show { display: block; }
+
+  .score-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .score-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 36px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .score-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .result-msg {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .result-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .wrong-list {
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .wrong-list h3 {
+    font-size: 13px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .wrong-item {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    word-break: keep-all;
+  }
+  .wrong-item:last-child { border-bottom: none; }
+  .wrong-item span { color: var(--text); }
+
+  .restart-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    padding: 14px 36px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .restart-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* ── QUIZ SCREEN ── */
+  #quiz-screen { width: 100%; max-width: 720px; }
+
+  .section-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="day-badge">DAY 04 · CHAPTER 03–04</div>
+  <h1>지식재산권 확보 & 디자인 저작권 관리</h1>
+  <p>시각디자인산업기사 · 컴퓨터그래픽운용기능사 대비</p>
+</header>
+
+<div class="progress-wrap" id="progress-wrap">
+  <div class="progress-info">
+    <span id="p-cur">1 / 30</span>
+    <span id="p-score">맞힘 0</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="p-fill" style="width:0%"></div></div>
+</div>
+
+<div id="quiz-screen">
+  <div class="card">
+    <div class="section-tag" id="q-section"></div>
+    <div class="q-meta" id="q-meta"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation"></div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" id="prev-btn" onclick="go(-1)">◂ 이전</button>
+    <button class="nav-btn primary" id="next-btn" onclick="go(1)">다음 ▸</button>
+  </div>
+</div>
+
+<div id="result-screen">
+  <div class="score-ring">
+    <div class="score-num" id="r-score"></div>
+    <div class="score-label">/ 50</div>
+  </div>
+  <div class="result-msg" id="r-msg"></div>
+  <div class="result-sub" id="r-sub"></div>
+  <div class="wrong-list" id="wrong-list"></div>
+  <button class="restart-btn" onclick="restart()">↺ 다시 풀기</button>
+</div>
+
+<script>
+const Q = [
+  {
+    section:"CH03 § 지식재산권 이해",
+    text:"지식재산법 제1호 규정에서 '지식재산'으로 볼 수 없는 것은?",
+    opts:["인간의 창조적 활동으로 창출된 지식·정보·기술","생물의 품종이나 유전자원","무형적인 것으로서 재산적 가치가 실현될 수 있는 것","토지·건물 등 유형의 부동산"],
+    ans:3,
+    exp:"지식재산은 인간의 창조적 활동 또는 경험 등으로 창출되거나 발견된 지식·정보·기술·사상이나 감정의 표현, 영업이나 물건의 표시, 생물의 품종이나 유전자원 등 재산적 가치가 있는 무형의 것을 말한다. 토지·건물 같은 유형의 부동산은 해당되지 않는다."
+  },
+  {
+    section:"CH03 § 지식재산권 이해",
+    text:"지식재산권의 특성으로 옳은 것은?",
+    opts:["대부분 존속기간이 한정되어 있으며 현금화를 통해 합법적 절세를 받을 수 있다","존속기간이 없어 영구적으로 보호된다","유형의 재산만 보호하는 권리이다","지식재산권은 절세 혜택과 무관하다"],
+    ans:0,
+    exp:"지식재산권은 대부분 존속기간이 한정되어 있으며, 현금화를 통해 합법적 절세를 통한 감면혜택도 받을 수 있다."
+  },
+  {
+    section:"CH03 § 지식재산권 확보의 중요성",
+    text:"지식재산권 확보의 중요성 중 'R&D 투자비 회수 및 기술 개발의 원천'에 대한 설명으로 옳은 것은?",
+    opts:["특허 보유 시 로열티 수입을 얻을 수 없다","지식재산권을 보유하면 막대한 기술개발 투자비를 회수하고, 추가 응용 기술개발이 가능하다","타인과의 분쟁 예방에만 효과가 있다","정부 보조금은 지식재산권과 무관하다"],
+    ans:1,
+    exp:"지식재산권을 보유하면 막대한 기술개발 투자비를 회수할 수 있다. 또한 확보된 권리를 기반으로 타인과의 분쟁 없이 추가 응용 기술개발이 가능하다."
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"지식재산권 구분표에서 특허권(Patent)의 권리기간으로 옳은 것은?",
+    opts:["설정 등록일에 발생하여 출원일 후 20년까지 존속","설정 등록한 날부터 출원일 후 10년까지","저작자의 생존 시와 사후 70년까지","출원일 후 15년까지"],
+    ans:0,
+    exp:"특허권의 권리기간: 설정 등록일에 발생하여 출원일 후 20년까지 존속. 특허법 제88조에 근거."
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"실용신안권(Utility Model)의 권리기간으로 옳은 것은?",
+    opts:["설정 등록한 날부터 출원일 후 10년까지 존속","설정 등록일에 발생하여 출원일 후 20년까지","출원일 후 15년까지","저작자 생존 시와 사후 70년"],
+    ans:0,
+    exp:"실용신안권: 설정 등록한 날부터 출원일 후 10년까지 존속. 실용신안법 제22조에 근거."
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"상표권(Trademark)의 특징으로 옳은 것은?",
+    opts:["출원일 후 20년 고정","만료 시에 갱신절차를 거치면 지속적으로 유지 가능","저작자 사후 70년으로 한정","존속기간 연장이 불가능하다"],
+    ans:1,
+    exp:"상표권은 설정 등록일에 발생하여 출원일 후 10년까지 존속하지만, 만료 시에 갱신절차를 거치면 지속적으로 유지할 수 있다는 점이 다른 산업재산권과 구별되는 특징이다."
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"디자인인권(Design)의 권리기간으로 옳은 것은?",
+    opts:["설정 등록일에 발생하여 출원일 후 10년까지","출원일 후 20년까지 존속","저작자 생존 시와 사후 70년","설정 등록한 날부터 출원일 후 20년까지"],
+    ans:3,
+    exp:"디자인권: 설정등록한 날부터 발생하여 디자인등록출원일 후 20년이 되는 날까지 존속한다. (디자인보호법 제91조)"
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"저작인접권의 권리기간으로 옳은 것은?",
+    opts:["저작자의 생존 시와 사후 100년","저작자의 생존 시와 사후 70년까지 권리 존속, 방송은 50년으로 규정","출원일 후 20년까지","영구적으로 존속"],
+    ans:1,
+    exp:"저작인접권: 저작자의 생존 시와 사후 70년까지 권리 존속, 방송은 50년으로 규정."
+  },
+  {
+    section:"CH03 § 지식재산권 구분",
+    text:"신지식재산권 중 '정보재산권'에 해당하는 것은?",
+    opts:["반도체 IC 배치설계, 생명공학기술","컴퓨터프로그램보호권, 소프트웨어","데이터베이스, 영업비밀, 뉴미디어","프랜차이징, 지리적 표시와 캐릭터, 도메인"],
+    ans:2,
+    exp:"신지식재산권 구분 — 첨단산업저작권: 반도체 IC 배치설계, 생명공학기술 / 산업저작권: 컴퓨터프로그램보호권, 소프트웨어 / 정보재산권: 데이터베이스, 영업비밀, 뉴미디어 / 기타: 프랜차이징, 지리적 표시와 캐릭터, 도메인, 색, 맛, 소리, 냄새 등"
+  },
+  {
+    section:"CH03 § 산업재산권 구분",
+    text:"특허권에 대한 설명으로 틀린 것은?",
+    opts:["자연법칙을 이용한 기술적 사상의 창작(고도한 것)을 보호한다","이 법은 발명을 보호·장려하고 이용을 도모하여 기술의 발전을 촉진함을 목적으로 한다","라이프 사이클이 짧은 물품의 형상·구조·모형에 관한 고안을 보호한다","산업발전에 이바지함을 목적으로 한다"],
+    ans:2,
+    exp:"라이프 사이클이 짧은 물품의 형상·구조·모형에 관한 고안을 보호하는 것은 실용신안권이다. 특허권은 자연법칙을 이용한 기술적 사상의 창작으로서 고도한 것을 보호한다."
+  },
+  {
+    section:"CH03 § 산업재산권 구분",
+    text:"실용신안권에 대한 설명으로 옳은 것은?",
+    opts:["특허보다 한 단계 높은 권리이다","발명한 것이 아닌 기존의 발명을 개선·보완했을 때 주는 권리이다","자연법칙을 이용한 고도한 기술적 창작을 보호한다","라이프 사이클이 긴 제품을 보호한다"],
+    ans:1,
+    exp:"실용신안권은 특허보다 한 단계 낮은 권리로, 발명한 것이 아닌 기존의 발명을 개선·보완했을 때 부여하는 권리이다. 라이프 사이클이 짧은 물품의 형상·구조·모형에 관한 고안을 보호한다(소발명)."
+  },
+  {
+    section:"CH03 § 산업재산권 구분",
+    text:"상표법 제1조 목적으로 옳은 것은?",
+    opts:["발명을 보호·장려하고 기술 발전을 촉진하여 산업발전에 이바지","상표를 보호함으로써 상표사용자의 업무상 신용유지를 도모하여 산업발전과 수요자의 이익을 보호","디자인의 창작을 장려하여 산업발전에 이바지","실용적인 고안을 보호·장려하여 기술 발전 촉진"],
+    ans:1,
+    exp:"상표법 제1조(목적): 이 법은 상표를 보호함으로써 상표사용자의 업무상의 신용유지를 도모하여 산업발전에 이바지함과 아울러 수요자의 이익을 보호함을 목적으로 한다."
+  },
+  {
+    section:"CH03 § 산업재산권 구분",
+    text:"디자인보호법에서 '디자인'의 정의로 옳은 것은?",
+    opts:["물품의 기능적인 부분(디자인)을 보호","독립적으로 거래대상이 될 수 있는 유체동산인 물품에 구현되어 시각을 통해 파악되어 미감을 일으키는 '물품의 미적 외관'","자연법칙을 이용한 기술적 사상의 창작","글자체와 화상만을 보호하는 개념"],
+    ans:1,
+    exp:"디자인보호법에서 '디자인'이란 독립적으로 거래대상이 될 수 있는 유체동산인 물품에 구현되어 시각을 통해 파악되어 미감을 일으키는 '물품의 미적 외관'으로 정의한다. (디자인보호법 제2조 정의)"
+  },
+  {
+    section:"CH03 § 저작권의 구분",
+    text:"저작재산권에 포함되지 않는 권리는?",
+    opts:["복제권","공연권","성명표시권","배포권"],
+    ans:2,
+    exp:"성명표시권은 저작인격권에 해당한다. 저작재산권에는 복제권, 공연권, 공중송신권, 전시권, 배포권, 대여권, 2차적 저작물 작성권 등이 있다."
+  },
+  {
+    section:"CH03 § 저작권의 구분",
+    text:"저작인격권에 해당하지 않는 것은?",
+    opts:["성명표시권","저작물의 왜곡 금지권","공연권 행사권","복제권"],
+    ans:3,
+    exp:"복제권은 저작재산권에 해당한다. 저작인격권은 저작물의 창작자가 자신의 저작물에 대해 정신적·인격적 이익을 추구할 수 있는 권리로, 성명표시권, 저작물의 왜곡 금지권, 공연권 행사권 등이 있다."
+  },
+  {
+    section:"CH03 § 신지식재산권 구분",
+    text:"신지식재산권 중 '첨단산업저작권'에 해당하는 것은?",
+    opts:["컴퓨터프로그램, 인공지능, 데이터베이스","반도체 IC 배치설계, 생명공학, 식물신품종 등","데이터베이스, 영업비밀, 뉴미디어","프랜차이징, 지리적 표시"],
+    ans:1,
+    exp:"첨단산업저작권: 반도체 IC 배치설계, 생명공학, 식물신품종 등과 같이 고도로 기술적이고 창조적인 작업을 통해 창작된 저작물에 대한 보호권을 말한다."
+  },
+  {
+    section:"CH03 § 디자인 등록방법",
+    text:"베른 조약에 대한 설명으로 옳은 것은?",
+    opts:["특허권을 국제적으로 보호하기 위해 체결된 조약이다","저작권을 국제적으로 서로 보호할 것을 목적으로 1886년 스위스 베른에서 채택된 국제 저작권 조약이다","상표권의 국제 보호를 위한 조약이다","디자인권 보호를 위한 조약이다"],
+    ans:1,
+    exp:"베른 조약은 저작권을 국제적으로 서로 보호할 것을 목적으로 체결된 조약이다. 정식 이름은 '문학 및 미술 저작물 보호에 관한 국제협정(International Convention for the Protection of Literary and Artistic Works)'으로, 1886년 스위스 베른에서 열린 국제회의에서 채택되었다."
+  },
+  {
+    section:"CH03 § 디자인 등록방법",
+    text:"디자인특허(디자인권)에 대한 설명으로 틀린 것은?",
+    opts:["미국에서는 Design Patent(특허)에서 유래했다","한국에서는 보통 '디자인'이라고 하며, 등록 후 등록디자인 또는 디자인권이라고 한다","특허는 기능성을 보호하고, 디자인은 심미성을 보호한다","아름다우면서 독창적인 기능을 가진 제품은 특허만 출원하면 된다"],
+    ans:3,
+    exp:"특허는 기능성을, 디자인은 심미성을 보호한다. 아름다우면서 독창적인 기능을 가진 제품은 반드시 특허와 디자인 모두 출원해야 한다."
+  },
+  {
+    section:"CH03 § 디자인 등록방법",
+    text:"디자인보호법 제1조(목적)로 옳은 것은?",
+    opts:["발명을 보호·장려하고 기술의 발전을 촉진하여 산업발전에 이바지","디자인의 보호 및 이용을 도모함으로써 디자인의 창작을 장려하여 산업발전에 이바지","상표를 보호하여 상표 사용자의 업무상 신용유지를 도모","실용적인 고안을 보호·장려하고 이용을 도모"],
+    ans:1,
+    exp:"디자인보호법 제1조(목적): 이 법은 디자인의 보호 및 이용을 도모함으로써 디자인의 창작을 장려하여 산업발전에 이바지함을 목적으로 한다."
+  },
+  {
+    section:"CH03 § 디자인 등록방법",
+    text:"디자인특허 등록을 받을 수 없는 디자인이 아닌 것은?",
+    opts:["국기, 국장, 군기, 훈장, 포장과 동일하거나 유사한 디자인","물품의 기능을 확보하는 데 불가결한 형상만으로 된 디자인","생활용품, 액세서리 등 외형이 있고 독립적으로 거래 가능한 물품의 디자인","공공의 질서를 해칠 우려가 있는 디자인"],
+    ans:2,
+    exp:"생활용품, 액세서리 등 외형이 있는 물품은 디자인특허(디자인권)의 등록 대상이다. 등록 불가 대상: ①국기·국장 등과 동일·유사한 디자인 ②공공질서·도덕관념에 어긋나는 디자인 ③타인의 업무와 혼동 우려 디자인 ④물품의 기능 확보에 불가결한 형상만의 디자인"
+  },
+  {
+    section:"CH03 § 디자인 등록방법",
+    text:"디자인 등록까지의 절차로 올바른 순서는?",
+    opts:["출원 준비 → 디자인 출원 → 심사 → 등록비용 납부 → 등록증 발급","디자인 출원 → 심사 → 등록 가능성 검토 → 등록증 발급","등록 가능성 검토 → 출원 준비 → 디자인 출원 → 심사 → (보정서 제출) → 디자인 결정 → 등록비용 납부 → 등록증 발급","심사 → 출원 → 등록 → 등록비용 납부"],
+    ans:2,
+    exp:"디자인 등록 절차: ①등록 가능성 검토 → ②출원 준비 → ③디자인 출원 → ④심사 → ⑤보정서 및 의견서 제출(거절이유 있을 시) → ⑥디자인 결정 → ⑦등록비용 납부(2개월 내) → ⑧등록증 발급(1~2주 후)"
+  },
+  {
+    section:"CH03 § KIPRIS 활용",
+    text:"KIPRIS 번호 검색에서 디자인의 권리구분 앞자리는?",
+    opts:["10 (특허)","20 (실용신안)","30 (디자인)","40 (상표)"],
+    ans:2,
+    exp:"KIPRIS 번호 검색 구분: 10-특허, 20-실용신안, 30-디자인, 40-상표. 예시 등록번호: 30-2011-0004891"
+  },
+  {
+    section:"CH03 § KIPRIS 활용",
+    text:"KIPRIS 한국특허정보원에서 제공하는 등록디자인의 서지사항별 검색 항목이 아닌 것은?",
+    opts:["자유 검색(전문), 물품명칭, 디자인 분류","출원번호, 등록번호, 공고번호","창작자, 출원인 이름/코드, 대리인 이름/코드","판매가격, 소비자 리뷰"],
+    ans:3,
+    exp:"KIPRIS 서지사항별 검색 항목: 자유 검색(전문), 물품명칭, 디자인 분류, 형태 분류, 출원번호, 등록번호, 공고번호, 공개번호, 우선권주장번호, 출원일자, 등록일자, 공고일자, 공개일자, 우선권주장일자, 창작자, 출원인 이름/코드, 대리인 이름/코드, 등록권자 이름. 판매가격·리뷰는 해당 없음."
+  },
+  {
+    section:"CH04 § 디자인보호법",
+    text:"디자인보호법 제91조(디자인권의 존속기간)에 의한 내용으로 옳은 것은?",
+    opts:["디자인권은 설정등록한 날부터 발생하여 디자인등록출원일 후 20년이 되는 날까지 존속한다","출원일로부터 10년간 존속한다","저작자 사후 70년까지 존속한다","영구적으로 보호된다"],
+    ans:0,
+    exp:"디자인보호법 제91조 제1항: 디자인권은 제90조제1항에 따라 설정등록한 날부터 발생하여 디자인등록출원일 후 20년이 되는 날까지 존속한다."
+  },
+  {
+    section:"CH04 § 디자인보호법",
+    text:"디자인권의 효력이 미치지 아니하는 범위가 아닌 것은?",
+    opts:["연구 또는 시험을 하기 위한 등록디자인의 실시","국내를 통과하는 선박·항공기·차량에 사용되는 기계·기구","디자인등록출원 시부터 국내에 있던 물건","상업 목적으로 동일한 디자인을 대량 생산하는 행위"],
+    ans:3,
+    exp:"디자인보호법 제94조(디자인권의 효력이 미치지 아니하는 범위): ①연구·시험을 위한 등록디자인의 실시 ②국내 통과 선박·항공기·차량에 사용되는 물건 ③디자인등록출원 시부터 국내에 있던 물건. 상업 목적 대량생산은 이 범위에 해당하지 않으므로 디자인권 효력이 미친다."
+  },
+  {
+    section:"CH04 § 특허법",
+    text:"특허법 제88조(특허권의 존속기간)에 의한 내용으로 옳은 것은?",
+    opts:["특허권의 존속기간은 제87조제1항에 따라 특허권을 설정등록한 날부터 특허출원일 후 20년이 되는 날까지로 한다","등록일로부터 10년","출원일로부터 20년(설정등록일 기준 아님)","영구적으로 보호된다"],
+    ans:0,
+    exp:"특허법 제88조 제1항: 특허권의 존속기간은 제87조제1항에 따라 특허권을 설정등록한 날부터 특허출원일 후 20년이 되는 날까지로 한다."
+  },
+  {
+    section:"CH04 § 실용신안법",
+    text:"실용신안법 제22조(실용신안권의 존속기간)에 의한 내용으로 옳은 것은?",
+    opts:["실용신안권의 존속기간은 제21조제1항에 따라 실용신안권을 설정등록한 날부터 실용신안등록출원일 후 10년이 되는 날까지로 한다","출원일로부터 20년","등록일로부터 10년","저작자 사후 70년"],
+    ans:0,
+    exp:"실용신안법 제22조 제1항: 실용신안권의 존속기간은 제21조제1항에 따라 실용신안권을 설정등록한 날부터 실용신안등록출원일 후 10년이 되는 날까지로 한다."
+  },
+  {
+    section:"CH04 § 실용신안법",
+    text:"실용신안등록을 받을 수 없는 고안이 아닌 것은?",
+    opts:["국기 또는 훈장과 동일하거나 유사한 고안","공공의 질서 또는 선량한 풍속에 어긋나거나 공중의 위생을 해칠 우려가 있는 고안","기존 발명을 개선한 실용적인 물품의 형상·구조 고안","국기와 유사하지 않고 독창적인 형상의 고안"],
+    ans:3,
+    exp:"실용신안법 제6조: 국기 또는 훈장과 동일·유사한 고안, 공공의 질서 또는 선량한 풍속에 어긋나는 고안은 등록 불가. 독창적인 형상의 고안은 등록 가능 대상이다."
+  },
+  {
+    section:"CH04 § 상표법",
+    text:"상표법 제2조에서 '표장'의 정의에 포함되지 않는 것은?",
+    opts:["기호, 문자, 도형","소리, 냄새","입체적 형상, 홀로그램, 동작 또는 색채","상품의 판매가격"],
+    ans:3,
+    exp:"상표법 제2조 제2호: '표장'이란 기호, 문자, 도형, 소리, 냄새, 입체적 형상, 홀로그램·동작 또는 색채 등으로서 그 구성이나 표현방식에 상관없이 상품의 출처를 나타내기 위하여 사용하는 모든 표시를 말한다. 판매가격은 표장에 해당하지 않는다."
+  },
+  {
+    section:"CH04 § 상표법",
+    text:"상표등록을 받을 수 없는 상표(제34조)에 해당하지 않는 것은?",
+    opts:["국가의 국기, 국장과 동일·유사한 상표","저명한 타인의 성명·상호를 포함하는 상표(그 타인의 승낙 없는 경우)","독창적이고 식별력 있는 기업 고유의 로고","선출원에 의한 타인의 등록상표와 동일·유사한 상표"],
+    ans:2,
+    exp:"독창적이고 식별력 있는 기업 고유의 로고는 상표등록의 대상이다. 상표등록 불가 사유에는 ①국기·국장·국제기관 표장과 동일·유사 ②타인의 저명한 성명·상호 포함(승낙 없는 경우) ③선출원 타인의 등록상표와 동일·유사 ④상품의 품질 오인 우려 등이 있다."
+  },
+  {
+    section:"CH03 § KIPRIS 활용",
+    text:"WIPO(세계지적재산권기구)의 지식재산권 범위에 포함되지 않는 것은?",
+    opts:["문학, 예술, 과학 작품, 연출, 예술가의 공연","발명, 과학적 발견","공업의장 등록 상표 및 상호에 대한 보호 권리","토지와 건물 등 유형 부동산"],
+    ans:3,
+    exp:"WIPO는 지식재산권의 범위를 '문학, 예술, 과학 작품, 연출, 예술가의 공연, 음반 및 방송, 발명, 과학적 발견, 공업의장 등록 상표 및 상호 등에 대한 보호 권리와 공업, 과학, 문학 또는 예술 분야의 지적 활동에서 발생하는 기타 모든 권리'로 정의한다. 토지·건물은 포함되지 않는다."
+  },
+
+  /* ══ 추가 20문제 ══ */
+  {
+    section:"CH04 § 상표법 제83조",
+    text:"상표법 제83조(상표권의 존속기간)에 대한 설명으로 옳은 것은?",
+    opts:["상표권의 존속기간은 설정등록이 있는 날부터 20년이다","상표권의 존속기간은 설정등록이 있는 날부터 10년으로 하며, 10년씩 갱신할 수 있다","상표권은 존속기간 만료 후 갱신이 불가능하다","상표권의 존속기간은 출원일로부터 10년이다"],
+    ans:1,
+    exp:"상표법 제83조: ①상표권의 존속기간은 제82조제1항에 따라 설정등록이 있는 날부터 10년으로 한다. ②상표권의 존속기간은 존속기간갱신등록신청에 의하여 10년씩 갱신할 수 있다."
+  },
+  {
+    section:"CH04 § 상표법 제83조",
+    text:"상표권의 존속기간 내에도 상표권이 소멸하는 경우가 아닌 것은?",
+    opts:["설정등록일 또는 존속기간갱신등록일부터 5년이 지나면 상표권이 소멸한다","제72조제3항 또는 제74조에 따른 납부기간 내에 상표등록료를 내지 아니한 경우","제76조제1항에 따라 상표등록료의 보전을 명한 경우로서 그 보전기간 내에 보전하지 아니한 경우","상표권자가 타 업체에 상표 사용을 허락한 경우"],
+    ans:3,
+    exp:"상표법 제83조 제3항: 설정등록일 또는 존속기간갱신등록일부터 5년이 지나면 상표권이 소멸하는 경우는 ①등록료 미납 ②보전기간 내 미보전 ③제77조 해당 기간 내 미납·미보전의 경우이다. 상표사용 허락(라이선스)은 소멸 사유가 아니다."
+  },
+  {
+    section:"CH04 § 저작권법 총칙",
+    text:"저작권법 제1조(목적)로 옳은 것은?",
+    opts:["발명을 보호·장려하고 기술 발전을 촉진","저작자의 권리와 이에 인접하는 권리를 보호하고 저작물의 공정한 이용을 도모함으로써 문화 및 관련 산업의 향상발전에 이바지","디자인의 창작을 장려하여 산업발전에 이바지","상표를 보호하여 산업발전과 수요자 이익을 보호"],
+    ans:1,
+    exp:"저작권법 제1조(목적): 이 법은 저작자의 권리와 이에 인접하는 권리를 보호하고 저작물의 공정한 이용을 도모함으로써 문화 및 관련 산업의 향상발전에 이바지함을 목적으로 한다."
+  },
+  {
+    section:"CH04 § 저작권법 총칙",
+    text:"저작권법 제2조에서 '저작물'의 정의로 옳은 것은?",
+    opts:["인간의 창조적 활동으로 발견된 기술·정보","인간의 사상 또는 감정을 표현한 창작물","자연법칙을 이용한 기술적 사상의 창작","물품의 형상·모양을 통해 미감을 일으키는 것"],
+    ans:1,
+    exp:"저작권법 제2조 제1호: '저작물'은 인간의 사상 또는 감정을 표현한 창작물을 말한다."
+  },
+  {
+    section:"CH04 § 저작권법 총칙",
+    text:"저작권법 제2조에서 '복제'의 정의로 옳은 것은?",
+    opts:["저작물 등의 원본 또는 그 복제물을 공중에게 대가를 받거나 받지 아니하고 양도 또는 대여하는 것","인쇄·사진촬영·복사·녹음·녹화 그 밖의 방법으로 일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것","저작물을 공중이 수신하거나 접근하게 할 목적으로 무선 또는 유선통신의 방법으로 송신하는 것","저작물을 공중에게 공개하는 것"],
+    ans:1,
+    exp:"저작권법 제2조 제22호: '복제'는 인쇄·사진촬영·복사·녹음·녹화 그 밖의 방법으로 일시적 또는 영구적으로 유형물에 고정하거나 다시 제작하는 것을 말하며, 건축물의 경우에는 그 건축을 위한 모형 또는 설계도서에 따라 이를 시공하는 것을 포함한다."
+  },
+  {
+    section:"CH04 § 저작권법 총칙",
+    text:"저작권법 제2조에서 '배포'의 정의로 옳은 것은?",
+    opts:["저작물을 공연·공중송신 또는 전시하는 것","저작물 등의 원본 또는 그 복제물을 공중에게 대가를 받거나 받지 아니하고 양도 또는 대여하는 것","저작물 또는 음반을 공중의 수요를 충족시키기 위하여 복제·배포하는 것","공중이 동시에 수신하게 할 목적으로 음·영상 등을 송신하는 것"],
+    ans:1,
+    exp:"저작권법 제2조 제23호: '배포'는 저작물 등의 원본 또는 그 복제물을 공중에게 대가를 받거나 받지 아니하고 양도 또는 대여하는 것을 말한다."
+  },
+  {
+    section:"CH04 § 저작권법 총칙",
+    text:"저작권법 제2조에서 '전송(傳送)'의 정의로 옳은 것은?",
+    opts:["공중이 동시에 수신하게 할 목적으로 음·영상 또는 음과 영상을 송신하는 것","공중의 구성원이 개별적으로 선택한 시간과 장소에서 접근할 수 있도록 저작물 등을 이용에 제공하는 것","저작물을 공중에게 공표하는 것","저작물 등의 복제물을 공중에게 양도하는 것"],
+    ans:1,
+    exp:"저작권법 제2조 제10호: '전송(傳送)'은 공중송신 중 공중의 구성원이 개별적으로 선택한 시간과 장소에서 접근할 수 있도록 저작물 등을 이용에 제공하는 것을 말하며, 그에 따라 이루어지는 송신을 포함한다."
+  },
+  {
+    section:"CH04 § 저작권법 저작물 예시",
+    text:"저작권법 제4조에서 저작물로 예시된 것이 아닌 것은?",
+    opts:["소설·시·논문·강연·연설·각본 그 밖의 어문저작물","사진저작물(이와 유사한 방법으로 제작된 것 포함)","지도·도표·설계도·약도·모형 그 밖의 도형저작물","특허 명세서와 실용신안 출원서"],
+    ans:3,
+    exp:"저작권법 제4조 저작물 예시 9가지: ①어문저작물 ②음악저작물 ③연극 및 무용·무언극 저작물 ④미술저작물 ⑤건축저작물 ⑥사진저작물 ⑦영상저작물 ⑧도형저작물 ⑨컴퓨터프로그램저작물. 특허 명세서는 포함되지 않는다."
+  },
+  {
+    section:"CH04 § 저작권법 저작물 예시",
+    text:"저작권법 제7조에서 저작권법에 의한 보호를 받지 못하는 저작물이 아닌 것은?",
+    opts:["헌법·법률·조약·명령·조례 및 규칙","국가 또는 지방자치단체의 고시·공고·훈령 그 밖에 이와 유사한 것","법원의 판결·결정·명령 및 심판이나 행정심판절차 그 밖에 이와 유사한 절차에 의한 의결·결정","개인이 창작한 소설, 시, 음악저작물"],
+    ans:3,
+    exp:"저작권법 제7조(보호받지 못하는 저작물): ①헌법·법률·조약·명령·조례 및 규칙 ②국가 또는 지방자치단체의 고시·공고·훈령 ③법원의 판결·결정·명령 등 ④국가나 지방자치단체가 작성한 것으로서 1~3호의 편집물 또는 번역물 ⑤사실의 전달에 불과한 시사보도. 개인 창작물은 보호대상이다."
+  },
+  {
+    section:"CH04 § 저작권법 저작물 예시",
+    text:"저작권법 제2조에서 '응용미술저작물'의 정의로 옳은 것은?",
+    opts:["특정한 결과를 얻기 위하여 컴퓨터 내에서 직접 또는 간접으로 사용되는 일련의 지시·명령으로 표현된 창작물","물품에 동일한 형상으로 복제될 수 있는 미술저작물로서 그 이용된 물품과 구분되어 독자성을 인정할 수 있는 것으로 디자인 등을 포함","소재의 선택·배열 또는 구성에 창작성이 있는 편집물","연속적인 영상이 수록된 창작물로서 기계 또는 전자장치에 의하여 재생하여 볼 수 있는 것"],
+    ans:1,
+    exp:"저작권법 제2조 제15호: '응용미술저작물'은 물품에 동일한 형상으로 복제될 수 있는 미술저작물로서 그 이용된 물품과 구분되어 독자성을 인정할 수 있는 것을 말하며, 디자인 등을 포함한다."
+  },
+  {
+    section:"CH04 § 저작권법 저작물 예시",
+    text:"저작권법 제5조(2차적저작물)에 대한 설명으로 옳은 것은?",
+    opts:["원저작물을 번역·편곡·변형·각색·영상제작 그 밖의 방법으로 작성한 창작물은 독자적인 저작물로서 보호된다","2차적저작물의 보호는 원저작물의 저작자의 권리에 영향을 미친다","원저작자의 동의 없이 작성된 2차적저작물도 독자적으로 보호된다","2차적저작물은 편집물과 동일한 개념이다"],
+    ans:0,
+    exp:"저작권법 제5조: ①원저작물을 번역·편곡·변형·각색·영상제작 그 밖의 방법으로 작성한 창작물(이하 '2차적저작물')은 독자적인 저작물로서 보호된다. ②2차적저작물의 보호는 그 원저작물의 저작자의 권리에 영향을 미치지 아니한다."
+  },
+  {
+    section:"CH04 § 저작인격권",
+    text:"저작권법 제11조(공표권)에 대한 설명으로 옳은 것은?",
+    opts:["저작자는 반드시 모든 저작물을 공표하여야 한다","저작자는 그의 저작물을 공표하거나 공표하지 아니할 것을 결정할 권리를 가진다","저작자의 사망 후에는 공표권이 자동으로 소멸한다","공표권은 저작재산권의 일종이다"],
+    ans:1,
+    exp:"저작권법 제11조 제1항: 저작자는 그의 저작물을 공표하거나 공표하지 아니할 것을 결정할 권리를 가진다. 공표권은 저작인격권에 해당하며, 일신전속성이 있어 양도할 수 없다."
+  },
+  {
+    section:"CH04 § 저작인격권",
+    text:"저작권법 제13조(동일성유지권)에 대한 설명으로 옳은 것은?",
+    opts:["저작자는 그의 저작물의 내용·형식 및 제호의 동일성을 유지할 권리를 가지며, 어떠한 경우에도 변경에 이의할 수 있다","저작자는 그의 저작물의 내용·형식 및 제호의 동일성을 유지할 권리를 가지나, 학교교육 목적상 부득이한 표현의 변경에는 이의할 수 없다","저작자는 동일성유지권을 제3자에게 양도할 수 있다","건축물의 증축·개축은 동일성유지권과 무관하다"],
+    ans:1,
+    exp:"저작권법 제13조: 저작자는 동일성을 유지할 권리를 가지나, ①학교교육 목적상 부득이한 표현의 변경 ②건축물의 증축·개축 ③특정 컴퓨터 외에는 이용할 수 없는 프로그램을 다른 컴퓨터에 이용할 수 있도록 필요한 범위의 변경 ④프로그램을 특정 컴퓨터에 효과적으로 이용할 수 있도록 필요한 범위의 변경 ⑤그 밖에 부득이하다고 인정되는 범위의 변경에 대해서는 이의할 수 없다."
+  },
+  {
+    section:"CH04 § 저작인격권",
+    text:"저작권법 제14조(저작인격권의 일신전속성)에 대한 설명으로 옳은 것은?",
+    opts:["저작인격권은 상속이 가능하다","저작인격권은 저작자 일신에 전속한다","저작인격권은 제3자에게 양도할 수 있다","저작인격권은 저작재산권과 함께 이전된다"],
+    ans:1,
+    exp:"저작권법 제14조 제1항: 저작인격권은 저작자 일신에 전속한다. 즉, 상속·양도가 불가능하며 오직 저작자만이 행사할 수 있는 권리이다."
+  },
+  {
+    section:"CH04 § 저작재산권",
+    text:"저작권법 제39조(보호기간의 원칙)에 대한 설명으로 옳은 것은?",
+    opts:["저작재산권은 저작자가 생존하는 동안만 존속한다","저작재산권은 이 관에 특별한 규정이 있는 경우를 제외하고는 저작자가 생존하는 동안과 사망한 후 70년간 존속한다","저작재산권은 저작자 사망 후 50년간 존속한다","저작재산권은 창작 후 70년간 존속한다"],
+    ans:1,
+    exp:"저작권법 제39조 제1항: 저작재산권은 이 관에 특별한 규정이 있는 경우를 제외하고는 저작자가 생존하는 동안과 사망한 후 70년간 존속한다."
+  },
+  {
+    section:"CH04 § 저작재산권",
+    text:"저작권법 제41조(업무상저작물의 보호기간)에 대한 설명으로 옳은 것은?",
+    opts:["업무상저작물의 저작재산권은 창작한 때부터 70년간 존속한다","업무상저작물의 저작재산권은 공표한 때부터 70년간 존속한다. 다만, 창작한 때부터 50년 이내에 공표되지 아니한 경우에는 창작한 때부터 70년간 존속한다","업무상저작물의 보호기간은 저작자 사후 70년이다","업무상저작물은 저작권법의 보호를 받지 못한다"],
+    ans:1,
+    exp:"저작권법 제41조: 업무상저작물의 저작재산권은 공표한 때부터 70년간 존속한다. 다만, 창작한 때부터 50년 이내에 공표되지 아니한 경우에는 창작한 때부터 70년간 존속한다."
+  },
+  {
+    section:"CH04 § 저작재산권",
+    text:"저작권법 제42조(영상저작물의 보호기간)에 대한 설명으로 옳은 것은?",
+    opts:["영상저작물은 제39조·제40조와 동일하게 저작자 사후 70년이다","영상저작물의 저작재산권은 공표한 때부터 70년간 존속한다. 다만, 창작한 때부터 50년 이내에 공표되지 아니한 경우에는 창작한 때부터 70년간 존속한다","영상저작물은 저작인접권으로 분류된다","영상저작물의 보호기간은 공표 후 50년이다"],
+    ans:1,
+    exp:"저작권법 제42조: 영상저작물의 저작재산권은 제39조 및 제40조에도 불구하고 공표한 때부터 70년간 존속한다. 다만, 창작한 때부터 50년 이내에 공표되지 아니한 경우에는 창작한 때부터 70년간 존속한다."
+  },
+  {
+    section:"CH04 § 저작인접권",
+    text:"저작권법 제86조(저작인접권 보호기간)에서 저작인접권(실연자의 인격권 제외)은 다음 각 호에 해당하는 때의 다음 해부터 기산하여 몇 년간 존속하는가?",
+    opts:["실연 50년, 음반 70년, 방송 70년","실연 70년, 음반 70년, 방송 50년","실연 50년, 음반 50년, 방송 50년","실연 70년, 음반 50년, 방송 70년"],
+    ans:1,
+    exp:"저작권법 제86조 제2항: 저작인접권(실연자의 인격권 제외)은 해당하는 때의 다음 해부터 기산하여 70년(방송의 경우에는 50년)간 존속한다. 즉, 실연·음반은 70년, 방송은 50년이다."
+  },
+  {
+    section:"CH04 § 저작인접권",
+    text:"저작인접권 중 실연자의 권리가 아닌 것은?",
+    opts:["성명표시권(제66조)","동일성유지권(제67조)","복제권(제69조)","저작물 발행권"],
+    ans:3,
+    exp:"실연자의 권리: 성명표시권(제66조), 동일성유지권(제67조), 복제권(제69조), 배포권(제70조), 대여권(제71조), 공연권(제72조), 방송권(제73조), 전송권(제74조). '저작물 발행권'은 실연자의 권리가 아닌 저작재산권 관련 개념이다."
+  },
+  {
+    section:"CH04 § 저작인접권",
+    text:"저작권법 제86조에서 저작인접권의 보호기간 기산점으로 옳은 것은?",
+    opts:["실연의 경우에는 그 실연을 한 때 / 음반의 경우에는 그 음을 맨 처음 음반에 고정한 때 / 방송의 경우에는 그 방송을 한 때","실연의 경우에는 그 실연을 한 다음 해 / 음반의 경우에는 출판한 때 / 방송의 경우에는 등록한 때","모두 창작한 때부터 기산한다","모두 공표한 때부터 기산한다"],
+    ans:0,
+    exp:"저작권법 제86조 제1항: 저작인접권은 다음 각 호에 해당하는 때부터 발생하며, 어떠한 절차나 형식의 이행을 필요로 하지 아니한다. 1.실연의 경우에는 그 실연을 한 때 2.음반의 경우에는 그 음을 맨 처음 음반에 고정한 때 3.방송의 경우에는 그 방송을 한 때"
+  },
+];
+
+let cur = 0;
+let answered = new Array(Q.length).fill(null); // null | index
+let score = 0;
+
+function render() {
+  const q = Q[cur];
+  document.getElementById('q-section').textContent = q.section;
+  document.getElementById('q-meta').textContent = `문제 ${cur+1} / ${Q.length}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const wrap = document.getElementById('options');
+  wrap.innerHTML = '';
+  const nums = ['①','②','③','④'];
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="num">${nums[i]}</span><span>${o}</span>`;
+    btn.onclick = () => pick(i);
+    wrap.appendChild(btn);
+  });
+
+  const exp = document.getElementById('explanation');
+  exp.className = 'explanation';
+  exp.innerHTML = '';
+
+  if (answered[cur] !== null) {
+    applyStyle(answered[cur]);
+  }
+
+  updateProgress();
+  document.getElementById('prev-btn').style.opacity = cur === 0 ? '0.3' : '1';
+  document.getElementById('next-btn').textContent = cur === Q.length - 1 ? '결과 보기 ▸' : '다음 ▸';
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  if (i === Q[cur].ans) score++;
+  applyStyle(i);
+  updateProgress();
+}
+
+function applyStyle(chosen) {
+  const q = Q[cur];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen && chosen !== q.ans) b.classList.add('wrong');
+  });
+  const exp = document.getElementById('explanation');
+  exp.innerHTML = `<strong>해설</strong> ${q.exp}`;
+  exp.classList.add('show');
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const correct = answered.reduce((s, a, i) => s + (a === Q[i].ans ? 1 : 0), 0);
+  document.getElementById('p-cur').textContent = `${cur+1} / ${Q.length}`;
+  document.getElementById('p-score').textContent = `맞힘 ${correct}`;
+  document.getElementById('p-fill').style.width = `${(done/Q.length)*100}%`;
+}
+
+function go(dir) {
+  const next = cur + dir;
+  if (next < 0) return;
+  if (next >= Q.length) { showResult(); return; }
+  cur = next;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showResult() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.classList.add('show');
+
+  const final = answered.reduce((s, a, i) => s + (a !== null && a === Q[i].ans ? 1 : 0), 0);
+  const pct = Math.round((final/Q.length)*100);
+  document.getElementById('r-score').textContent = final;
+  document.getElementById('r-msg').textContent = pct >= 80 ? '🏆 우수합니다!' : pct >= 60 ? '📚 조금 더 다져요' : '💪 다시 도전!';
+  document.getElementById('r-sub').textContent = `정답률 ${pct}% · ${final}/${Q.length} (80% 이상: 합격권)`;
+
+  const wl = document.getElementById('wrong-list');
+  const wrongs = Q.filter((q,i) => answered[i] !== q.ans);
+  if (wrongs.length === 0) {
+    wl.innerHTML = '<h3>WRONG LIST</h3><div class="wrong-item" style="color:#4a8c5c">모두 정답! 완벽합니다 🎉</div>';
+  } else {
+    wl.innerHTML = `<h3>WRONG LIST · ${wrongs.length}문제</h3>` +
+      wrongs.map((q,i) => `<div class="wrong-item"><span>Q${Q.indexOf(q)+1}. ${q.text}</span><br>정답: ${['①','②','③','④'][q.ans]} ${q.opts[q.ans]}</div>`).join('');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart() {
+  cur = 0;
+  answered = new Array(Q.length).fill(null);
+  score = 0;
+  document.getElementById('result-screen').classList.remove('show');
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('progress-wrap').style.display = 'block';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
