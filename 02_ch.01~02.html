@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시각디자인산업기사 필기 | DAY 03</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #faf8f4;
+    --cream: #f2ede4;
+    --accent: #c0392b;
+    --accent2: #2c3e50;
+    --gold: #b8860b;
+    --muted: #7a6f63;
+    --border: #d4ccc0;
+    --highlight: #fff3cd;
+    --tip-bg: #eaf4fb;
+    --tip-border: #2980b9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--ink);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── 셸 레이아웃 ── */
+  .shell {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── 사이드바 ── */
+  .sidebar {
+    width: 270px;
+    flex-shrink: 0;
+    background: var(--accent2);
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform .3s;
+  }
+
+  .sidebar-header {
+    padding: 28px 22px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .sidebar-header .day-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .sidebar-header h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #fff;
+  }
+  .sidebar-header p {
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+    margin-top: 6px;
+  }
+
+  .nav-section {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .nav-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    padding: 0 22px 8px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 22px;
+    font-size: 13px;
+    color: rgba(255,255,255,.7);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav-item.active { background: rgba(192,57,43,.2); color: #fff; border-left-color: var(--accent); }
+  .nav-item .num {
+    width: 20px; height: 20px;
+    background: rgba(255,255,255,.12);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* ── 메인 콘텐츠 ── */
+  .main {
+    margin-left: 270px;
+    flex: 1;
+    background: var(--paper);
+    min-height: 100vh;
+  }
+
+  /* 탑 바 */
+  .topbar {
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0;
+    z-index: 50;
+  }
+  .topbar .breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .topbar .breadcrumb span { color: var(--ink); font-weight: 500; }
+  .progress-bar {
+    width: 160px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width .4s;
+    border-radius: 2px;
+  }
+
+  /* 섹션 */
+  .section {
+    display: none;
+    padding: 48px 64px 80px;
+    max-width: 860px;
+    animation: fadeIn .35s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 챕터 헤더 */
+  .chapter-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .chapter-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .chapter-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .chapter-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* 강 헤더 */
+  .gang-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 40px 0 24px;
+  }
+  .gang-badge {
+    background: var(--accent2);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .gang-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* 섹션 제목 */
+  .sec-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+    margin: 32px 0 14px;
+  }
+
+  /* 소제목 */
+  .sub-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 22px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sub-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+  }
+
+  /* 본문 */
+  p.body-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #2d2825;
+    margin-bottom: 12px;
+  }
+
+  /* 번호 리스트 */
+  .num-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 8px 0 16px;
+  }
+  .num-list li {
+    display: flex;
+    gap: 12px;
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: #2d2825;
+  }
+  .num-list li .n {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent2);
+    margin-top: 2px;
+  }
+
+  /* 원형 번호 리스트 (①②) */
+  .circle-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 6px 0 14px 4px;
+  }
+  .circle-list li {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: #2d2825;
+    padding-left: 6px;
+  }
+
+  /* TIP 박스 */
+  .tip-box {
+    background: var(--tip-bg);
+    border-left: 4px solid var(--tip-border);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin: 24px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tip-border);
+    margin-bottom: 10px;
+  }
+  .tip-box .tip-term {
+    font-weight: 700;
+    font-size: 13.5px;
+    margin-bottom: 6px;
+    color: var(--accent2);
+  }
+  .tip-box p {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #2d2825;
+    margin-bottom: 8px;
+  }
+
+  /* 키워드 칩 */
+  .keyword-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .chip {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent2);
+  }
+  .chip.red { background: #fdf0ee; border-color: #e8b0a8; color: var(--accent); }
+
+  /* 기출 뱃지 */
+  .exam-badge {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #856404;
+    padding: 1px 7px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* 카드 그리드 */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .card .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .card .card-title .icon { font-size: 16px; }
+  .card p { font-size: 12.5px; line-height: 1.7; color: #3a3330; }
+
+  /* 다이어그램 박스 */
+  .diagram-box {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .diagram-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .schema-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .schema-layer {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .schema-label {
+    width: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .schema-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+  }
+  .schema-box {
+    background: var(--accent2);
+    color: #fff;
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .schema-box.external { background: #27ae60; }
+  .schema-box.concept { background: #8e44ad; }
+  .schema-box.internal { background: #c0392b; }
+  .schema-box.mapping { background: #f39c12; color: #333; }
+  .schema-arrow { color: var(--muted); font-size: 18px; line-height: 1; }
+  .schema-stage {
+    width: 70px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* 하단 내비게이션 */
+  .bottom-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-btn:hover { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+  .nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+  .nav-btn:disabled:hover { background: #fff; color: var(--ink); border-color: var(--border); }
+  .page-info { font-size: 13px; color: var(--muted); }
+
+  /* 모바일 토글 */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 14px; left: 14px;
+    z-index: 200;
+    background: var(--accent2);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    width: 40px; height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .menu-toggle { display: flex; align-items: center; justify-content: center; }
+    .section { padding: 24px 20px 60px; }
+    .topbar { padding: 14px 20px 14px 60px; }
+    .chapter-title { font-size: 24px; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<div class="shell">
+  <!-- 사이드바 -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="day-badge">DAY 03</div>
+      <h1>시각디자인산업기사<br>필기 핵심정리</h1>
+      <p>PART 02 디자인 자료화</p>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">CHAPTER 01</div>
+      <div class="nav-item active" onclick="goTo(0)">
+        <span class="num">1</span> 기초자료조사와 분석
+      </div>
+      <div class="nav-item" onclick="goTo(1)">
+        <span class="num">2</span> 디자인 전략 수립
+      </div>
+      <div class="nav-item" onclick="goTo(2)">
+        <span class="num">3</span> 계약서 및 정산서 확인
+      </div>
+      <div class="nav-item" onclick="goTo(3)">
+        <span class="num">4</span> 디자인 가이드 제작
+      </div>
+      <div class="nav-item" onclick="goTo(4)">
+        <span class="num">5</span> 디자인 프로세스 및 결과물
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">CHAPTER 02</div>
+      <div class="nav-item" onclick="goTo(5)">
+        <span class="num">6</span> 데이터베이스 기초
+      </div>
+      <div class="nav-item" onclick="goTo(6)">
+        <span class="num">7</span> 색인화 방법
+      </div>
+      <div class="nav-item" onclick="goTo(7)">
+        <span class="num">8</span> 데이터베이스 관리방법
+      </div>
+    </div>
+  </nav>
+
+  <!-- 메인 -->
+  <main class="main">
+    <div class="topbar">
+      <div class="breadcrumb">
+        PART 02 › <span id="breadcrumb-text">프로젝트 결과보고서 정리</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:11px;color:var(--muted)" id="progress-label">1 / 8</span>
+        <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 0 ===== -->
+    <div class="section active" id="sec-0">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 01</div>
+        <div class="chapter-title">프로젝트 결과보고서 정리</div>
+        <div class="chapter-sub">제1강 · 프로젝트 결과보고서 작성</div>
+      </div>
+
+      <div class="sec-title">01 | 기초자료조사와 분석</div>
+
+      <p class="body-text">
+        디자인 프로젝트 완료 시 개발사가 의뢰자에게 제출하는 서류를 <strong>프로젝트 결과보고서(Project Results Report)</strong>라고 한다. 이 보고서는 프로젝트 결과를 체계적으로 정리하여 일정 및 모든 개발내용을 한눈에 알아볼 수 있도록 매뉴얼 형태로 제작된다.
+      </p>
+
+      <div class="keyword-chips">
+        <div class="chip red">Project Results Report</div>
+        <div class="chip">매뉴얼 형태</div>
+        <div class="chip">종합 평가</div>
+        <div class="chip">유지보수 참고자료</div>
+      </div>
+
+      <div class="sub-title">결과보고서 구성 내용</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>조사, 분석, 개발, 전략, 일정, 콘셉트(concept), 제작비용 등을 보고하는 형태로 제작된다.</span></li>
+        <li><span class="n">②</span><span>프로젝트 일정 및 모든 개발내용을 한눈에 알아볼 수 있도록 체계적으로 정리하여 매뉴얼 형태로 제작된다.</span></li>
+        <li><span class="n">③</span><span>디자인의 방향이 크게 바뀐 경우는 물론 작은 수정에 대한 내용도 구체적 산출물에 근거하여 정리된다.</span></li>
+      </ul>
+
+      <div class="sub-title">(1) 기초자료조사</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>기초자료조사는 디자이너가 프로젝트를 시작하기 전에 의뢰자와 충분한 커뮤니케이션을 통해 필요한 정보를 수집하는 과정이다. 고객사의 신념·가치·디자인적 취향 등을 파악하여 방향성을 제시한다.</span></li>
+        <li><span class="n">②</span><span>자료 리서치는 설문이나 질문지를 활용하여 고객사가 원하는 바를 파악하는 것으로, 기초 자료를 수집하는 데 있어 중요한 능력 중 하나이다.</span></li>
+      </ul>
+
+      <div class="sub-title">(2) 기초자료분석</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>기초자료분석은 수집한 자료를 분석하여 디자인 작업에 필요한 정보를 도출하는 과정이다.</span></li>
+        <li><span class="n">②</span><span>전체적인 트렌드를 파악하는 것은 강력한 경쟁력을 갖추어 디자인적 차별점을 도출하는 데 매우 중요하다.</span></li>
+      </ul>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" disabled>← 이전</button>
+        <span class="page-info">1 / 8</span>
+        <button class="nav-btn" onclick="goTo(1)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 1 ===== -->
+    <div class="section" id="sec-1">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 01</div>
+        <div class="chapter-title">디자인 전략 수립</div>
+        <div class="chapter-sub">제1강 계속</div>
+      </div>
+
+      <div class="sec-title">02 | 디자인 전략 수립</div>
+
+      <ul class="num-list">
+        <li><span class="n">①</span><span>디자인 전략 수립은 프로젝트의 목적·목표를 바탕으로 구체적인 디자인 콘셉트를 도출하고, 이를 체계적으로 정리하는 단계이다.</span></li>
+        <li><span class="n">②</span><span><strong>이미지 보드</strong>는 디자인 전략을 시각화한 것으로, 설정한 디자인 콘셉트에 맞는 이미지·색상·폰트 등을 조합하여 구성한 시각적 자료이다.</span></li>
+        <li><span class="n">③</span><span>이미지 보드는 작업 시안의 방향에 맞게 적절한 이미지를 나열하여 전체적인 디자인 전략을 쉽게 파악할 수 있도록 도와준다.</span></li>
+      </ul>
+
+      <div class="sub-title">(1) 프로젝트 디자인 전략 및 방향 가이드</div>
+      <ul class="circle-list">
+        <li>① 기업 내부 운영 상황, 기술적인 강약점, 법률적인 부분 등을 파악한다.</li>
+        <li>② 최고 경영진의 인터뷰를 진행한다.</li>
+        <li>③ 기존 브랜드의 진단과 브랜드 아키텍처(architecture)를 파악한다.</li>
+        <li>④ 회계 감사 정보를 파악한다.</li>
+        <li>⑤ 프로젝트 디자인은 다양한 방향성을 제시한다.</li>
+      </ul>
+
+      <div class="sub-title">(2) 프로젝트 디자인 수립</div>
+      <ul class="circle-list">
+        <li>① 수집한 자료들에 대한 종합 분석을 진행한다.</li>
+        <li>② 경쟁 상황 분석과 미래 시장 상황을 예측해 본다.</li>
+        <li>③ 브랜드 포지셔닝(positioning) 전략을 수립한다.</li>
+        <li>④ 브랜드 속성과 핵심가치를 추출하여 디자인 수립 과정으로 진행한다.</li>
+        <li>⑤ 브랜드 개발 브리프(brief)를 작성한다.</li>
+        <li>⑥ 핵심 메시지 개발을 통해 네이밍 전략 수립과 네이밍을 개발한다.</li>
+      </ul>
+
+      <div class="tip-box">
+        <div class="tip-label">📌 초산생의 TIP</div>
+        <div class="tip-term">브리프(brief) <span class="exam-badge">2023년 3회 산업기사</span><span class="exam-badge">2024년 2월 기사</span></div>
+        <p>프로젝트 시작 전 클라이언트와 디자이너/마케터/광고업자 등이 모여 목적, 목표, 타깃 대상, 예산 등을 상세하게 정리하고 공유하는 문서 또는 회의. 오해와 차이를 최소화하여 원활한 진행을 돕는다.</p>
+        <div class="tip-term" style="margin-top:14px;">브랜드 아키텍처(brand architecture)</div>
+        <p>기업이 소유하고 있는 다양한 브랜드들의 상관관계와 구조를 나타내는 시스템. 브랜드 포트폴리오를 구성하는 브랜드들 간의 관계를 이해하고 상호작용을 최적화하는 데 중요한 역할을 한다.</p>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(0)">← 이전</button>
+        <span class="page-info">2 / 8</span>
+        <button class="nav-btn" onclick="goTo(2)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 2 ===== -->
+    <div class="section" id="sec-2">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 01</div>
+        <div class="chapter-title">계약서 및 정산서 확인</div>
+        <div class="chapter-sub">제2강</div>
+      </div>
+
+      <div class="sec-title">01 | 결과보고서 수행 내용</div>
+      <p class="body-text">프로젝트에서 얻은 인사이트와 결과를 종합하여 결론을 도출하고 추후 개선점과 발전 가능성을 검토한다. 결과보고서는 클라이언트·제작자와 합의된 형식과 절차에 따라 제출하고 최종 확인한다.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title"><span class="icon">🎯</span> ① 수행 목적</div>
+          <p>프로젝트의 배경, 목적, 목표 등을 명시하도록 한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">📋</span> ② 결과물의 개요</div>
+          <p>프로젝트 구조 및 결과물에 대한 설명과 다른 디자인 시안으로 연결될 수 있도록 명시한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">📅</span> ③ 추진 체계 및 일정</div>
+          <p>각 디자인 팀원들의 조직도 및 역할분담과 수행일정을 자세하게 표기한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">📊</span> ④ 결과에 대한 내용</div>
+          <p>기획부터 최종 디자인까지 각 프로세스 단계별 데이터를 정리하여 결과물의 특징, 차별점, 사용자 경험 등을 적는다.</p>
+        </div>
+      </div>
+
+      <div class="sec-title">02 | 결과보고서 작성 필요사항 <span class="exam-badge">2023년 4회 산업기사</span></div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>최종 보고서 제출 전에 결과보고서 작성 과정에서 생긴 문제점이나 수정사항 등을 체크하여 보완해야 한다.</span></li>
+        <li><span class="n">②</span><span>작업 전체 과정을 문서화하여 작업 내용과 결과를 명확하게 보고서에 담아야 한다. 특히 디지털 디자인은 시각적 내용이 많아 순서와 방향을 잘 정리해야 한다.</span></li>
+        <li><span class="n">③</span><span>작업 완료 후에는 관련 파일을 정리하여 다음 작업을 준비한다. Work Table 같은 작업 정리 도구를 활용하여 효율적인 작업 관리를 해야 한다.</span></li>
+      </ul>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(1)">← 이전</button>
+        <span class="page-info">3 / 8</span>
+        <button class="nav-btn" onclick="goTo(3)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 3 ===== -->
+    <div class="section" id="sec-3">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 01</div>
+        <div class="chapter-title">디자인 가이드 제작</div>
+        <div class="chapter-sub">제2강 계속</div>
+      </div>
+
+      <div class="sec-title">03 | 디자인 가이드 제작</div>
+
+      <div class="sub-title">(1) 디자인 가이드(design guide) <span class="exam-badge">2024년 2회 산업기사</span></div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>다양한 프로젝트에서 디자인 방향성과 다양한 시안 작업을 위해 제작되는 가이드를 말한다.</span></li>
+        <li><span class="n">②</span><span>향후 지속적이고 다양한 디자인 콘셉트를 유지하기 위한 가이드이다.</span></li>
+        <li><span class="n">③</span><span>일관된 디자인 콘셉트를 유지하며, 관리와 활용이 용이해지고 디자인 작업의 질과 효율성을 높일 수 있다.</span></li>
+      </ul>
+
+      <div class="sub-title">(2) 디자인 가이드 제작 목적</div>
+      <p class="body-text">디자인 작업 후에 관리하기 편하도록 정리하여 필요한 사항과 지침을 만들어, 관리자가 교육을 받지 않고서도 그 지침만으로 관리와 활용이 가능하도록 만드는 것에 목적을 둔다.</p>
+
+      <div class="sub-title">(3) 디자인 가이드 구성요소</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>안내서 부분: 로고, 컬러 팔레트, 타이포그래피, 이미지 사용 등에 대한 지침이 포함된다.</span></li>
+        <li><span class="n">②</span><span>최종 디자인 작업 산출물: 작업 파일 및 결과물 파일 등을 포함한다.</span></li>
+      </ul>
+
+      <div class="sub-title">(4) 디자인 가이드 제작 시 고려사항</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>최종 가이드 파일과 작업 종료 후 얻어지는 결과물 파일을 모두 제작하고 관리하도록 한다.</span></li>
+        <li><span class="n">②</span><span>디자인 작업 프로세스상에서 모든 부분에 대해 규칙과 방법을 제시하도록 한다.</span></li>
+      </ul>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(2)">← 이전</button>
+        <span class="page-info">4 / 8</span>
+        <button class="nav-btn" onclick="goTo(4)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 4 ===== -->
+    <div class="section" id="sec-4">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 01</div>
+        <div class="chapter-title">디자인 프로세스 및 결과물</div>
+        <div class="chapter-sub"><span class="exam-badge" style="font-size:11px;">2024년 2회 산업기사</span></div>
+      </div>
+
+      <div class="sec-title">04 | 디자인 프로세스 및 결과물</div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title"><span class="icon">📝</span> ① 견적서 및 계약서 작성</div>
+          <p>의뢰자의 요구사항을 파악한 후 비용·일정을 산정하여 견적서를 작성한다. 이후 계약서를 작성하고 양측에서 날인이 이루어져야 한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">✏️</span> ② 디자인 작업 완성</div>
+          <p>모든 날인이 이루어졌다면 디자인 시안을 작성하고 작업을 시작한다. 요구사항에 따라 여러 차례 수정될 수 있으며, 완성되면 인쇄물을 만들어야 한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🖨️</span> ③ 인쇄물 제작</div>
+          <p>디자인 작업이 완료되면 인쇄물을 제작한다. 인쇄물 종류에 따라 인쇄기나 재료를 선정하고, 검수를 거쳐 최종 완료된 작업물로 인정된다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🔧</span> ④ 유지보수 및 관리</div>
+          <p>디자인 작업이 완료된 후에는 유지보수 및 관리가 필요하다. 수정, 보관, 백업 등을 포함하며 필요한 도구·시스템을 준비하여 체계적으로 수행해야 한다.</p>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(3)">← 이전</button>
+        <span class="page-info">5 / 8</span>
+        <button class="nav-btn" onclick="goTo(5)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 5 ===== -->
+    <div class="section" id="sec-5">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 02</div>
+        <div class="chapter-title">데이터베이스 관리</div>
+        <div class="chapter-sub">제1강 · 최종 디자인 파일 및 결과물 데이터베이스화</div>
+      </div>
+
+      <div class="sec-title">01 | 데이터베이스(data base) <span class="exam-badge">2023년 1·2회 산업기사</span></div>
+
+      <ul class="num-list">
+        <li><span class="n">①</span><span>데이터베이스는 중복된 정보를 효율적으로 처리하고 많은 사람들이 함께 공유할 목적으로 통합하여 관리되는 <strong>데이터의 집합</strong>을 말한다.</span></li>
+        <li><span class="n">②</span><span>정보의 중복을 피하여 정보를 일원화하고, 서로 관련성을 가지며 중복이 없는 데이터의 집합을 유지하는 것이다.</span></li>
+        <li><span class="n">③</span><span>현대적 DB 개념을 확립한 사람은 1963년 <strong>바크만(C. Bachman)</strong>으로, IDS(Integrated Data Store)를 만들었다. 이때 데이터베이스를 관리하는 시스템을 <strong>DBMS(Database Management System)</strong>이라고 한다.</span></li>
+        <li><span class="n">④</span><span>데이터베이스는 최소의 중복으로 <strong>통합(integrated)·저장(stored)·운영(operation)·공용(shared)</strong> 데이터로 구성된다. <span class="exam-badge">2023년 4회 산업기사</span></span></li>
+      </ul>
+
+      <div class="sec-title">02 | 데이터베이스의 특징 <span class="exam-badge">2024년 1회 산업기사</span></div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">① 실시간 접근성<br><small style="font-weight:400;font-size:11px;">(real time accessibility)</small></div>
+          <p>사용자가 요구하는 정보를 실시간으로 처리하여 응답하는 특징을 갖는다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">② 계속적인 진화<br><small style="font-weight:400;font-size:11px;">(continuous evolution)</small></div>
+          <p>데이터를 입력, 삭제, 갱신을 통해 최신의 정확한 데이터를 유지하는 특징이 있다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">③ 동시 공유<br><small style="font-weight:400;font-size:11px;">(concurrent sharing)</small></div>
+          <p>여러 사용자가 동시에 데이터를 공유할 수 있는 특징을 갖는다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">④ 내용에 의한 참조<br><small style="font-weight:400;font-size:11px;">(content reference)</small></div>
+          <p>위치나 주소 대신에 사용자가 요구하는 데이터 내용에 따라 참조하는 특징을 갖는다.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:0;">
+        <div class="card-title">⑤ 데이터 논리적 독립성<br><small style="font-weight:400;font-size:11px;">(independence)</small></div>
+        <p>독립된 응용프로그램과 데이터베이스를 데이터의 논리적 구조를 변경시키더라도 응용프로그램은 변경되지 않는 특징을 갖는다.</p>
+      </div>
+
+      <div class="sec-title">03 | 데이터베이스 구축 단계</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span><strong>기획 단계</strong>: 대상 선정, 시장 조사 및 분석, DB 범위·성격 정의, 요구사항 분석, 마케팅 전략 수립, 저작권 등 법적 측면을 고려한다.</span></li>
+        <li><span class="n">②</span><span><strong>설계 단계</strong>: 개념적 모델 설계, 논리적·물리적 구조 설계를 통해 DB의 구조와 특징을 정의하고, DBMS를 선택·설치한다.</span></li>
+        <li><span class="n">③</span><span><strong>구현 단계</strong>: 데이터의 수집, 가공, 입력 및 저장, 검색 등을 위한 애플리케이션을 개발하고 DBMS와 연동하여 구현한다.</span></li>
+        <li><span class="n">④</span><span><strong>운영 및 유지보수 단계</strong>: DB의 정확성과 안정성을 유지하기 위한 데이터의 갱신, 보안, 백업 등이 포함된다.</span></li>
+      </ul>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(4)">← 이전</button>
+        <span class="page-info">6 / 8</span>
+        <button class="nav-btn" onclick="goTo(6)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 6 ===== -->
+    <div class="section" id="sec-6">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 02</div>
+        <div class="chapter-title">분류 색인화 방법</div>
+        <div class="chapter-sub">제2강</div>
+      </div>
+
+      <div class="sec-title">01 | 색인화(indexing) <span class="exam-badge">2024년 2회 기사</span></div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>색인화(indexing)는 특정 정보를 빠르게 찾아보기 위해 일정한 순서나 계량적·수치적 배열 등을 통해 정보를 구성하는 것으로, 문서의 내용이나 특성에 따라 키워드를 추출하고 분류하여 <strong>색인(index)을 만드는 과정</strong>을 말한다.</span></li>
+        <li><span class="n">②</span><span>색인(index)이라는 자료구조가 추가적으로 만들어지며, <strong>색인어(index Term)</strong>는 정보 검색의 대상이 되는 단어로, 이를 통해 빠르게 원하는 데이터를 찾을 수 있게 된다.</span></li>
+      </ul>
+
+      <div class="sec-title">02 | 색인의 역할</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">🔍 검색 수단</div>
+          <p>사용자가 검색하고자 하는 질의와 문서를 연결하여 검색 결과를 제공하는 역할을 한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ 속도 향상</div>
+          <p>정보와 문서를 빠르게 탐색하기 위한 보조적 자료 역할을 하여 검색 속도를 향상시킨다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📂 자료 목록</div>
+          <p>색인화된 정보와 문서의 위치를 목록화하여 사용자에게 제공한다.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🏷️ 키워드화</div>
+          <p>문서의 핵심어로서의 역할을 수행하여 정보의 내용을 요약하고 검색을 용이하게 한다.</p>
+        </div>
+      </div>
+
+      <div class="sec-title">03 | 색인의 단점</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span><strong>별도의 저장 공간으로 자원소모</strong>: 색인을 생성하기 위해서는 별도의 저장 공간이 필요하며, 큰 규모의 색인을 생성하면 그만큼 많은 저장 공간이 필요하게 된다.</span></li>
+        <li><span class="n">②</span><span><strong>유지보수의 필요성</strong>: 새로운 문서가 추가되거나 기존 문서가 수정되면 그 정보를 색인에 반영해야 한다. 일정 주기마다 적절하게 갱신 작업을 수행해야 한다.</span></li>
+        <li><span class="n">③</span><span><strong>제한된 커버리지(coverage)</strong>: 검색어에 색인이 포함되지 않으면 검색결과에서 제외될 수 있다.</span></li>
+        <li><span class="n">④</span><span><strong>정확도 문제</strong>: 검색어와 유사한 단어나 구를 사용한 문서는 누락될 수 있다.</span></li>
+      </ul>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(5)">← 이전</button>
+        <span class="page-info">7 / 8</span>
+        <button class="nav-btn" onclick="goTo(7)">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ===== 섹션 7 ===== -->
+    <div class="section" id="sec-7">
+      <div class="chapter-header">
+        <div class="chapter-label">Chapter 02</div>
+        <div class="chapter-title">데이터베이스 관리방법</div>
+        <div class="chapter-sub">제3강 <span class="exam-badge">2023년 2회 · 2024년 1회 산업기사</span></div>
+      </div>
+
+      <div class="sec-title">01 | 데이터베이스 스키마(database schema)</div>
+      <ul class="num-list">
+        <li><span class="n">①</span><span>데이터베이스 스키마는 데이터베이스에서 <strong>자료의 구조, 자료의 표현방법, 자료 간의 관계</strong>를 형식 언어로 정의한 구조를 말한다.</span></li>
+        <li><span class="n">②</span><span>DBMS이 주어진 설정에 따라 스키마를 생성하며, 사용자가 자료를 저장·조회·삭제·변경할 때 DBMS는 스키마를 참조하여 명령을 수행한다.</span></li>
+      </ul>
+
+      <div class="sec-title">02 | 스키마의 종류 <span class="exam-badge">2023년 4회 · 2024년 2회 · 3회 산업기사</span></div>
+
+      <div class="card-grid">
+        <div class="card" style="border-top:3px solid #27ae60;">
+          <div class="card-title" style="color:#27ae60;">① 외부 스키마 (external schema) <span class="exam-badge">2024년 1회</span></div>
+          <p>프로그래머나 사용자의 입장에서 DB의 모습으로 조직의 일부분을 논리적 구조로 정의한 것. 여러 개의 외부 스키마로 세분화될 수 있다.</p>
+        </div>
+        <div class="card" style="border-top:3px solid #8e44ad;">
+          <div class="card-title" style="color:#8e44ad;">② 개념 스키마 (conceptual schema)</div>
+          <p>모든 응용 시스템과 사용자들이 필요로 하는 데이터를 통합한 조직 전체의 DB 구조를 논리적으로 정의한 것. <strong>하나만 존재</strong>한다.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:0; border-top:3px solid #c0392b;">
+        <div class="card-title" style="color:#c0392b;">③ 내부 스키마 (internal schema)</div>
+        <p>전체 데이터베이스의 물리적 저장 형태를 기술한 개념이다.</p>
+      </div>
+
+      <!-- 스키마 다이어그램 -->
+      <div class="diagram-box">
+        <div class="diagram-title">데이터베이스 스키마 3계층 구조</div>
+        <div style="display:flex; align-items:stretch; gap:12px;">
+          <div style="display:flex;flex-direction:column;justify-content:space-between;font-size:10px;font-weight:700;color:var(--muted);text-align:right;padding-right:8px;">
+            <span>외부 단계</span>
+            <span>개념 단계</span>
+            <span>내부 단계</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:0;align-items:center;">
+            <!-- 외부 -->
+            <div style="display:flex;gap:10px;justify-content:center;padding:10px 0;">
+              <div style="background:#27ae60;color:#fff;border-radius:4px;padding:4px 12px;font-size:11px;font-weight:600;">사용자 1</div>
+              <div style="background:#27ae60;color:#fff;border-radius:4px;padding:4px 12px;font-size:11px;font-weight:600;">사용자 2</div>
+              <div style="background:#27ae60;color:#fff;border-radius:4px;padding:4px 12px;font-size:11px;font-weight:600;">사용자 3</div>
+            </div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:#27ae60;color:#fff;border-radius:4px;padding:6px 20px;font-size:12px;font-weight:700;margin:6px 0;">외부 스키마 (External Schema)</div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:#f39c12;color:#333;border-radius:4px;padding:5px 16px;font-size:11px;font-weight:700;margin:6px 0;">중류 인터페이스 (Mapping)</div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:#8e44ad;color:#fff;border-radius:4px;padding:6px 20px;font-size:12px;font-weight:700;margin:6px 0;">개념 스키마 (Conceptual Schema)</div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:#f39c12;color:#333;border-radius:4px;padding:5px 16px;font-size:11px;font-weight:700;margin:6px 0;">저장 인터페이스 (Mapping)</div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:#c0392b;color:#fff;border-radius:4px;padding:6px 20px;font-size:12px;font-weight:700;margin:6px 0;">내부 스키마 (Internal Schema)</div>
+            <div style="color:var(--muted);font-size:18px;">↓</div>
+            <div style="background:var(--accent2);color:#fff;border-radius:4px;padding:6px 16px;font-size:11px;font-weight:600;margin:6px 0;">물리적 저장소</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 마무리 배너 -->
+      <div style="background:var(--accent2);border-radius:10px;padding:28px 30px;margin-top:32px;color:#fff;text-align:center;">
+        <div style="font-size:13px;opacity:.6;margin-bottom:6px;letter-spacing:2px;">DAY 03 완료</div>
+        <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;margin-bottom:10px;">수고하셨습니다! 🎉</div>
+        <div style="font-size:13px;opacity:.7;">시각디자인산업기사 필기 · PART 02 디자인 자료화</div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" onclick="goTo(6)">← 이전</button>
+        <span class="page-info">8 / 8</span>
+        <button class="nav-btn" disabled>완료 ✓</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const TITLES = [
+    '프로젝트 결과보고서 정리',
+    '디자인 전략 수립',
+    '계약서 및 정산서 확인',
+    '디자인 가이드 제작',
+    '디자인 프로세스 및 결과물',
+    '데이터베이스 기초',
+    '분류 색인화 방법',
+    '데이터베이스 관리방법',
+  ];
+  const TOTAL = 8;
+  let current = 0;
+
+  function goTo(idx) {
+    document.getElementById('sec-' + current).classList.remove('active');
+    document.querySelectorAll('.nav-item')[current].classList.remove('active');
+    current = idx;
+    document.getElementById('sec-' + current).classList.add('active');
+    document.querySelectorAll('.nav-item')[current].classList.add('active');
+    document.getElementById('breadcrumb-text').textContent = TITLES[current];
+    document.getElementById('progress-label').textContent = (current + 1) + ' / ' + TOTAL;
+    document.getElementById('progress-fill').style.width = ((current + 1) / TOTAL * 100) + '%';
+    window.scrollTo(0, 0);
+    // 모바일: 사이드바 닫기
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // 초기 진행 바
+  document.getElementById('progress-fill').style.width = (1 / TOTAL * 100) + '%';
+</script>
+</body>
+</html>
