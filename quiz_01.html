@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시각디자인 산업기사 모의고사 1회</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: '맑은 고딕', 'Malgun Gothic', '나눔고딕', sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* 헤더 */
+  .exam-header {
+    background: linear-gradient(135deg, #1a3a6b 0%, #2e6fc4 100%);
+    color: white;
+    text-align: center;
+    padding: 36px 20px 28px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(46,111,196,0.3);
+  }
+  .exam-header h1 {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .exam-header .subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 8px;
+  }
+  .exam-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .exam-meta span {
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* 안내문 */
+  .notice {
+    background: #fff8e1;
+    border-left: 4px solid #f9a825;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 12.5px;
+    color: #555;
+  }
+
+  /* 채점 카드 */
+  .score-card {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    flex-wrap: wrap;
+  }
+  .score-card .score-label { font-weight: 700; color: #1a3a6b; font-size: 15px; }
+  .score-display {
+    font-size: 28px;
+    font-weight: 900;
+    color: #2e6fc4;
+    min-width: 80px;
+  }
+  .score-card .btns { margin-left: auto; display: flex; gap: 10px; }
+  .btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-grade {
+    background: #2e6fc4;
+    color: white;
+  }
+  .btn-grade:hover { background: #1a3a6b; transform: translateY(-1px); }
+  .btn-reset {
+    background: #eee;
+    color: #555;
+  }
+  .btn-reset:hover { background: #ddd; }
+
+  /* 과목 헤더 */
+  .subject-header {
+    background: #1a3a6b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 28px 0 16px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* 문제 카드 */
+  .question-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .question-card.answered { border-color: #c8ddf7; }
+  .question-card.correct { border-color: #4caf50; background: #f9fff9; }
+  .question-card.incorrect { border-color: #f44336; background: #fff8f8; }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    background: #2e6fc4;
+    color: white;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .q-text {
+    font-size: 14.5px;
+    font-weight: 600;
+    flex: 1;
+    line-height: 1.65;
+  }
+  .q-source {
+    font-size: 10.5px;
+    color: #aaa;
+    white-space: nowrap;
+    margin-top: 3px;
+  }
+
+  /* 보기 */
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .options.single-col { grid-template-columns: 1fr; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fafafa;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .option:hover { border-color: #2e6fc4; background: #f0f6ff; }
+  .option.selected { border-color: #2e6fc4; background: #e8f1fd; }
+  .option.correct-ans { border-color: #4caf50; background: #e8f5e9; }
+  .option.wrong-ans { border-color: #f44336; background: #ffebee; }
+
+  .opt-num {
+    font-weight: 700;
+    color: #2e6fc4;
+    min-width: 16px;
+  }
+  .option.correct-ans .opt-num { color: #2e7d32; }
+  .option.wrong-ans .opt-num { color: #c62828; }
+
+  /* 결과 배지 */
+  .result-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .badge-correct { background: #e8f5e9; color: #2e7d32; }
+  .badge-wrong { background: #ffebee; color: #c62828; }
+
+  /* 진행바 */
+  .progress-wrap {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: #666;
+    margin-bottom: 7px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2e6fc4, #42a5f5);
+    border-radius: 4px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  /* 결과 모달 */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 36px 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal h2 { font-size: 22px; color: #1a3a6b; margin-bottom: 6px; }
+  .modal .score-big { font-size: 56px; font-weight: 900; color: #2e6fc4; margin: 16px 0; }
+  .modal .score-detail { color: #666; font-size: 14px; margin-bottom: 20px; }
+  .modal .pass { color: #2e7d32; font-weight: 700; font-size: 18px; }
+  .modal .fail { color: #c62828; font-weight: 700; font-size: 18px; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+
+  @media (max-width: 600px) {
+    .options { grid-template-columns: 1fr; }
+    .exam-header h1 { font-size: 20px; }
+    .score-display { font-size: 22px; }
+  }
+
+  @media print {
+    body { background: white; }
+    .score-card, .progress-wrap, .btns, .modal-overlay { display: none !important; }
+    .question-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- 헤더 -->
+  <div class="exam-header">
+    <h1>시각디자인 산업기사 모의고사</h1>
+    <div style="font-size:20px; font-weight:800; margin-top:6px;">제 1 회</div>
+    <div class="exam-meta">
+      <span>총 60문항</span>
+      <span>제한시간 60분</span>
+      <span>합격기준 60점 이상</span>
+    </div>
+  </div>
+
+  <!-- 안내 -->
+  <div class="notice">
+    ※ 보기를 클릭하여 답을 선택하세요. <strong>[채점하기]</strong>를 누르면 정답과 점수를 확인할 수 있습니다. 문제 번호 옆 출처는 기존 출제된 시험 정보입니다.
+  </div>
+
+  <!-- 진행 상황 -->
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span>답안 작성 현황</span>
+      <span id="progressText">0 / 60 문항</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- 채점 카드 -->
+  <div class="score-card">
+    <div>
+      <div class="score-label">내 점수</div>
+      <div class="score-display" id="scoreDisplay">-</div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-grade" onclick="gradeExam()">채점하기</button>
+      <button class="btn btn-reset" onclick="resetExam()">초기화</button>
+    </div>
+  </div>
+
+  <!-- ======================== 제1과목 ======================== -->
+  <div class="subject-header">제1과목 : 시각디자인 조사·분석</div>
+
+  <!-- Q01 -->
+  <div class="question-card" id="card-1">
+    <div class="question-top">
+      <span class="q-num">01</span>
+      <span class="q-text">일반적인 디자인 분류의 3대 영역은?</span>
+      <span class="q-source">2017년 4회 산업기사 56번</span>
+    </div>
+    <div class="options" id="opts-1">
+      <div class="option" onclick="selectOpt(1,1)"><span class="opt-num">①</span> 제품, 시각, 환경</div>
+      <div class="option" onclick="selectOpt(1,2)"><span class="opt-num">②</span> 시각, 제품, 공예</div>
+      <div class="option" onclick="selectOpt(1,3)"><span class="opt-num">③</span> 시각, 조각, 제품</div>
+      <div class="option" onclick="selectOpt(1,4)"><span class="opt-num">④</span> 시각, 공예, 환경</div>
+    </div>
+  </div>
+
+  <!-- Q02 -->
+  <div class="question-card" id="card-2">
+    <div class="question-top">
+      <span class="q-num">02</span>
+      <span class="q-text">설득적, 감화적 전달에 따르는 커뮤니케이션의 매체전달형식의 요소로 적합하지 않은 것은?</span>
+      <span class="q-source">2016년 1회 산업기사 74번</span>
+    </div>
+    <div class="options" id="opts-2">
+      <div class="option" onclick="selectOpt(2,1)"><span class="opt-num">①</span> 포스터</div>
+      <div class="option" onclick="selectOpt(2,2)"><span class="opt-num">②</span> 통계도표</div>
+      <div class="option" onclick="selectOpt(2,3)"><span class="opt-num">③</span> 광고</div>
+      <div class="option" onclick="selectOpt(2,4)"><span class="opt-num">④</span> 영화</div>
+    </div>
+  </div>
+
+  <!-- Q03 -->
+  <div class="question-card" id="card-3">
+    <div class="question-top">
+      <span class="q-num">03</span>
+      <span class="q-text">디자인 관리 측면의 프로세스로 가장 바람직한 것은?</span>
+      <span class="q-source">2016년 1회 산업기사 60번</span>
+    </div>
+    <div class="options single-col" id="opts-3">
+      <div class="option" onclick="selectOpt(3,1)"><span class="opt-num">①</span> 계획 → 시장조사 → 아이디어 수집 → 아이디어 확정 → 시안 제작 → 프레젠테이션 → 생산, 품질관리 → 종합평가</div>
+      <div class="option" onclick="selectOpt(3,2)"><span class="opt-num">②</span> 아이디어 수집 → 시장조사 → 계획 → 분석 → 생산, 품질관리 → 프레젠테이션 → 종합평가</div>
+      <div class="option" onclick="selectOpt(3,3)"><span class="opt-num">③</span> 분석 → 시장조사 → 아이디어 확정 → 품질관리 → 제작 → 프레젠테이션 → 시안 제작 → 사후관리</div>
+      <div class="option" onclick="selectOpt(3,4)"><span class="opt-num">④</span> 시장조사 → 분석 → 아이디어 수집 → 아이디어 확정 → 생산, 품질관리 → 프레젠테이션 → 시안 제작 → 사후관리</div>
+    </div>
+  </div>
+
+  <!-- Q04 -->
+  <div class="question-card" id="card-4">
+    <div class="question-top">
+      <span class="q-num">04</span>
+      <span class="q-text">소비자, 관심, 태도, 요구들을 파악하기 위한 조사방법 중 한 쌍의 대조적인 형용사를 선분의 양 끝에 설정, 몇 개의 점으로 나눠 이들 관련된 개념을 의미공간에 관련시켜 보는 조사 기법은?</span>
+      <span class="q-source">2018년 1회 산업기사 62번</span>
+    </div>
+    <div class="options single-col" id="opts-4">
+      <div class="option" onclick="selectOpt(4,1)"><span class="opt-num">①</span> 동행관찰(shadowing)</div>
+      <div class="option" onclick="selectOpt(4,2)"><span class="opt-num">②</span> 의미론적 차별법(semantic differential)</div>
+      <div class="option" onclick="selectOpt(4,3)"><span class="opt-num">③</span> 사이코 그래픽스(psychographics)</div>
+      <div class="option" onclick="selectOpt(4,4)"><span class="opt-num">④</span> 다차원적 척도법(multi-dimensional scaling)</div>
+    </div>
+  </div>
+
+  <!-- Q05 -->
+  <div class="question-card" id="card-5">
+    <div class="question-top">
+      <span class="q-num">05</span>
+      <span class="q-text">다음 중 시장 환경 조사를 위한 역량으로 포함되지 않는 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-5">
+      <div class="option" onclick="selectOpt(5,1)"><span class="opt-num">①</span> 인터넷 검색</div>
+      <div class="option" onclick="selectOpt(5,2)"><span class="opt-num">②</span> 도서관 소장 문헌 검색</div>
+      <div class="option" onclick="selectOpt(5,3)"><span class="opt-num">③</span> 정성적, 정량적 접근을 통한 시장 수요 조사</div>
+      <div class="option" onclick="selectOpt(5,4)"><span class="opt-num">④</span> 브레인 스토밍 조사</div>
+    </div>
+  </div>
+
+  <!-- Q06 -->
+  <div class="question-card" id="card-6">
+    <div class="question-top">
+      <span class="q-num">06</span>
+      <span class="q-text">진행자와 6~12명의 사람들로 구성된 집단이 1~2시간 동안 특정 주제에 대하여 토론하는 조사자료 수집방법은?</span>
+      <span class="q-source">2016년 2회 산업기사 80번</span>
+    </div>
+    <div class="options" id="opts-6">
+      <div class="option" onclick="selectOpt(6,1)"><span class="opt-num">①</span> 포커스 그룹 조사</div>
+      <div class="option" onclick="selectOpt(6,2)"><span class="opt-num">②</span> 실험실 조사</div>
+      <div class="option" onclick="selectOpt(6,3)"><span class="opt-num">③</span> 관찰 조사</div>
+      <div class="option" onclick="selectOpt(6,4)"><span class="opt-num">④</span> 우편 설문조사</div>
+    </div>
+  </div>
+
+  <!-- Q07 -->
+  <div class="question-card" id="card-7">
+    <div class="question-top">
+      <span class="q-num">07</span>
+      <span class="q-text">"트렌드"의 의미로 가장 올바른 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-7">
+      <div class="option" onclick="selectOpt(7,1)"><span class="opt-num">①</span> 일시적인 현상과 경향</div>
+      <div class="option" onclick="selectOpt(7,2)"><span class="opt-num">②</span> 사상과 행동에서 나타나는 방향</div>
+      <div class="option" onclick="selectOpt(7,3)"><span class="opt-num">③</span> 일정한 방향으로 대부분의 소비자들이 관심을 가지는 것</div>
+      <div class="option" onclick="selectOpt(7,4)"><span class="opt-num">④</span> 모든 것의 변화와 발전을 나타내는 개념</div>
+    </div>
+  </div>
+
+  <!-- Q08 -->
+  <div class="question-card" id="card-8">
+    <div class="question-top">
+      <span class="q-num">08</span>
+      <span class="q-text">시장조사나 세분화 단계에서 나이, 성별, 가족 규모, 소득, 직업, 교육 정도, 종교 등의 요인을 파악하는 것은?</span>
+      <span class="q-source">2017년 2회 산업기사 70번</span>
+    </div>
+    <div class="options" id="opts-8">
+      <div class="option" onclick="selectOpt(8,1)"><span class="opt-num">①</span> 지리적 요인 분석</div>
+      <div class="option" onclick="selectOpt(8,2)"><span class="opt-num">②</span> 소비자 심리 분석</div>
+      <div class="option" onclick="selectOpt(8,3)"><span class="opt-num">③</span> 고객 호감도 분석</div>
+      <div class="option" onclick="selectOpt(8,4)"><span class="opt-num">④</span> 인구 통계적 분석</div>
+    </div>
+  </div>
+
+  <!-- Q09 -->
+  <div class="question-card" id="card-9">
+    <div class="question-top">
+      <span class="q-num">09</span>
+      <span class="q-text">다음 중 사용자 행동패턴 조사기법에 대한 설명으로 잘못된 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-9">
+      <div class="option" onclick="selectOpt(9,1)"><span class="opt-num">①</span> 포커스 그룹 인터뷰는 대규모로 많은 사용자들의 의견을 수집하는 데 사용된다.</div>
+      <div class="option" onclick="selectOpt(9,2)"><span class="opt-num">②</span> 설문조사는 정형화된 질문을 통해 정량적인 데이터를 수집할 수 있다.</div>
+      <div class="option" onclick="selectOpt(9,3)"><span class="opt-num">③</span> 사용자 행동패턴 조사는 세심한 준비가 필요하다.</div>
+      <div class="option" onclick="selectOpt(9,4)"><span class="opt-num">④</span> 포커스 그룹 인터뷰는 작은 그룹의 사용자들을 대상으로 자유로운 토론을 통해 의견과 경험을 수집한다.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-card" id="card-10">
+    <div class="question-top">
+      <span class="q-num">10</span>
+      <span class="q-text">디자이너가 프로젝트를 시작하기 전 기초 자료 조사를 하는 목적이 아닌 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-10">
+      <div class="option" onclick="selectOpt(10,1)"><span class="opt-num">①</span> 의뢰자와 충분한 커뮤니케이션을 통해 필요한 정보를 수집</div>
+      <div class="option" onclick="selectOpt(10,2)"><span class="opt-num">②</span> 고객사의 신념이나 가치, 디자인적 취향 등을 파악</div>
+      <div class="option" onclick="selectOpt(10,3)"><span class="opt-num">③</span> 디자인 작업에 대한 방향성을 제시</div>
+      <div class="option" onclick="selectOpt(10,4)"><span class="opt-num">④</span> 디자인 작업에 필요한 정보를 도출</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question-card" id="card-11">
+    <div class="question-top">
+      <span class="q-num">11</span>
+      <span class="q-text">데이터베이스의 특징 중 실시간 접근성에 대한 설명으로 옳은 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-11">
+      <div class="option" onclick="selectOpt(11,1)"><span class="opt-num">①</span> 사용자가 요구하는 정보를 실시간으로 처리하여 응답</div>
+      <div class="option" onclick="selectOpt(11,2)"><span class="opt-num">②</span> 여러 사용자가 동시에 데이터를 공유</div>
+      <div class="option" onclick="selectOpt(11,3)"><span class="opt-num">③</span> 최신의 정확한 데이터를 유지</div>
+      <div class="option" onclick="selectOpt(11,4)"><span class="opt-num">④</span> 데이터의 논리적 구조를 변경시키더라도 응용프로그램은 변경되지 않는 특징</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question-card" id="card-12">
+    <div class="question-top">
+      <span class="q-num">12</span>
+      <span class="q-text">삼표법의 목적에 해당되지 않는 것은?</span>
+      <span class="q-source">2013년 2회 기사 20번</span>
+    </div>
+    <div class="options single-col" id="opts-12">
+      <div class="option" onclick="selectOpt(12,1)"><span class="opt-num">①</span> 수요자의 이익 보호</div>
+      <div class="option" onclick="selectOpt(12,2)"><span class="opt-num">②</span> 상표사용자의 업무상의 신용 유지</div>
+      <div class="option" onclick="selectOpt(12,3)"><span class="opt-num">③</span> 산업발전에 이바지</div>
+      <div class="option" onclick="selectOpt(12,4)"><span class="opt-num">④</span> 상표를 구성하는 기호, 문자, 도형의 보호</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question-card" id="card-13">
+    <div class="question-top">
+      <span class="q-num">13</span>
+      <span class="q-text">실용신안법의 설명으로 틀린 것은?</span>
+      <span class="q-source">2014년 2회 기사 07번</span>
+    </div>
+    <div class="options single-col" id="opts-13">
+      <div class="option" onclick="selectOpt(13,1)"><span class="opt-num">①</span> 실용신안등록출원서에는 반드시 도면이 첨부되어야 한다.</div>
+      <div class="option" onclick="selectOpt(13,2)"><span class="opt-num">②</span> 실용신안권의 존속기간은 실용신안등록출원일 후 10년이 되는 날까지로 한다.</div>
+      <div class="option" onclick="selectOpt(13,3)"><span class="opt-num">③</span> 5년간의 기간 내에서 존속기간을 연장할 수 있다.</div>
+      <div class="option" onclick="selectOpt(13,4)"><span class="opt-num">④</span> 비교적 기술진보 속도가 빠른 기술 분야에서 실용신안출원이 많다.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question-card" id="card-14">
+    <div class="question-top">
+      <span class="q-num">14</span>
+      <span class="q-text">다음 중 선행디자인 조사의 목적이 아닌 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-14">
+      <div class="option" onclick="selectOpt(14,1)"><span class="opt-num">①</span> 디자인 출원 전에 해당 디자인이 이미 등록되어 있는지 조사하는 것이다.</div>
+      <div class="option" onclick="selectOpt(14,2)"><span class="opt-num">②</span> 디자인 출원의 가능성은 사전에 미리 예측할 수 없다.</div>
+      <div class="option" onclick="selectOpt(14,3)"><span class="opt-num">③</span> 디자인 출원에 대한 불필요한 비용과 시간을 절약할 수 있으며, 출원 가능성을 높일 수 있다.</div>
+      <div class="option" onclick="selectOpt(14,4)"><span class="opt-num">④</span> 유사한 디자인이 이미 출원되어 있는지 등을 조사하는 것이다.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question-card" id="card-15">
+    <div class="question-top">
+      <span class="q-num">15</span>
+      <span class="q-text">실용신안법에서 사용하는 용어의 뜻으로 올바르지 않은 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-15">
+      <div class="option" onclick="selectOpt(15,1)"><span class="opt-num">①</span> "고안"이란 자연법칙을 이용한 기술적 사상의 창작을 말한다.</div>
+      <div class="option" onclick="selectOpt(15,2)"><span class="opt-num">②</span> "등록실용신안"이란 실용신안등록을 받은 고안을 말한다.</div>
+      <div class="option" onclick="selectOpt(15,3)"><span class="opt-num">③</span> "특허발명"이란 특허를 받은 발명을 말한다.</div>
+      <div class="option" onclick="selectOpt(15,4)"><span class="opt-num">④</span> "실시"란 고안에 관한 물품을 생산·사용·양도·대여 또는 수입하거나 그 물품의 양도 또는 대여의 청약을 하는 행위를 말한다.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="question-card" id="card-16">
+    <div class="question-top">
+      <span class="q-num">16</span>
+      <span class="q-text">다음 중 특허정보검색서비스(KIPRIS)에서 제공하는 국내 데이터 제공 범위가 틀린 하나는?</span>
+    </div>
+    <div class="options" id="opts-16">
+      <div class="option" onclick="selectOpt(16,1)"><span class="opt-num">①</span> 특허·실용신안</div>
+      <div class="option" onclick="selectOpt(16,2)"><span class="opt-num">②</span> 디자인</div>
+      <div class="option" onclick="selectOpt(16,3)"><span class="opt-num">③</span> 상표</div>
+      <div class="option" onclick="selectOpt(16,4)"><span class="opt-num">④</span> 심판</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="question-card" id="card-17">
+    <div class="question-top">
+      <span class="q-num">17</span>
+      <span class="q-text">마케팅 믹스의 특성에 해당되지 않는 것은?</span>
+    </div>
+    <div class="options" id="opts-17">
+      <div class="option" onclick="selectOpt(17,1)"><span class="opt-num">①</span> 개방적 특성</div>
+      <div class="option" onclick="selectOpt(17,2)"><span class="opt-num">②</span> 침적 특성</div>
+      <div class="option" onclick="selectOpt(17,3)"><span class="opt-num">③</span> 시간적 특성</div>
+      <div class="option" onclick="selectOpt(17,4)"><span class="opt-num">④</span> 공간적 특성</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="question-card" id="card-18">
+    <div class="question-top">
+      <span class="q-num">18</span>
+      <span class="q-text">카메라에 일반적으로 표시된 조리개 번호(f-number)로 옳은 것은?</span>
+      <span class="q-source">2016년 1회 산업기사 34번</span>
+    </div>
+    <div class="options single-col" id="opts-18">
+      <div class="option" onclick="selectOpt(18,1)"><span class="opt-num">①</span> 1.4, 2, 2.8, 4, 5.6, 8, 11, 16 …</div>
+      <div class="option" onclick="selectOpt(18,2)"><span class="opt-num">②</span> 1.4, 2.8, 4, 5.6, 8, 11, 16 …</div>
+      <div class="option" onclick="selectOpt(18,3)"><span class="opt-num">③</span> 1.4, 2.8, 4, 8, 5.6, 11, 16 …</div>
+      <div class="option" onclick="selectOpt(18,4)"><span class="opt-num">④</span> 1.4, 2, 2.8, 5.6, 8, 11, 16 …</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="question-card" id="card-19">
+    <div class="question-top">
+      <span class="q-num">19</span>
+      <span class="q-text">디자인 용어에 대한 설명 중 틀린 것은?</span>
+      <span class="q-source">2020년 1,2회 산업기사 76번</span>
+    </div>
+    <div class="options single-col" id="opts-19">
+      <div class="option" onclick="selectOpt(19,1)"><span class="opt-num">①</span> 감성공학 디자인은 인간의 교육수준, 경험, 민족성, 문화적 배경까지 고려하여 디자인 개발을 한다.</div>
+      <div class="option" onclick="selectOpt(19,2)"><span class="opt-num">②</span> 유저 인터페이스(user interface)는 사물과 인간 상호작용의 접촉영역을 말한다.</div>
+      <div class="option" onclick="selectOpt(19,3)"><span class="opt-num">③</span> 테크니컬 일러스트레이션(technical illustration)은 유머, 풍자 등의 효과를 더욱 살린 캐리커처 그림이다.</div>
+      <div class="option" onclick="selectOpt(19,4)"><span class="opt-num">④</span> 빛의 간섭을 이용한 사진법을 홀로그래피 또는 홀로그램이라 부른다.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="question-card" id="card-20">
+    <div class="question-top">
+      <span class="q-num">20</span>
+      <span class="q-text">다음 중 디자인특허와 디자인권의 차이점으로 틀린 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-20">
+      <div class="option" onclick="selectOpt(20,1)"><span class="opt-num">①</span> 디자인특허는 미국의 Design Patent에서 유래됐다.</div>
+      <div class="option" onclick="selectOpt(20,2)"><span class="opt-num">②</span> 우리나라는 보통 "디자인"이라고 하며, 디자인 출원 및 등록한 후 등록디자인 또는 디자인권이라고 말한다.</div>
+      <div class="option" onclick="selectOpt(20,3)"><span class="opt-num">③</span> 특허는 심미성을 보호하고, 디자인은 기능성을 보호한다.</div>
+      <div class="option" onclick="selectOpt(20,4)"><span class="opt-num">④</span> 디자인은 제품의 외형적인 부분을 보호한다.</div>
+    </div>
+  </div>
+
+  <!-- ======================== 제2과목 ======================== -->
+  <div class="subject-header">제2과목 : 시각디자인 기획 구성</div>
+
+  <!-- Q21 -->
+  <div class="question-card" id="card-21">
+    <div class="question-top">
+      <span class="q-num">21</span>
+      <span class="q-text">다음 중 시안디자인의 설명으로 가장 올바른 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-21">
+      <div class="option" onclick="selectOpt(21,1)"><span class="opt-num">①</span> 디자인 결과물의 후보 안을 클라이언트에게 제시하여 최종 결정을 내릴 수 있도록 복수의 디자인 안을 개발하는 직무 단계이다.</div>
+      <div class="option" onclick="selectOpt(21,2)"><span class="opt-num">②</span> 디자인 결과물의 품질을 평가하고 개선할 수 있는 방법을 제시하는 직무 단계이다.</div>
+      <div class="option" onclick="selectOpt(21,3)"><span class="opt-num">③</span> 디자인 결과물의 목적과 대상을 분석하고, 디자인 콘셉트와 방향을 설정하는 직무 단계이다.</div>
+      <div class="option" onclick="selectOpt(21,4)"><span class="opt-num">④</span> 디자인 결과물의 내용과 구성을 정리하고, 필요한 자료를 수집하고 정리하는 직무 단계이다.</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="question-card" id="card-22">
+    <div class="question-top">
+      <span class="q-num">22</span>
+      <span class="q-text">다음 중 시안작업 방법 계획의 과정으로 올바른 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-22">
+      <div class="option" onclick="selectOpt(22,1)"><span class="opt-num">①</span> 목표설정 → 대상그룹분석 → 디자인요소결정 → 스케치 및 프로토타이핑 → 검토 및 수정 → 완성 → 피드백 및 개선</div>
+      <div class="option" onclick="selectOpt(22,2)"><span class="opt-num">②</span> 목표설정 → 디자인요소결정 → 대상그룹분석 → 스케치 및 프로토타이핑 → 검토 및 수정 → 완성 → 피드백 및 개선</div>
+      <div class="option" onclick="selectOpt(22,3)"><span class="opt-num">③</span> 목표설정 → 디자인요소결정 → 스케치 및 프로토타이핑 → 대상그룹분석 → 검토 및 수정 → 피드백 및 개선 → 완성</div>
+      <div class="option" onclick="selectOpt(22,4)"><span class="opt-num">④</span> 목표설정 → 대상그룹분석 → 디자인요소결정 → 스케치 및 프로토타이핑 → 검토 및 수정 → 피드백 및 개선 → 완성</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="question-card" id="card-23">
+    <div class="question-top">
+      <span class="q-num">23</span>
+      <span class="q-text">다음 중 균형에 대한 설명으로 틀린 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-23">
+      <div class="option" onclick="selectOpt(23,1)"><span class="opt-num">①</span> 형, 색, 양, 재료에서 미적 관계의 힘이나 질서를 말한다.</div>
+      <div class="option" onclick="selectOpt(23,2)"><span class="opt-num">②</span> 두 개 이상의 요소가 시각상의 힘이 안정된 상태를 말한다.</div>
+      <div class="option" onclick="selectOpt(23,3)"><span class="opt-num">③</span> 정형과 비정형이 있다.</div>
+      <div class="option" onclick="selectOpt(23,4)"><span class="opt-num">④</span> 대칭과 비대칭, 주도와 종속 등이 어우러져 연출된다.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="question-card" id="card-24">
+    <div class="question-top">
+      <span class="q-num">24</span>
+      <span class="q-text">세계 각국에서 사용되고 있는 제도규격은 무엇에 의해 통제되고 표준화된 것인가?</span>
+      <span class="q-source">2016년 1회 산업기사 54번</span>
+    </div>
+    <div class="options" id="opts-24">
+      <div class="option" onclick="selectOpt(24,1)"><span class="opt-num">①</span> SOI</div>
+      <div class="option" onclick="selectOpt(24,2)"><span class="opt-num">②</span> ISO</div>
+      <div class="option" onclick="selectOpt(24,3)"><span class="opt-num">③</span> ESO</div>
+      <div class="option" onclick="selectOpt(24,4)"><span class="opt-num">④</span> SOS</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="question-card" id="card-25">
+    <div class="question-top">
+      <span class="q-num">25</span>
+      <span class="q-text">다음 중 그리드(grid)에 대한 설명으로 올바른 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-25">
+      <div class="option" onclick="selectOpt(25,1)"><span class="opt-num">①</span> 그리드는 편집디자인에서 사용되지 않는 레이아웃 시스템이다.</div>
+      <div class="option" onclick="selectOpt(25,2)"><span class="opt-num">②</span> 그리드는 정보 요소를 일정한 질서와 규칙에 따라 배치하는 방식이다.</div>
+      <div class="option" onclick="selectOpt(25,3)"><span class="opt-num">③</span> 일반적인 단행본은 다단 그리드로 구성되어 있다.</div>
+      <div class="option" onclick="selectOpt(25,4)"><span class="opt-num">④</span> 잡지나 브로슈어, 카탈로그 등의 편집디자인에서는 1단 그리드를 사용하는 경우가 많다.</div>
+    </div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="question-card" id="card-26">
+    <div class="question-top">
+      <span class="q-num">26</span>
+      <span class="q-text">다음 중 제품 브로슈어 개발을 위한 방법으로 가장 맞는 설명은?</span>
+    </div>
+    <div class="options single-col" id="opts-26">
+      <div class="option" onclick="selectOpt(26,1)"><span class="opt-num">①</span> 제품 브로슈어의 디자인 요소는 텍스트 요소보다 많아야 한다.</div>
+      <div class="option" onclick="selectOpt(26,2)"><span class="opt-num">②</span> 제품 브로슈어의 텍스트 요소는 제품의 특징과 장점을 간결하고 명확하게 전달해야 한다.</div>
+      <div class="option" onclick="selectOpt(26,3)"><span class="opt-num">③</span> 제품 브로슈어의 디자인은 브랜드의 이미지와 상관없이 자유롭게 제작할 수 있다.</div>
+      <div class="option" onclick="selectOpt(26,4)"><span class="opt-num">④</span> 제품 브로슈어의 디자인은 제품의 이미지와 특성을 잘 드러낼 수 있는 텍스트 요소를 적극 사용해야 한다.</div>
+    </div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="question-card" id="card-27">
+    <div class="question-top">
+      <span class="q-num">27</span>
+      <span class="q-text">타이포그래피(typography)를 가장 잘 설명한 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-27">
+      <div class="option" onclick="selectOpt(27,1)"><span class="opt-num">①</span> 그림형태로 이루어진 글자의 조형적 표현</div>
+      <div class="option" onclick="selectOpt(27,2)"><span class="opt-num">②</span> 광고에 나오는 그림의 조형적 표현</div>
+      <div class="option" onclick="selectOpt(27,3)"><span class="opt-num">③</span> 글자에 의한 모든 커뮤니케이션의 조형적 표현</div>
+      <div class="option" onclick="selectOpt(27,4)"><span class="opt-num">④</span> 상징에 의한 커뮤니케이션의 조형적 표현</div>
+    </div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="question-card" id="card-28">
+    <div class="question-top">
+      <span class="q-num">28</span>
+      <span class="q-text">다음 중 브랜드 아이덴티티 시안 제작에서 시안 아트웍을 제작함으로써 생길 수 있는 결과로 가장 맞는 설명은?</span>
+    </div>
+    <div class="options single-col" id="opts-28">
+      <div class="option" onclick="selectOpt(28,1)"><span class="opt-num">①</span> 브랜드 일관성을 유지하고 브랜드 감성과 가치를 표현할 수 있다.</div>
+      <div class="option" onclick="selectOpt(28,2)"><span class="opt-num">②</span> 시안 아트웍을 제작하면 브랜드 디자인 요소를 제작하는 시간과 비용이 증가될 수 있다.</div>
+      <div class="option" onclick="selectOpt(28,3)"><span class="opt-num">③</span> 시안 아트웍은 브랜드 다양성과 효과를 보장하는 데 도움이 된다.</div>
+      <div class="option" onclick="selectOpt(28,4)"><span class="opt-num">④</span> 시안 아트웍은 디자인 작업의 일관성과 효율성을 감소시킬 수 있다.</div>
+    </div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="question-card" id="card-29">
+    <div class="question-top">
+      <span class="q-num">29</span>
+      <span class="q-text">다음 중 아이콘 베리에이션(Icon variation) 수행을 위한 원칙으로 틀린 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-29">
+      <div class="option" onclick="selectOpt(29,1)"><span class="opt-num">①</span> 개별 아이콘은 직관적으로 정보를 전달할 수 있도록 디자인한다.</div>
+      <div class="option" onclick="selectOpt(29,2)"><span class="opt-num">②</span> 전체 아이콘 세트의 시각적 스타일 다양성을 유지해야 한다.</div>
+      <div class="option" onclick="selectOpt(29,3)"><span class="opt-num">③</span> 색상 계획안과 지정된 색상 팔레트를 사용하여 일관성을 유지한다.</div>
+      <div class="option" onclick="selectOpt(29,4)"><span class="opt-num">④</span> 형태의 시각적 크기와 밀도, 중량감을 평준화하는 것이 중요하다.</div>
+    </div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="question-card" id="card-30">
+    <div class="question-top">
+      <span class="q-num">30</span>
+      <span class="q-text">다음 중 제안 프레젠테이션 표현의 기본 원칙에 속하지 않는 것은?</span>
+    </div>
+    <div class="options" id="opts-30">
+      <div class="option" onclick="selectOpt(30,1)"><span class="opt-num">①</span> 직독성 확보</div>
+      <div class="option" onclick="selectOpt(30,2)"><span class="opt-num">②</span> 소구력 강화</div>
+      <div class="option" onclick="selectOpt(30,3)"><span class="opt-num">③</span> 간결성 유지</div>
+      <div class="option" onclick="selectOpt(30,4)"><span class="opt-num">④</span> 컴퓨터활용 능력</div>
+    </div>
+  </div>
+
+  <!-- Q31 -->
+  <div class="question-card" id="card-31">
+    <div class="question-top">
+      <span class="q-num">31</span>
+      <span class="q-text">다음 중 제안요청서(RFP)에 수록된 내용을 중심으로 제안 의도에 따라 의뢰형 제안과 자주형 제안으로 나눌 수 있다. 의뢰형 제안의 특징이 아닌 것은?</span>
+    </div>
+    <div class="options" id="opts-31">
+      <div class="option" onclick="selectOpt(31,1)"><span class="opt-num">①</span> 과제가 명확함</div>
+      <div class="option" onclick="selectOpt(31,2)"><span class="opt-num">②</span> 성장기</div>
+      <div class="option" onclick="selectOpt(31,3)"><span class="opt-num">③</span> 쇠퇴기</div>
+      <div class="option" onclick="selectOpt(31,4)"><span class="opt-num">④</span> 해결 수단</div>
+    </div>
+  </div>
+
+  <!-- Q32 -->
+  <div class="question-card" id="card-32">
+    <div class="question-top">
+      <span class="q-num">32</span>
+      <span class="q-text">다음 중 계약에 대한 법리적 기본 지식으로 가장 옳지 않은 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-32">
+      <div class="option" onclick="selectOpt(32,1)"><span class="opt-num">①</span> 계약서는 기업과 기업 간의 신의를 바탕으로 하는 공문서이다.</div>
+      <div class="option" onclick="selectOpt(32,2)"><span class="opt-num">②</span> 계약서는 개발사와 클라이언트의 권리와 의무를 규정한다.</div>
+      <div class="option" onclick="selectOpt(32,3)"><span class="opt-num">③</span> 합의가 이루어지지 않을 경우에는 소송으로 이어지며 관할 법원은 반드시 클라이언트의 소재지 관할 법원으로 한다.</div>
+      <div class="option" onclick="selectOpt(32,4)"><span class="opt-num">④</span> 분쟁이 발생하면 기본적으로 기본적으로 상호 협의하여 우호적으로 해결하도록 한다.</div>
+    </div>
+  </div>
+
+  <!-- Q33 -->
+  <div class="question-card" id="card-33">
+    <div class="question-top">
+      <span class="q-num">33</span>
+      <span class="q-text">다음 그림과 같은 레이아웃의 유형은?</span>
+    </div>
+    <div class="options" id="opts-33">
+      <div class="option" onclick="selectOpt(33,1)"><span class="opt-num">①</span> 축 레이아웃</div>
+      <div class="option" onclick="selectOpt(33,2)"><span class="opt-num">②</span> 그리드 레이아웃</div>
+      <div class="option" onclick="selectOpt(33,3)"><span class="opt-num">③</span> 전이적 레이아웃</div>
+      <div class="option" onclick="selectOpt(33,4)"><span class="opt-num">④</span> 양단시스템 레이아웃</div>
+    </div>
+  </div>
+
+  <!-- Q34 -->
+  <div class="question-card" id="card-34">
+    <div class="question-top">
+      <span class="q-num">34</span>
+      <span class="q-text">다음 그림에 해당하는 착시유형은?</span>
+      <span class="q-source">2021년 2회 산업기사 40번</span>
+    </div>
+    <div class="options" id="opts-34">
+      <div class="option" onclick="selectOpt(34,1)"><span class="opt-num">①</span> 겹침의 착시</div>
+      <div class="option" onclick="selectOpt(34,2)"><span class="opt-num">②</span> 반전하는 착시</div>
+      <div class="option" onclick="selectOpt(34,3)"><span class="opt-num">③</span> 회전에 의한 착시</div>
+      <div class="option" onclick="selectOpt(34,4)"><span class="opt-num">④</span> 깊이의 착시</div>
+    </div>
+  </div>
+
+  <!-- Q35 -->
+  <div class="question-card" id="card-35">
+    <div class="question-top">
+      <span class="q-num">35</span>
+      <span class="q-text">유사성의 법칙, 근접성의 법칙, 연속성의 법칙, 공동운동의 법칙과 관련이 있는 것은?</span>
+      <span class="q-source">2020년 1,2회 산업기사 80번</span>
+    </div>
+    <div class="options" id="opts-35">
+      <div class="option" onclick="selectOpt(35,1)"><span class="opt-num">①</span> 기호학</div>
+      <div class="option" onclick="selectOpt(35,2)"><span class="opt-num">②</span> 구성주의</div>
+      <div class="option" onclick="selectOpt(35,3)"><span class="opt-num">③</span> 게슈탈트 이론</div>
+      <div class="option" onclick="selectOpt(35,4)"><span class="opt-num">④</span> 저널리즘</div>
+    </div>
+  </div>
+
+  <!-- Q36 -->
+  <div class="question-card" id="card-36">
+    <div class="question-top">
+      <span class="q-num">36</span>
+      <span class="q-text">아래 그림은 형태의 인식과정을 도식화한 것이다. ⓐ, ⓑ, ⓒ에 들어갈 내용으로 옳은 것은?</span>
+      <span class="q-source">2019년 1회 산업기사 72번</span>
+    </div>
+    <div class="options single-col" id="opts-36">
+      <div class="option" onclick="selectOpt(36,1)"><span class="opt-num">①</span> ⓐ 물리적 세계, ⓑ 심리적 세계, ⓒ 생리적 세계</div>
+      <div class="option" onclick="selectOpt(36,2)"><span class="opt-num">②</span> ⓐ 물리적 세계, ⓑ 생리적 세계, ⓒ 심리적 세계</div>
+      <div class="option" onclick="selectOpt(36,3)"><span class="opt-num">③</span> ⓐ 생리적 세계, ⓑ 물리적 세계, ⓒ 심리적 세계</div>
+      <div class="option" onclick="selectOpt(36,4)"><span class="opt-num">④</span> ⓐ 생리적 세계, ⓑ 심리적 세계, ⓒ 물리적 세계</div>
+    </div>
+  </div>
+
+  <!-- Q37 -->
+  <div class="question-card" id="card-37">
+    <div class="question-top">
+      <span class="q-num">37</span>
+      <span class="q-text">극도의 미학적, 축소화를 지향, 최소한의 장식과 미학으로 처리했던 시조는?</span>
+      <span class="q-source">2018년 1회 산업기사 48번</span>
+    </div>
+    <div class="options" id="opts-37">
+      <div class="option" onclick="selectOpt(37,1)"><span class="opt-num">①</span> 미니멀리즘</div>
+      <div class="option" onclick="selectOpt(37,2)"><span class="opt-num">②</span> 팝아트</div>
+      <div class="option" onclick="selectOpt(37,3)"><span class="opt-num">③</span> 포스트모더니즘</div>
+      <div class="option" onclick="selectOpt(37,4)"><span class="opt-num">④</span> 유토피아</div>
+    </div>
+  </div>
+
+  <!-- Q38 -->
+  <div class="question-card" id="card-38">
+    <div class="question-top">
+      <span class="q-num">38</span>
+      <span class="q-text">다음 중 포장의 기능이 아닌 것은?</span>
+      <span class="q-source">2018년 4회 산업기사 67번</span>
+    </div>
+    <div class="options" id="opts-38">
+      <div class="option" onclick="selectOpt(38,1)"><span class="opt-num">①</span> 내용물의 보호</div>
+      <div class="option" onclick="selectOpt(38,2)"><span class="opt-num">②</span> 취급의 편리</div>
+      <div class="option" onclick="selectOpt(38,3)"><span class="opt-num">③</span> 상품의 기획</div>
+      <div class="option" onclick="selectOpt(38,4)"><span class="opt-num">④</span> 상품가치의 부가</div>
+    </div>
+  </div>
+
+  <!-- Q39 -->
+  <div class="question-card" id="card-39">
+    <div class="question-top">
+      <span class="q-num">39</span>
+      <span class="q-text">TV 광고 중 프로그램과 프로그램 사이에 삽입되는 광고는?</span>
+      <span class="q-source">2018년 1회 산업기사 69번</span>
+    </div>
+    <div class="options" id="opts-39">
+      <div class="option" onclick="selectOpt(39,1)"><span class="opt-num">①</span> 블록 광고</div>
+      <div class="option" onclick="selectOpt(39,2)"><span class="opt-num">②</span> 프로그램 광고</div>
+      <div class="option" onclick="selectOpt(39,3)"><span class="opt-num">③</span> 스폿 광고</div>
+      <div class="option" onclick="selectOpt(39,4)"><span class="opt-num">④</span> 네트워크 광고</div>
+    </div>
+  </div>
+
+  <!-- Q40 -->
+  <div class="question-card" id="card-40">
+    <div class="question-top">
+      <span class="q-num">40</span>
+      <span class="q-text">기업 아이덴티티(CI)에 관한 설명으로 옳지 않은 것은?</span>
+      <span class="q-source">2018년 2회 산업기사 71번</span>
+    </div>
+    <div class="options single-col" id="opts-40">
+      <div class="option" onclick="selectOpt(40,1)"><span class="opt-num">①</span> CI는 기업 자체와 존재의 본질 간의 동질화와 함께 비교 대상과의 차별화라는 의미를 동시에 내포한다.</div>
+      <div class="option" onclick="selectOpt(40,2)"><span class="opt-num">②</span> CI는 마케팅 증진만을 위한 상품의 얼굴이자 말 없는 세일즈맨의 역할을 한다.</div>
+      <div class="option" onclick="selectOpt(40,3)"><span class="opt-num">③</span> CI가 형성되기 위해서는 일관성과 지속성이라는 두 가지 요소가 전제되어야 한다.</div>
+      <div class="option" onclick="selectOpt(40,4)"><span class="opt-num">④</span> 국내에서 최초로 CI가 도입된 사례로는 1936년 버드나무를 형상화하여 심벌마크로 제정하고 녹색을 기업의 색상으로 사용한 '유한양행'을 들 수 있다.</div>
+    </div>
+  </div>
+
+  <!-- ======================== 제3과목 ======================== -->
+  <div class="subject-header">제3과목 : 시각디자인 제작</div>
+
+  <!-- Q41 -->
+  <div class="question-card" id="card-41">
+    <div class="question-top">
+      <span class="q-num">41</span>
+      <span class="q-text">그래픽 모티프(graphic motif)란 무엇인가?</span>
+    </div>
+    <div class="options single-col" id="opts-41">
+      <div class="option" onclick="selectOpt(41,1)"><span class="opt-num">①</span> 그래픽 디자인에서 반복적으로 사용되는 시각적인 요소나 패턴</div>
+      <div class="option" onclick="selectOpt(41,2)"><span class="opt-num">②</span> 그래픽 디자인에서 다양한 동작의 이미지 표현이 가능한 이미지</div>
+      <div class="option" onclick="selectOpt(41,3)"><span class="opt-num">③</span> 그래픽 디자인에서 한 번만 사용되는 시각적인 요소나 패턴</div>
+      <div class="option" onclick="selectOpt(41,4)"><span class="opt-num">④</span> 그래픽 디자인에서 일정 주기로 변경되는 시각적인 요소나 이미지</div>
+    </div>
+  </div>
+
+  <!-- Q42 -->
+  <div class="question-card" id="card-42">
+    <div class="question-top">
+      <span class="q-num">42</span>
+      <span class="q-text">문제를 보는 관점을 완전히 다르게 하여 이곳에서 연상되는 점과 관련성을 찾아내어 아이디어를 발상하는 방법은?</span>
+      <span class="q-source">2011년 2회 기사 02번</span>
+    </div>
+    <div class="options" id="opts-42">
+      <div class="option" onclick="selectOpt(42,1)"><span class="opt-num">①</span> 시네틱스법</div>
+      <div class="option" onclick="selectOpt(42,2)"><span class="opt-num">②</span> 브레인스토밍</div>
+      <div class="option" onclick="selectOpt(42,3)"><span class="opt-num">③</span> 입출력법</div>
+      <div class="option" onclick="selectOpt(42,4)"><span class="opt-num">④</span> 체크리스트법</div>
+    </div>
+  </div>
+
+  <!-- Q43 -->
+  <div class="question-card" id="card-43">
+    <div class="question-top">
+      <span class="q-num">43</span>
+      <span class="q-text">섬네일 스케치(thumbnail sketch)란?</span>
+      <span class="q-source">2017년 4회 산업기사 68번</span>
+    </div>
+    <div class="options single-col" id="opts-43">
+      <div class="option" onclick="selectOpt(43,1)"><span class="opt-num">①</span> 결정된 콘셉트를 표현하기 위해 여러 가지의 그림, 문자로 작게 시각화한 것</div>
+      <div class="option" onclick="selectOpt(43,2)"><span class="opt-num">②</span> 2차 리뷰에 붙여진 스케치 중 아이디어로 선택되어 정밀하고 세밀하게 보완하여 완성도가 있는 상태로 그려지는 것</div>
+      <div class="option" onclick="selectOpt(43,3)"><span class="opt-num">③</span> 디자인의 구성요소들을 보기 좋게 배열해 놓은 것</div>
+      <div class="option" onclick="selectOpt(43,4)"><span class="opt-num">④</span> 제작의도를 정확히 알리려고 마무리에 충실하게 그려 놓은 것</div>
+    </div>
+  </div>
+
+  <!-- Q44 -->
+  <div class="question-card" id="card-44">
+    <div class="question-top">
+      <span class="q-num">44</span>
+      <span class="q-text">다음 중 콘셉트 이미지(concept image)의 역할에 포함되지 않는 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-44">
+      <div class="option" onclick="selectOpt(44,1)"><span class="opt-num">①</span> 메시지를 직접적으로 설명하는 역할</div>
+      <div class="option" onclick="selectOpt(44,2)"><span class="opt-num">②</span> 내용 전달을 위한 텍스트로서의 역할</div>
+      <div class="option" onclick="selectOpt(44,3)"><span class="opt-num">③</span> 의미 형성을 위한 상징으로 사용</div>
+      <div class="option" onclick="selectOpt(44,4)"><span class="opt-num">④</span> 감성적 연출 수단으로 사용</div>
+    </div>
+  </div>
+
+  <!-- Q45 -->
+  <div class="question-card" id="card-45">
+    <div class="question-top">
+      <span class="q-num">45</span>
+      <span class="q-text">다음 중 와이어프레임 모델(wire-frame model)의 설명이 아닌 것은?</span>
+      <span class="q-source">2016년 1회 산업기사 66번</span>
+    </div>
+    <div class="options single-col" id="opts-45">
+      <div class="option" onclick="selectOpt(45,1)"><span class="opt-num">①</span> 면과 면이 만나는 선만으로 입체를 생성한다.</div>
+      <div class="option" onclick="selectOpt(45,2)"><span class="opt-num">②</span> 처리속도가 빠르다.</div>
+      <div class="option" onclick="selectOpt(45,3)"><span class="opt-num">③</span> 입체물의 무게감, 부피, 실체감 등을 표현한다.</div>
+      <div class="option" onclick="selectOpt(45,4)"><span class="opt-num">④</span> 작업 초기에 진행되며, 가장 기본적인 모델링이다.</div>
+    </div>
+  </div>
+
+  <!-- Q46 -->
+  <div class="question-card" id="card-46">
+    <div class="question-top">
+      <span class="q-num">46</span>
+      <span class="q-text">시각화 방안을 위한 키워드는 각종 조사의 내용을 정리하고 시각적 자료를 수집하여 콘셉트를 구체화하는 것으로 이에 속하지 않는 요소는?</span>
+    </div>
+    <div class="options" id="opts-46">
+      <div class="option" onclick="selectOpt(46,1)"><span class="opt-num">①</span> 현상성</div>
+      <div class="option" onclick="selectOpt(46,2)"><span class="opt-num">②</span> 유추성</div>
+      <div class="option" onclick="selectOpt(46,3)"><span class="opt-num">③</span> 심미성</div>
+      <div class="option" onclick="selectOpt(46,4)"><span class="opt-num">④</span> 지시성</div>
+    </div>
+  </div>
+
+  <!-- Q47 -->
+  <div class="question-card" id="card-47">
+    <div class="question-top">
+      <span class="q-num">47</span>
+      <span class="q-text">색상에 흥분감을 줄 수 있는 색의 특징은?</span>
+      <span class="q-source">2018년 2회 산업기사 15번</span>
+    </div>
+    <div class="options" id="opts-47">
+      <div class="option" onclick="selectOpt(47,1)"><span class="opt-num">①</span> 난색계열의 고채도 색</div>
+      <div class="option" onclick="selectOpt(47,2)"><span class="opt-num">②</span> 난색계열의 저채도 색</div>
+      <div class="option" onclick="selectOpt(47,3)"><span class="opt-num">③</span> 한색계열의 고채도 색</div>
+      <div class="option" onclick="selectOpt(47,4)"><span class="opt-num">④</span> 한색계열의 저채도 색</div>
+    </div>
+  </div>
+
+  <!-- Q48 -->
+  <div class="question-card" id="card-48">
+    <div class="question-top">
+      <span class="q-num">48</span>
+      <span class="q-text">오스트발트의 등색상 삼각형에서 등흑계열의 조화에 해당하는 것은?</span>
+      <span class="q-source">2018년 2회 산업기사 17번</span>
+    </div>
+    <div class="options" id="opts-48">
+      <div class="option" onclick="selectOpt(48,1)"><span class="opt-num">①</span> pn-pi-pe</div>
+      <div class="option" onclick="selectOpt(48,2)"><span class="opt-num">②</span> ec-ic-nc</div>
+      <div class="option" onclick="selectOpt(48,3)"><span class="opt-num">③</span> ca-ge-li</div>
+      <div class="option" onclick="selectOpt(48,4)"><span class="opt-num">④</span> gc-lc-lg</div>
+    </div>
+  </div>
+
+  <!-- Q49 -->
+  <div class="question-card" id="card-49">
+    <div class="question-top">
+      <span class="q-num">49</span>
+      <span class="q-text">다음 중 콘셉트에 맞는 판면(그리드) 설계에 대한 설명으로 옳지 않은 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-49">
+      <div class="option" onclick="selectOpt(49,1)"><span class="opt-num">①</span> 판면(그리드) 설계는 브랜드 아이덴티티 디자인에서 매우 중요한 역할을 한다.</div>
+      <div class="option" onclick="selectOpt(49,2)"><span class="opt-num">②</span> 그리드(grid)는 디자인 요소들을 규칙적으로 배치하여 일관성 있게 구성할 수 있도록 도와준다.</div>
+      <div class="option" onclick="selectOpt(49,3)"><span class="opt-num">③</span> 판면(그리드) 설계는 디자인 요소들의 배치와 규칙성을 유지하는 것 외에도, 사용할 매체에 따라 다양한 고려사항을 고려해야 한다.</div>
+      <div class="option" onclick="selectOpt(49,4)"><span class="opt-num">④</span> 콘셉트에 맞는 판면(그리드) 설계는 브랜드 아이덴티티 디자인에서 다양성을 유지하며, 다양한 매체에서 일관된 브랜드 이미지를 전달하는 데 매우 중요한 역할을 한다.</div>
+    </div>
+  </div>
+
+  <!-- Q50 -->
+  <div class="question-card" id="card-50">
+    <div class="question-top">
+      <span class="q-num">50</span>
+      <span class="q-text">문자의 굵기, 장식적 변화, 폭, 높이 등을 바꾸어 다양화시킨 동일 계통의 서체 집합을 나타내는 용어는?</span>
+      <span class="q-source">2018년 4회 산업기사 73번</span>
+    </div>
+    <div class="options" id="opts-50">
+      <div class="option" onclick="selectOpt(50,1)"><span class="opt-num">①</span> 레터링(lettering)</div>
+      <div class="option" onclick="selectOpt(50,2)"><span class="opt-num">②</span> 패밀리(family)</div>
+      <div class="option" onclick="selectOpt(50,3)"><span class="opt-num">③</span> 이니셜(initial)</div>
+      <div class="option" onclick="selectOpt(50,4)"><span class="opt-num">④</span> 타입페이스(typeface)</div>
+    </div>
+  </div>
+
+  <!-- Q51 -->
+  <div class="question-card" id="card-51">
+    <div class="question-top">
+      <span class="q-num">51</span>
+      <span class="q-text">색채관리의 진행순서 중 옳은 것은?</span>
+      <span class="q-source">2016년 4회 산업기사 10번</span>
+    </div>
+    <div class="options single-col" id="opts-51">
+      <div class="option" onclick="selectOpt(51,1)"><span class="opt-num">①</span> 색의 설정 → 발색 및 착색 → 검사 → 판매</div>
+      <div class="option" onclick="selectOpt(51,2)"><span class="opt-num">②</span> 색의 설정 → 검사 → 발색 및 착색 → 판매</div>
+      <div class="option" onclick="selectOpt(51,3)"><span class="opt-num">③</span> 발색 및 착색 → 검사 → 색의 설정 → 판매</div>
+      <div class="option" onclick="selectOpt(51,4)"><span class="opt-num">④</span> 발색 및 착색 → 검사 → 판매 → 색의 설정</div>
+    </div>
+  </div>
+
+  <!-- Q52 -->
+  <div class="question-card" id="card-52">
+    <div class="question-top">
+      <span class="q-num">52</span>
+      <span class="q-text">색채조절을 위한 고려사항 중 잘못된 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-52">
+      <div class="option" onclick="selectOpt(52,1)"><span class="opt-num">①</span> 시간, 장소, 경우를 고려한 색채조절</div>
+      <div class="option" onclick="selectOpt(52,2)"><span class="opt-num">②</span> 사물의 용도를 고려한 색채조절</div>
+      <div class="option" onclick="selectOpt(52,3)"><span class="opt-num">③</span> 사용자의 성향을 고려한 색채조절</div>
+      <div class="option" onclick="selectOpt(52,4)"><span class="opt-num">④</span> 고채도 색상 연상을 벗어난 사용자의 개성을 고려한 색채조절</div>
+    </div>
+  </div>
+
+  <!-- Q53 -->
+  <div class="question-card" id="card-53">
+    <div class="question-top">
+      <span class="q-num">53</span>
+      <span class="q-text">그래픽 파일 포맷의 하나인 PSD에 대한 설명으로 옳은 것은?</span>
+      <span class="q-source">2018년 2회 산업기사 52번</span>
+    </div>
+    <div class="options single-col" id="opts-53">
+      <div class="option" onclick="selectOpt(53,1)"><span class="opt-num">①</span> 레이어, 패스, 채널 등의 정보도 함께 저장할 수 있다.</div>
+      <div class="option" onclick="selectOpt(53,2)"><span class="opt-num">②</span> 16비트 컬러를 사용한다.</div>
+      <div class="option" onclick="selectOpt(53,3)"><span class="opt-num">③</span> 압축을 하여도 이미지에 손실이 발생하지 않는다.</div>
+      <div class="option" onclick="selectOpt(53,4)"><span class="opt-num">④</span> 압축률을 변화시켜 파일의 크기를 조절할 수 있다.</div>
+    </div>
+  </div>
+
+  <!-- Q54 -->
+  <div class="question-card" id="card-54">
+    <div class="question-top">
+      <span class="q-num">54</span>
+      <span class="q-text">일반적으로 PS판을 사용하여 오프셋 인쇄를 하였다면 무슨 인쇄방식에 속하는가?</span>
+      <span class="q-source">2016년 4회 산업기사 38번</span>
+    </div>
+    <div class="options" id="opts-54">
+      <div class="option" onclick="selectOpt(54,1)"><span class="opt-num">①</span> 볼록판</div>
+      <div class="option" onclick="selectOpt(54,2)"><span class="opt-num">②</span> 오목판</div>
+      <div class="option" onclick="selectOpt(54,3)"><span class="opt-num">③</span> 공판</div>
+      <div class="option" onclick="selectOpt(54,4)"><span class="opt-num">④</span> 평판</div>
+    </div>
+  </div>
+
+  <!-- Q55 -->
+  <div class="question-card" id="card-55">
+    <div class="question-top">
+      <span class="q-num">55</span>
+      <span class="q-text">문자의 크기 중 1급의 크기를 나타내는 것은?</span>
+      <span class="q-source">2019년 2회 산업기사 28번</span>
+    </div>
+    <div class="options single-col" id="opts-55">
+      <div class="option" onclick="selectOpt(55,1)"><span class="opt-num">①</span> 문자 한 변의 길이가 0.1mm인 정사각형의 크기</div>
+      <div class="option" onclick="selectOpt(55,2)"><span class="opt-num">②</span> 문자 한 변의 길이가 0.25mm인 정사각형의 크기</div>
+      <div class="option" onclick="selectOpt(55,3)"><span class="opt-num">③</span> 문자 한 변의 길이가 0.33mm인 정사각형의 크기</div>
+      <div class="option" onclick="selectOpt(55,4)"><span class="opt-num">④</span> 문자 한 변의 길이가 0.5mm인 정사각형의 크기</div>
+    </div>
+  </div>
+
+  <!-- Q56 -->
+  <div class="question-card" id="card-56">
+    <div class="question-top">
+      <span class="q-num">56</span>
+      <span class="q-text">활자를 원고의 지시에 따라 구두점과 공목 등을 넣어 낱말 사이와 행간을 띄우고 단락이 올바가 될 지어 판을 짜는 작업을 무엇이라 하는가?</span>
+      <span class="q-source">2016년 1회 산업기사 35번</span>
+    </div>
+    <div class="options" id="opts-56">
+      <div class="option" onclick="selectOpt(56,1)"><span class="opt-num">①</span> 교정</div>
+      <div class="option" onclick="selectOpt(56,2)"><span class="opt-num">②</span> 재교</div>
+      <div class="option" onclick="selectOpt(56,3)"><span class="opt-num">③</span> 식자</div>
+      <div class="option" onclick="selectOpt(56,4)"><span class="opt-num">④</span> 문선</div>
+    </div>
+  </div>
+
+  <!-- Q57 -->
+  <div class="question-card" id="card-57">
+    <div class="question-top">
+      <span class="q-num">57</span>
+      <span class="q-text">디지털 색채 체계의 유형에 대한 설명으로 틀린 것은?</span>
+      <span class="q-source">2019년 2회 산업기사 03번</span>
+    </div>
+    <div class="options single-col" id="opts-57">
+      <div class="option" onclick="selectOpt(57,1)"><span class="opt-num">①</span> HSV 색공간은 실제 페인트 혼합에 근거를 둔 색교정이 쉬운 인터페이스를 제공한다.</div>
+      <div class="option" onclick="selectOpt(57,2)"><span class="opt-num">②</span> RGB 데이터를 CMYK로 변환하는 과정에서 색상이 손실되지 않는다.</div>
+      <div class="option" onclick="selectOpt(57,3)"><span class="opt-num">③</span> RGB 형식은 빨강(Red), 초록(Green), 파랑(Blue)을 혼합하여 우리가 볼 수 있는 모든 컬러를 재현하는 것이다.</div>
+      <div class="option" onclick="selectOpt(57,4)"><span class="opt-num">④</span> CMYK 형식은 표현할 수 있는 컬러의 범위가 RGB보다 좁다.</div>
+    </div>
+  </div>
+
+  <!-- Q58 -->
+  <div class="question-card" id="card-58">
+    <div class="question-top">
+      <span class="q-num">58</span>
+      <span class="q-text">디자인 아이디어 발상법 중 시네틱스에 대한 설명으로 옳은 것은?</span>
+    </div>
+    <div class="options single-col" id="opts-58">
+      <div class="option" onclick="selectOpt(58,1)"><span class="opt-num">①</span> 원인과 결과의 관계를 입출력 관계로 규명해 가면서 문제를 해결하는 아이디어 구상법</div>
+      <div class="option" onclick="selectOpt(58,2)"><span class="opt-num">②</span> 문제에 관련된 항목들을 나열하고 그 항목별로 어떤 특정적 변수에 대해 검토해 봄으로써 아이디어를 구상하는 방법</div>
+      <div class="option" onclick="selectOpt(58,3)"><span class="opt-num">③</span> 일정한 테마에 관하여 회의형식을 채택하고, 구성원의 자유발언을 통한 아이디어 제시를 요구하여 발상을 찾아내려는 방법</div>
+      <div class="option" onclick="selectOpt(58,4)"><span class="opt-num">④</span> 문제를 보는 관점을 완전히 다르게 하여 여기서 연상되는 점과 관련성을 찾아 아이디어를 발상하는 방법</div>
+    </div>
+  </div>
+
+  <!-- Q59 -->
+  <div class="question-card" id="card-59">
+    <div class="question-top">
+      <span class="q-num">59</span>
+      <span class="q-text">평판 인쇄의 특징에 대한 설명으로 옳지 않은 것은?</span>
+      <span class="q-source">2018년 4회 산업기사 23번</span>
+    </div>
+    <div class="options single-col" id="opts-59">
+      <div class="option" onclick="selectOpt(59,1)"><span class="opt-num">①</span> 윤전인쇄가 가능하다.</div>
+      <div class="option" onclick="selectOpt(59,2)"><span class="opt-num">②</span> 볼록판 인쇄에 비해 인쇄물이 부드러운 느낌을 준다.</div>
+      <div class="option" onclick="selectOpt(59,3)"><span class="opt-num">③</span> 대부분 직접 인쇄방식이므로 잉크의 전이량이 많다.</div>
+      <div class="option" onclick="selectOpt(59,4)"><span class="opt-num">④</span> 같은 높이의 판면으로 화학적인 원리에 의하여 인쇄하는 방법이다.</div>
+    </div>
+  </div>
+
+  <!-- Q60 -->
+  <div class="question-card" id="card-60">
+    <div class="question-top">
+      <span class="q-num">60</span>
+      <span class="q-text">톤을 이용한 배색 중 톤인톤(tone in tone) 배색에 대한 내용 중 옳은 것은?</span>
+      <span class="q-source">2018년 1회 산업기사 18번</span>
+    </div>
+    <div class="options single-col" id="opts-60">
+      <div class="option" onclick="selectOpt(60,1)"><span class="opt-num">①</span> 서로 반대되는 색상 톤의 조합이다.</div>
+      <div class="option" onclick="selectOpt(60,2)"><span class="opt-num">②</span> 인접하거나 유사색상 내에서 비슷한 톤으로 볼 수 있다.</div>
+      <div class="option" onclick="selectOpt(60,3)"><span class="opt-num">③</span> 비콜로 배색도 톤인톤 배색과 같은 종류로 볼 수 있다.</div>
+      <div class="option" onclick="selectOpt(60,4)"><span class="opt-num">④</span> 고채도 영역의 톤에서는 색상의 선택에 따라 보색대비 효과가 있다.</div>
+    </div>
+  </div>
+
+  <!-- 하단 채점 버튼 -->
+  <div style="text-align:center; margin: 30px 0 10px;">
+    <button class="btn btn-grade" style="padding:12px 40px; font-size:15px;" onclick="gradeExam()">채점하기</button>
+    <button class="btn btn-reset" style="padding:12px 30px; font-size:15px; margin-left:12px;" onclick="resetExam()">초기화</button>
+  </div>
+
+</div><!-- end wrapper -->
+
+<!-- 결과 모달 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>🎯 채점 결과</h2>
+    <div class="score-big" id="modalScore"></div>
+    <div class="score-detail" id="modalDetail"></div>
+    <div id="modalPass"></div>
+    <div class="modal-btns" style="margin-top:20px;">
+      <button class="btn btn-grade" onclick="closeModal()">확인</button>
+      <button class="btn btn-reset" onclick="resetExam(); closeModal()">다시 풀기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 정답 (1-indexed)
+const ANSWERS = {
+  1:1, 2:2, 3:1, 4:2, 5:4,
+  6:1, 7:3, 8:4, 9:1, 10:3,
+  11:1, 12:4, 13:3, 14:2, 15:3,
+  16:4, 17:2, 18:1, 19:3, 20:3,
+  21:1, 22:1, 23:4, 24:2, 25:2,
+  26:2, 27:3, 28:1, 29:2, 30:4,
+  31:3, 32:3, 33:2, 34:4, 35:3,
+  36:2, 37:1, 38:3, 39:1, 40:2,
+  41:1, 42:1, 43:1, 44:2, 45:3,
+  46:1, 47:1, 48:2, 49:4, 50:2,
+  51:1, 52:4, 53:1, 54:4, 55:3,
+  56:3, 57:2, 58:4, 59:3, 60:2
+};
+
+const userAnswers = {};
+let graded = false;
+
+function selectOpt(qNum, optNum) {
+  if (graded) return;
+  userAnswers[qNum] = optNum;
+
+  const opts = document.querySelectorAll(`#opts-${qNum} .option`);
+  opts.forEach((el, i) => {
+    el.classList.toggle('selected', i + 1 === optNum);
+  });
+
+  document.getElementById(`card-${qNum}`).classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(userAnswers).length;
+  document.getElementById('progressText').textContent = `${answered} / 60 문항`;
+  document.getElementById('progressFill').style.width = (answered / 60 * 100) + '%';
+}
+
+function gradeExam() {
+  graded = true;
+  let correct = 0;
+
+  for (let q = 1; q <= 60; q++) {
+    const card = document.getElementById(`card-${q}`);
+    const opts = document.querySelectorAll(`#opts-${q} .option`);
+    const userAns = userAnswers[q];
+    const correctAns = ANSWERS[q];
+
+    opts.forEach((el, i) => {
+      el.classList.remove('selected');
+      if (i + 1 === correctAns) el.classList.add('correct-ans');
+      if (userAns && i + 1 === userAns && userAns !== correctAns) el.classList.add('wrong-ans');
+    });
+
+    // 기존 배지 제거
+    const oldBadge = card.querySelector('.result-badge');
+    if (oldBadge) oldBadge.remove();
+
+    card.classList.remove('answered', 'correct', 'incorrect');
+    if (userAns === correctAns) {
+      card.classList.add('correct');
+      correct++;
+      const badge = document.createElement('div');
+      badge.className = 'result-badge badge-correct';
+      badge.textContent = '✓ 정답';
+      card.appendChild(badge);
+    } else {
+      card.classList.add('incorrect');
+      const badge = document.createElement('div');
+      badge.className = 'result-badge badge-wrong';
+      badge.textContent = userAns ? `✗ 오답 (정답: ${correctAns}번)` : `미응답 (정답: ${correctAns}번)`;
+      card.appendChild(badge);
+    }
+  }
+
+  const score = Math.round(correct / 60 * 100);
+  document.getElementById('scoreDisplay').textContent = score + '점';
+
+  // 모달
+  document.getElementById('modalScore').textContent = score + '점';
+  document.getElementById('modalDetail').textContent = `60문항 중 ${correct}문항 정답`;
+  const passEl = document.getElementById('modalPass');
+  if (score >= 60) {
+    passEl.innerHTML = '<span class="pass">🎉 합격!</span>';
+  } else {
+    passEl.innerHTML = '<span class="fail">😢 불합격 (60점 이상 합격)</span>';
+  }
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function resetExam() {
+  graded = false;
+  for (let k in userAnswers) delete userAnswers[k];
+
+  for (let q = 1; q <= 60; q++) {
+    const card = document.getElementById(`card-${q}`);
+    card.classList.remove('answered', 'correct', 'incorrect');
+    const badge = card.querySelector('.result-badge');
+    if (badge) badge.remove();
+
+    const opts = document.querySelectorAll(`#opts-${q} .option`);
+    opts.forEach(el => {
+      el.classList.remove('selected', 'correct-ans', 'wrong-ans');
+    });
+  }
+
+  document.getElementById('scoreDisplay').textContent = '-';
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 모달 외부 클릭 닫기
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
