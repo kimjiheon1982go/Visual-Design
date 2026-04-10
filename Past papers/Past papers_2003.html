@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시각디자인기사 2003-08-31 기출문제</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --line: #e5e7eb;
+      --text: #111827;
+      --sub: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --correct: #166534;
+      --correct-bg: #dcfce7;
+      --wrong: #991b1b;
+      --wrong-bg: #fee2e2;
+      --chip: #f3f4f6;
+      --shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+        "Malgun Gothic", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+    }
+    .hero {
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.8);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 28px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+    }
+    .title {
+      margin: 0 0 6px;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .desc {
+      margin: 0;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.2fr .9fr .9fr .8fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .control {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      min-height: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+    .control label {
+      font-size: 12px;
+      color: var(--sub);
+      font-weight: 700;
+    }
+    .control input, .control select {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 15px;
+      width: 100%;
+      color: var(--text);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .primary { background: var(--accent); color: #fff; box-shadow: 0 10px 22px rgba(37,99,235,.24); }
+    .secondary { background: #fff; color: var(--text); border: 1px solid var(--line); }
+    .ghost { background: var(--chip); color: var(--text); }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0 24px;
+    }
+    .stat {
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 14px 16px;
+      min-width: 150px;
+    }
+    .stat .k {
+      display: block;
+      color: var(--sub);
+      font-size: 12px;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+    .stat .v {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .subject-block { margin-top: 30px; }
+    .subject-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+    }
+    .q-list { display: grid; gap: 14px; }
+    .card {
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+      padding: 20px;
+    }
+    .q-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 0 12px;
+      flex-shrink: 0;
+    }
+    .q-text {
+      flex: 1;
+      font-size: 17px;
+      line-height: 1.65;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .options { display: grid; gap: 10px; margin-top: 8px; }
+    .option {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: #fff;
+      transition: border-color .12s ease, background .12s ease;
+    }
+    .option:hover { border-color: #c7d2fe; background: #fafbff; }
+    .option input {
+      margin-top: 3px;
+      accent-color: var(--accent);
+      transform: scale(1.08);
+    }
+    .option-label {
+      font-size: 15px;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .option-index {
+      display: inline-block;
+      min-width: 28px;
+      color: var(--sub);
+      font-weight: 700;
+    }
+    .correct {
+      border-color: #86efac !important;
+      background: var(--correct-bg) !important;
+    }
+    .wrong {
+      border-color: #fca5a5 !important;
+      background: var(--wrong-bg) !important;
+    }
+    .reveal {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+      color: var(--sub);
+      font-size: 14px;
+      display: none;
+    }
+    .reveal strong { color: var(--correct); }
+    .footer-note {
+      margin-top: 40px;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    @media (max-width: 880px) {
+      .toolbar { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 18px 14px 60px; }
+      .hero { position: static; padding: 20px; border-radius: 22px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .q-head { flex-direction: column; }
+      .q-text { font-size: 16px; }
+      .card { padding: 16px; border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1 class="title">시각디자인기사 2003년 08월 31일 필기 기출문제</h1>
+      <p class="desc">
+        업로드한 PDF를 바탕으로 만든 HTML 문제집입니다. 과목별 정리, 검색, 과목 필터,
+        채점 기능을 넣었고 정답은 채점 후에만 보이도록 구성했습니다.
+      </p>
+
+      <div class="toolbar">
+        <div class="control">
+          <label for="searchInput">문항 검색</label>
+          <input id="searchInput" type="text" placeholder="키워드를 입력하세요" />
+        </div>
+        <div class="control">
+          <label for="subjectFilter">과목 선택</label>
+          <select id="subjectFilter">
+            <option value="all">전체 과목</option>
+            <option value="1과목 · 시각디자인론">1과목 · 시각디자인론</option>
+            <option value="2과목 · 조형심리학">2과목 · 조형심리학</option>
+            <option value="3과목 · 광고학">3과목 · 광고학</option>
+            <option value="4과목 · 색채학">4과목 · 색채학</option>
+            <option value="5과목 · 사진 및 인쇄제판론">5과목 · 사진 및 인쇄제판론</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="statusFilter">표시 방식</label>
+          <select id="statusFilter">
+            <option value="all">전체 보기</option>
+            <option value="unanswered">미응답만 보기</option>
+            <option value="answered">응답한 문제만 보기</option>
+          </select>
+        </div>
+        <div class="control">
+          <label>현재 상태</label>
+          <div id="liveState" style="font-size:15px;font-weight:700;">문제 풀이 전</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="gradeBtn">채점하기</button>
+<button class="ghost" id="resetBtn">전체 초기화</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><span class="k">전체 문항</span><span class="v" id="totalCount">100</span></div>
+      <div class="stat"><span class="k">응답 수</span><span class="v" id="answeredCount">0</span></div>
+      <div class="stat"><span class="k">정답 수</span><span class="v" id="correctCount">0</span></div>
+      <div class="stat"><span class="k">점수</span><span class="v" id="scoreText">0점</span></div>
+    </section>
+
+    <div id="examRoot"></div>
+
+    <p class="footer-note">
+      출처 파일: 시각디자인기사20030831(교사용).pdf<br />
+      이 HTML은 학습용으로 재구성한 버전입니다.
+    </p>
+  </div>
+
+  <script>
+    const questions = [{"num": 1, "subject": "1과목 · 시각디자인론", "question": "포스트모더니즘의 해체주의 양식이 등장하게된 계기로서 가 장 직접적이고 적합한 내용은?", "options": [{"idx": 1, "label": "①", "text": "세기말 현상의 일환으로 기존질서나 규범이 무너지는 현 상이 나타났다."}, {"idx": 2, "label": "②", "text": "디자인에 컴퓨터가 이용되면서 그리드 개념이 없는 자유 분방한 스타일이 가능해졌다."}, {"idx": 3, "label": "③", "text": "수직수평의 규격화된 디자인에 대중이 싫증을 느끼게 되 었다."}, {"idx": 4, "label": "④", "text": "몇 사람의 그래픽디자이너에 의해 우연히 시도된 스타일 이 확산되었다."}], "correct": 2}, {"num": 2, "subject": "1과목 · 시각디자인론", "question": "디자인의 조건 중 경제성에 관한 설명으로 적합하지 못한 것 은?", "options": [{"idx": 1, "label": "①", "text": "최소한의 시간과 노력으로 최대한의 효과를 얻는 것"}, {"idx": 2, "label": "②", "text": "최대한의 비용으로 최상의 디자인을 하는 것"}, {"idx": 3, "label": "③", "text": "최소한의 비용으로 최대의 효과를 얻는 것"}, {"idx": 4, "label": "④", "text": "최소한의 재료와 노동력으로 최대의 기능을 발휘하는 것"}], "correct": 2}, {"num": 3, "subject": "1과목 · 시각디자인론", "question": "시각디자인에 있어서 이미지를 쉽게 삽입할 수 있도록 사전 에 제작된 이미지 엘리먼트(Element)는?", "options": [{"idx": 1, "label": "①", "text": "Clip Art"}, {"idx": 2, "label": "②", "text": "Script"}, {"idx": 3, "label": "③", "text": "Calligraphy"}, {"idx": 4, "label": "④", "text": "Calligram"}], "correct": 1}, {"num": 4, "subject": "1과목 · 시각디자인론", "question": "다음 중 문자언어를 시각화한 가장 대표적인 것은?", "options": [{"idx": 1, "label": "①", "text": "Symbol Mark"}, {"idx": 2, "label": "②", "text": "Logotype"}, {"idx": 3, "label": "③", "text": "Pictogram"}, {"idx": 4, "label": "④", "text": "Brand Mark"}], "correct": 3}, {"num": 5, "subject": "1과목 · 시각디자인론", "question": "잡지나 신문에 가장 널리 쓰이는 인쇄방법은?", "options": [{"idx": 1, "label": "①", "text": "활판인쇄"}, {"idx": 2, "label": "②", "text": "오프셋인쇄"}, {"idx": 3, "label": "③", "text": "요판인쇄"}, {"idx": 4, "label": "④", "text": "실크프린트인쇄"}], "correct": 2}, {"num": 6, "subject": "1과목 · 시각디자인론", "question": "다음 중 전파매체 디자인에 해당되지 않는 것은?", "options": [{"idx": 1, "label": "①", "text": "CF"}, {"idx": 2, "label": "②", "text": "방송국 로고 애니메이션"}, {"idx": 3, "label": "③", "text": "드라마"}, {"idx": 4, "label": "④", "text": "방송 그래픽"}], "correct": 3}, {"num": 7, "subject": "1과목 · 시각디자인론", "question": "디자이너의 사회적 역할 중 맞지 않는 것은?", "options": [{"idx": 1, "label": "①", "text": "소비자 욕구충족"}, {"idx": 2, "label": "②", "text": "의식수준 향상"}, {"idx": 3, "label": "③", "text": "예술과 기술의 조화"}, {"idx": 4, "label": "④", "text": "예술적 특권 확보"}], "correct": 4}, {"num": 8, "subject": "1과목 · 시각디자인론", "question": "다음 시각전달 디자인의 분류 중 잘못된 것은?", "options": [{"idx": 1, "label": "①", "text": "문자 - 타입페이스, 활자, 펀트"}, {"idx": 2, "label": "②", "text": "영상영역 - CAD, CAM, 시뮬레이션"}, {"idx": 3, "label": "③", "text": "포장영역 - 포장지, 용기, 패턴"}, {"idx": 4, "label": "④", "text": "CIP영역 - 보도사진, 상업사진, 기록사진"}], "correct": 4}, {"num": 9, "subject": "1과목 · 시각디자인론", "question": "교통광고에 적합한 유형은?", "options": [{"idx": 1, "label": "①", "text": "전단광고"}, {"idx": 2, "label": "②", "text": "지하철 광고"}, {"idx": 3, "label": "③", "text": "철도시간표 광고"}, {"idx": 4, "label": "④", "text": "항공기 잡지 광고"}], "correct": 2}, {"num": 10, "subject": "1과목 · 시각디자인론", "question": "아이디어 발상법의 대표적인 브레인 스토밍(Brain Storming)을 진행할 때 바람직하지 않은 방식은?", "options": [{"idx": 1, "label": "①", "text": "자유분방한 아이디어 제기"}, {"idx": 2, "label": "②", "text": "제기된 아이디어의 분석과 비판"}, {"idx": 3, "label": "③", "text": "가급적 많은 양의 아이디어 요구"}, {"idx": 4, "label": "④", "text": "상위 직급자의 분석과 비판은 금물"}], "correct": 2}, {"num": 11, "subject": "1과목 · 시각디자인론", "question": "다음 중 T.V 매체의 장점이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "속보성"}, {"idx": 2, "label": "②", "text": "기록성"}, {"idx": 3, "label": "③", "text": "반복성"}, {"idx": 4, "label": "④", "text": "대량전달성"}], "correct": 2}, {"num": 12, "subject": "1과목 · 시각디자인론", "question": "시각디자인에 있어서의 티저(teaser)기법이란?", "options": [{"idx": 1, "label": "①", "text": "호기심과 궁금증을 유발시키면서, 놀리듯이 하나씩 하나 씩 메시지를 전달하는 기법"}, {"idx": 2, "label": "②", "text": "언어유희적인 발상법으로 시각적 즐거움을 유도하는 방 법"}, {"idx": 3, "label": "③", "text": "누구나 알고있는 예술적 대상을 차용하는 기법"}, {"idx": 4, "label": "④", "text": "타이포그래피(typography)적인 기법을 전체적으로 일컫 는 용어"}], "correct": 1}, {"num": 13, "subject": "1과목 · 시각디자인론", "question": "다음 중 주지상표의 판단요소가 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "상표의 사용기한"}, {"idx": 2, "label": "②", "text": "거래범위"}, {"idx": 3, "label": "③", "text": "사용방법 및 형태"}, {"idx": 4, "label": "④", "text": "유통기한 표시"}], "correct": 4}, {"num": 14, "subject": "1과목 · 시각디자인론", "question": "A4크기, 288쪽의 원색책자 15,000부를 인쇄할 경우 필요한 종이의 소요 연수는 ? (단 A4는 전지 한장에 16쪽임, 여분 지는 5%로 계산)", "options": [{"idx": 1, "label": "①", "text": "567연"}, {"idx": 2, "label": "②", "text": "540연"}, {"idx": 3, "label": "③", "text": "283.5연"}, {"idx": 4, "label": "④", "text": "270연"}], "correct": 1}, {"num": 15, "subject": "1과목 · 시각디자인론", "question": "지역방송국에 제한되어 방송되는 광고는?", "options": [{"idx": 1, "label": "①", "text": "로컬광고"}, {"idx": 2, "label": "②", "text": "네트워크광고"}, {"idx": 3, "label": "③", "text": "블록광고"}, {"idx": 4, "label": "④", "text": "스폿광고"}], "correct": 1}, {"num": 16, "subject": "1과목 · 시각디자인론", "question": "1960년대 뉴욕을 중심으로 일어난 운동으로서 포스터나 광 고, 만화 등 대량생산품의 이미지를 재구성함으로써 대중문 화를 미술의 세계와 동화시켰던 미술사조는?", "options": [{"idx": 1, "label": "①", "text": "옵 아트"}, {"idx": 2, "label": "②", "text": "멤피스 스타일"}, {"idx": 3, "label": "③", "text": "키치"}, {"idx": 4, "label": "④", "text": "팝 아트"}], "correct": 4}, {"num": 17, "subject": "1과목 · 시각디자인론", "question": "디자이너가 선정한 색상이 고객을 만족시키지 못했을 때 디 자이너가 취할 수 있는 태도로서 바람직하지 않은 것은?", "options": [{"idx": 1, "label": "①", "text": "색상견본 책자를 건네주면서 직접 선택하도록 한다."}, {"idx": 2, "label": "②", "text": "고객이 제시하는 색상문제 뒤에 숨은 고객 자신의 배경, 이유를 이해하기 위하여 노력한다."}, {"idx": 3, "label": "③", "text": "고객이 제시하는 색상에 대한 의견이 주관적일 때는 그 것을 인지시킨다."}, {"idx": 4, "label": "④", "text": "프로젝트의 목표에 입각해서 합리적인 설명을 한다."}], "correct": 1}, {"num": 18, "subject": "1과목 · 시각디자인론", "question": "산업디자인의 분류체계에 적합치 않는 것은?", "options": [{"idx": 1, "label": "①", "text": "제품디자인(Product Design)"}, {"idx": 2, "label": "②", "text": "환경디자인(Environmental Design)"}, {"idx": 3, "label": "③", "text": "시각디자인(Visual Communication Design)"}, {"idx": 4, "label": "④", "text": "컴퓨터그래픽스(Computer Graphics)"}], "correct": 4}, {"num": 19, "subject": "1과목 · 시각디자인론", "question": "다음 디자인의 개념에 관한 설명 중 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "설계하다. 계획하다 라는 의미를 갖는다."}, {"idx": 2, "label": "②", "text": "사물의 재료, 기능, 구조에 조형성을 부여하는 종합적인 계획이다."}, {"idx": 3, "label": "③", "text": "인간이 보고 즐길 수 있는 매우 아름다운 예술영역을 의 미한다."}, {"idx": 4, "label": "④", "text": "더욱 쾌적한 생활 환경 형성에 기여하는 행위이다."}], "correct": 3}, {"num": 20, "subject": "1과목 · 시각디자인론", "question": "포스트 스크립트(post script)방식의 글자꼴을 표현하는 말 이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "아우트라인 글자꼴"}, {"idx": 2, "label": "②", "text": "벡터 폰트"}, {"idx": 3, "label": "③", "text": "비트맵 글자꼴"}, {"idx": 4, "label": "④", "text": "윤곽선 글자꼴"}], "correct": 3}, {"num": 21, "subject": "2과목 · 조형심리학", "question": "다음 선에 대한 설명 중 틀린 것은?", "options": [{"idx": 1, "label": "①", "text": "방향성이 있다."}, {"idx": 2, "label": "②", "text": "무수히 많은 점들의 집합이다."}, {"idx": 3, "label": "③", "text": "구성의 어떠한 대상이든 가장 큰 영향력을 갖는다."}, {"idx": 4, "label": "④", "text": "폭은 길이에 비해 상당히 좁기 때문에 단지 길이로만 인 식한다."}], "correct": 3}, {"num": 22, "subject": "2과목 · 조형심리학", "question": "원근에 의한 공간 표현이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "직선원근법"}, {"idx": 2, "label": "②", "text": "사선원근법"}, {"idx": 3, "label": "③", "text": "대기원근법"}, {"idx": 4, "label": "④", "text": "과장원근법"}], "correct": 2}, {"num": 23, "subject": "2과목 · 조형심리학", "question": "다음과 같은 도형을 볼 때 심리적으로 느낄 수 있는 지각 상태가 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "사각형의 틀에서 벗어나려는 원반의 유동성을 발견할 수 있다."}, {"idx": 2, "label": "②", "text": "중심(中心) 따위의 특정한 방향으로 이끌리는 인력(引力) 이 느껴질 수 있다."}, {"idx": 3, "label": "③", "text": "주변의 사각형에 대해 관련하는 어떤 내적인 긴장 (tension)을 보여준다."}, {"idx": 4, "label": "④", "text": "어둡기와 밝기에 대한 명암의 상태를 보여준다."}], "correct": 4}, {"num": 24, "subject": "2과목 · 조형심리학", "question": "모든 예술에 있어서 기본적인 창조적 행위이며 예술가의 정 서나 마음의 상태를 나타내는 예술적 행위를 뜻하는 것은?", "options": [{"idx": 1, "label": "①", "text": "표현(表現)"}, {"idx": 2, "label": "②", "text": "일치(一致)"}, {"idx": 3, "label": "③", "text": "조형(造形)"}, {"idx": 4, "label": "④", "text": "지각(知覺)"}], "correct": 1}, {"num": 25, "subject": "2과목 · 조형심리학", "question": "사진은 덴마크의 심리학자인 루빈(E. Rubin)이 그린 루빈의 컵이다. 이것은 무엇을 실험하고자 한 것인가?", "options": [{"idx": 1, "label": "①", "text": "색채감각과 무색감각"}, {"idx": 2, "label": "②", "text": "명도와 채도"}, {"idx": 3, "label": "③", "text": "면과 선"}, {"idx": 4, "label": "④", "text": "도형과 바탕"}], "correct": 4}, {"num": 26, "subject": "2과목 · 조형심리학", "question": "사물을 보는 사람의 눈에 대한 설명 중 틀린 것은?", "options": [{"idx": 1, "label": "①", "text": "눈은 시각정보를 받아들이기만 할 뿐 분석을 하지 않는 다."}, {"idx": 2, "label": "②", "text": "사람은 코나 귀 보다 주로 두 눈에 의해 환경을 알아 본 다."}, {"idx": 3, "label": "③", "text": "직접 체험이 간접 체험보다 더 정확하다."}, {"idx": 4, "label": "④", "text": "사람의 눈은 독수리의 눈보다 멀리보고 물고기의 눈보다 넓게 본다."}], "correct": 4}, {"num": 27, "subject": "2과목 · 조형심리학", "question": "우리가 창문에 비춰진 그림자만 보고도 사람인줄 알았다면 이러한 지각의 특성을 무엇이라 하는가?", "options": [{"idx": 1, "label": "①", "text": "지각의 일반화"}, {"idx": 2, "label": "②", "text": "지각의 자율화"}, {"idx": 3, "label": "③", "text": "지각의 표준화"}, {"idx": 4, "label": "④", "text": "지각의 강조화"}], "correct": 1}, {"num": 28, "subject": "2과목 · 조형심리학", "question": "비숫한 성질을 가진 요소는 비록 떨어져 있어도 덩어리져 보이는 경향이 있다. 이 법칙을 이용한 색맹검사표는 어떤 원리를 응용한 것인가?", "options": [{"idx": 1, "label": "①", "text": "유사의 원리"}, {"idx": 2, "label": "②", "text": "근접의 원리"}, {"idx": 3, "label": "③", "text": "패쇄의 원리"}, {"idx": 4, "label": "④", "text": "연속의 원리"}], "correct": 1}, {"num": 29, "subject": "2과목 · 조형심리학", "question": "미술작품의 감상자가 느끼는 것 중에서 긴장-이완 모형은 다음 중 어떤 심리적 기제에 기초하여 개발된 것인가?", "options": [{"idx": 1, "label": "①", "text": "원형이론"}, {"idx": 2, "label": "②", "text": "동질정체이론"}, {"idx": 3, "label": "③", "text": "감정이입이론"}, {"idx": 4, "label": "④", "text": "계산이론"}], "correct": 2}, {"num": 30, "subject": "2과목 · 조형심리학", "question": "점에 대한 설명이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "점이 작아지면 일반적으로 그 넓이는 지각된다."}, {"idx": 2, "label": "②", "text": "수학적인 점은 제로 차원의 대상이라고 정의된다."}, {"idx": 3, "label": "③", "text": "기하학적인 점은 작도상으로는 선의 교점으로도 설명된 다."}, {"idx": 4, "label": "④", "text": "기하학적인 점은 간접적이며, 직관적인 점의 가치가 주 어질 뿐이다."}], "correct": 1}, {"num": 31, "subject": "2과목 · 조형심리학", "question": "다음 그림의 작도법은?", "options": [{"idx": 1, "label": "①", "text": "원주밖에 있는 한점에서 접선 그리기"}, {"idx": 2, "label": "②", "text": "두 개의 직선에 접하는 원 그리기"}, {"idx": 3, "label": "③", "text": "삼각형에 내접하는 원 그리기"}, {"idx": 4, "label": "④", "text": "원 주와 같은 길이의 직선 그리기"}], "correct": 1}, {"num": 32, "subject": "2과목 · 조형심리학", "question": "다음 중 통일성을 주는 방법이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "근접"}, {"idx": 2, "label": "②", "text": "반복"}, {"idx": 3, "label": "③", "text": "연속"}, {"idx": 4, "label": "④", "text": "변화"}], "correct": 4}, {"num": 33, "subject": "2과목 · 조형심리학", "question": "토운(Tone)의 성질에 관한 내용으로 적절치 않은 것은?", "options": [{"idx": 1, "label": "①", "text": "어두운 부분과 밝은 부분 사이에 연결되어 있는 명도의 단계를 말한다."}, {"idx": 2, "label": "②", "text": "이웃하는 토운은 모두 명도와의 관계이다."}, {"idx": 3, "label": "③", "text": "빛의 성질과 특성에 일치한다."}, {"idx": 4, "label": "④", "text": "반사광에 영향을 받지 않는다."}], "correct": 4}, {"num": 34, "subject": "2과목 · 조형심리학", "question": "디자인 작업에서 균형(balance)에 대한 설명 중 적당하지 않은 것은?", "options": [{"idx": 1, "label": "①", "text": "균형이 잡힌 작품에서는 형태, 방향, 위치같은 모든 요소 들이 상호간에 복합적으로 결정되며, 작품 전체는 각 부 분의慨필연적인 결속으로 나타난다."}, {"idx": 2, "label": "②", "text": "불균형한 작품은 우연적, 가변적으로 보이며, 따라서 전 체적인 안정감을 준다."}, {"idx": 3, "label": "③", "text": "불균형한 작업은 그 작품이 의도하는 분명한 의사를 보 여주지 못한다."}, {"idx": 4, "label": "④", "text": "불균형한 작품은 위치와 형태를 바꾸려는 성향을 보인 다."}], "correct": 2}, {"num": 35, "subject": "2과목 · 조형심리학", "question": "미학에 대한 설명 중 가장 합리적인 것은?", "options": [{"idx": 1, "label": "①", "text": "예술가들의 미에 대한 명확한 관념"}, {"idx": 2, "label": "②", "text": "보편적으로 존재하는 미에 대한 감정"}, {"idx": 3, "label": "③", "text": "아름다운 것에 대한 일반적인 사람들이 느끼는 감정"}, {"idx": 4, "label": "④", "text": "미에 대한 문제를 조직적인 방법으로 해명하려는 학문"}], "correct": 4}, {"num": 36, "subject": "2과목 · 조형심리학", "question": "사람이 두 눈을 떴을 때 지각할 수 있는 대략적인 시각의 범위는?", "options": [{"idx": 1, "label": "①", "text": "상하 약 90도, 좌우 약 100도"}, {"idx": 2, "label": "②", "text": "상하 약 110도, 좌우 약 150도"}, {"idx": 3, "label": "③", "text": "상하 약 130도, 좌우 약 190도"}, {"idx": 4, "label": "④", "text": "상하 약 150도, 좌우 약 230도"}], "correct": 3}, {"num": 37, "subject": "2과목 · 조형심리학", "question": "인쇄물의 명료성을 돕는 도구로서 비례감을 기본으로 한 디 자인의 틀(구조) 역할을 하는 것은?", "options": [{"idx": 1, "label": "①", "text": "컨셉"}, {"idx": 2, "label": "②", "text": "그리드"}, {"idx": 3, "label": "③", "text": "황금비"}, {"idx": 4, "label": "④", "text": "통일감"}], "correct": 2}, {"num": 38, "subject": "2과목 · 조형심리학", "question": "다음 그림의 설명 중 맞는 것은?", "options": [{"idx": 1, "label": "①", "text": "원에 내접하는 정오각형 그리기"}, {"idx": 2, "label": "②", "text": "정오각형으로 정원 그리기"}, {"idx": 3, "label": "③", "text": "주어진 직선을 한 변으로 하는 정오각형 그리기"}, {"idx": 4, "label": "④", "text": "정오각형의 중심점 찾기"}], "correct": 3}, {"num": 39, "subject": "2과목 · 조형심리학", "question": "다음 기본작도의 그림에 대한 설명 중 잘못된 것은?", "options": [{"idx": 1, "label": "①", "text": "주어진 직선을 수직이등분하는 방법"}, {"idx": 2, "label": "②", "text": "주어진 직선상의 한점에서 수선을 긋는 방법"}, {"idx": 3, "label": "③", "text": "주어진 직선에 평행선을 긋는 방법"}, {"idx": 4, "label": "④", "text": "주어진 선분의 등분법"}], "correct": 2}, {"num": 40, "subject": "2과목 · 조형심리학", "question": "단축이 주어진 근사 타원의 작도법에서 순서상 세 번째에 해당하는 항목은?", "options": [{"idx": 1, "label": "①", "text": "수평중심 CD를 긋고 AC, AD와 BC, BD를 구하여 연장 한다."}, {"idx": 2, "label": "②", "text": "C와 D를 중심으로 교점을 원호로 연결한다."}, {"idx": 3, "label": "③", "text": "단축의 길이와 같은 지름 AB를 정한다."}, {"idx": 4, "label": "④", "text": "A와 B를 중심으로 각각 반지름 원호를 그어 교점 E, F, G, H를 구한다."}], "correct": 4}, {"num": 41, "subject": "3과목 · 광고학", "question": "다음 문장 중 ( )속에 알맞은 말은?", "options": [{"idx": 1, "label": "①", "text": "조합"}, {"idx": 2, "label": "②", "text": "선별"}, {"idx": 3, "label": "③", "text": "분류"}, {"idx": 4, "label": "④", "text": "교환"}], "correct": 1}, {"num": 42, "subject": "3과목 · 광고학", "question": "뉴욕의 광고 크리에이터인 제리 시아노(Jerry Siano)가 주장 한 위대한 광고의 4가지 요소가 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "재미있어야한다."}, {"idx": 2, "label": "②", "text": "인간적이어야 한다."}, {"idx": 3, "label": "③", "text": "정보를 제공해야 한다."}, {"idx": 4, "label": "④", "text": "관능에 호소해야한다."}], "correct": 4}, {"num": 43, "subject": "3과목 · 광고학", "question": "그린 마케팅의 개념이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "기업활동의 기능과 목표를 환경적인 가치위에서 운영"}, {"idx": 2, "label": "②", "text": "소비자들의 단순한 욕구나 수요충족 지향적인 마케팅"}, {"idx": 3, "label": "③", "text": "인간과 자연의 상호 의존성에 초점을 맞춘 마케팅"}, {"idx": 4, "label": "④", "text": "공해 물질 배출량이 적거나, 폐기물을 재활용한 녹색 상 품개발"}], "correct": 2}, {"num": 44, "subject": "3과목 · 광고학", "question": "인터넷에서 가장 많이 사용되는 형태로 인터넷 사이트 내특 정 위치에 사각형의 띠 형태로 광고가 보여지는 것을 말하 며 소비자가 이를 클릭할 경우 해당 광고메시지와 연결되는 형태의 광고는?", "options": [{"idx": 1, "label": "①", "text": "컨텐트형 광고"}, {"idx": 2, "label": "②", "text": "틈입형 광고"}, {"idx": 3, "label": "③", "text": "푸쉬형 광고"}, {"idx": 4, "label": "④", "text": "배너광고"}], "correct": 4}, {"num": 45, "subject": "3과목 · 광고학", "question": "다음 중 의견 지도자의 속성과 관계 없는 것은?", "options": [{"idx": 1, "label": "①", "text": "많은 정규교육을 받았다."}, {"idx": 2, "label": "②", "text": "사회· 경제적 지위가 높다."}, {"idx": 3, "label": "③", "text": "상품을 채택하는데 혁신적이다."}, {"idx": 4, "label": "④", "text": "감성적이다."}], "correct": 4}, {"num": 46, "subject": "3과목 · 광고학", "question": "광고의 전달수단은 매스커뮤니케이션에 의하는가와 그 외의 방법에 의하는가에 따라 분류되는데, 다음 중 커뮤니케이션 형태별 구분이 맞는 것은?", "options": [{"idx": 1, "label": "①", "text": "개척광고와 경쟁광고"}, {"idx": 2, "label": "②", "text": "기본적 수용 광고와 선택적 수용 광고"}, {"idx": 3, "label": "③", "text": "매스컴 광고와 SP광고"}, {"idx": 4, "label": "④", "text": "감정광고와 설명광고"}], "correct": 3}, {"num": 47, "subject": "3과목 · 광고학", "question": "기업 이미지 제고를 위한 기업광고는 촉진믹스 중 어디에 속하는가?", "options": [{"idx": 1, "label": "①", "text": "판매촉진"}, {"idx": 2, "label": "②", "text": "PR"}, {"idx": 3, "label": "③", "text": "대인판매"}, {"idx": 4, "label": "④", "text": "퍼블리시티"}], "correct": 2}, {"num": 48, "subject": "3과목 · 광고학", "question": "다음 중 소비자 관여도의 결정요인과 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "개인적 요인"}, {"idx": 2, "label": "②", "text": "제품 요인"}, {"idx": 3, "label": "③", "text": "심리적 요인"}, {"idx": 4, "label": "④", "text": "상황적 요인"}], "correct": 3}, {"num": 49, "subject": "3과목 · 광고학", "question": "광고인들에게 반드시 요구되는 지식의 카테고리와 비교적 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "종교에 대한 지식: 소비자가 어떤 종교를 믿는지, 어떤 마음가짐으로 세상을 살아가는지 알아야 한다."}, {"idx": 2, "label": "②", "text": "제안에 대한 지식: 소비자의 니드를 파악하고 그들에게 제안할 짜릿한 이야기 거리를 갖고 있어야 한다."}, {"idx": 3, "label": "③", "text": "매체에 대한 지식: 각 매체의 특성을 잘 알고, 가장 효율 적인 운용을 할 수 있어야 한다."}, {"idx": 4, "label": "④", "text": "유통채널에 대한 지식: 소비자와 생산자가 최종적으로 만나는 접점, 유통채널에 대해 잘 알아야 한다."}], "correct": 1}, {"num": 50, "subject": "3과목 · 광고학", "question": "다음 중 \"라이프스타일\"의 개념이 가장 유효한 기준으로 작 용할 수 있는 것은?", "options": [{"idx": 1, "label": "①", "text": "시장세분화"}, {"idx": 2, "label": "②", "text": "제품개발"}, {"idx": 3, "label": "③", "text": "소비자행동"}, {"idx": 4, "label": "④", "text": "인구학"}], "correct": 1}, {"num": 51, "subject": "3과목 · 광고학", "question": "커뮤니케이션 요소 중 소리, 빛깔, 빛, 모양 따위의 일정한 부호에 의해 의사를 전달하는 것은?", "options": [{"idx": 1, "label": "①", "text": "정보(Information)"}, {"idx": 2, "label": "②", "text": "기호(Sign)"}, {"idx": 3, "label": "③", "text": "신호(Signal)"}, {"idx": 4, "label": "④", "text": "픽토그램(Pictogram)"}], "correct": 3}, {"num": 52, "subject": "3과목 · 광고학", "question": "이상적인 브랜드 이미지의 특징이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "타 브랜드와 차별된다."}, {"idx": 2, "label": "②", "text": "경쟁상황에 따라 유동적이다."}, {"idx": 3, "label": "③", "text": "구매자 특성과 어울린다."}, {"idx": 4, "label": "④", "text": "오랜기간 유지된다."}], "correct": 2}, {"num": 53, "subject": "3과목 · 광고학", "question": "마케팅의 기본 기능은?", "options": [{"idx": 1, "label": "①", "text": "이미지창조"}, {"idx": 2, "label": "②", "text": "생산창조"}, {"idx": 3, "label": "③", "text": "배급창조"}, {"idx": 4, "label": "④", "text": "수요창조"}], "correct": 4}, {"num": 54, "subject": "3과목 · 광고학", "question": "박스광고, 배너광고, 좌측 메뉴버튼광고, 본문 버튼광고 등 은 다음 중 어떤 광고에서 쓰이는 용어들인가?", "options": [{"idx": 1, "label": "①", "text": "온라인 광고"}, {"idx": 2, "label": "②", "text": "인터넷 광고"}, {"idx": 3, "label": "③", "text": "다이랙트마케팅 광고"}, {"idx": 4, "label": "④", "text": "POP광고"}], "correct": 2}, {"num": 55, "subject": "3과목 · 광고학", "question": "통합 마케팅 커뮤니케이션(IMC)의 개념과 가장 관계 없는 것은?", "options": [{"idx": 1, "label": "①", "text": "SP"}, {"idx": 2, "label": "②", "text": "PR"}, {"idx": 3, "label": "③", "text": "PC"}, {"idx": 4, "label": "④", "text": "DM"}], "correct": 3}, {"num": 56, "subject": "3과목 · 광고학", "question": "라디오 CM 관련용어에 대한 설명 중 올바른 것은?", "options": [{"idx": 1, "label": "①", "text": "FO; 소리가 들어온다."}, {"idx": 2, "label": "②", "text": "FU; 소리가 차차 높아진다"}, {"idx": 3, "label": "③", "text": "FD; 소리가 사라진다."}, {"idx": 4, "label": "④", "text": "FI; 소리가 작아진다."}], "correct": 2}, {"num": 57, "subject": "3과목 · 광고학", "question": "조형적 표현이 중요한 요소로서 작용하는 조직내에서 기획, 생산, 영업, 경영 등의 각 분야와 관련된 조형적 문제를 총 괄적으로 처리하고 지휘하는 전문가는?", "options": [{"idx": 1, "label": "①", "text": "카피라이터"}, {"idx": 2, "label": "②", "text": "아트디렉터"}, {"idx": 3, "label": "③", "text": "프로듀서"}, {"idx": 4, "label": "④", "text": "CM프레너"}], "correct": 2}, {"num": 58, "subject": "3과목 · 광고학", "question": "A는 자동차를 새로 구입했다.그런데 사고 보니까 사기 전에 가졌던 신념과 같지 않아 뭔가 불안한 느낌을 가졌다. 이런 소비자 심리 상태는?", "options": [{"idx": 1, "label": "①", "text": "구매후 불안심리"}, {"idx": 2, "label": "②", "text": "소비적 공황심리"}, {"idx": 3, "label": "③", "text": "인지부조화심리"}, {"idx": 4, "label": "④", "text": "불합리심리"}], "correct": 3}, {"num": 59, "subject": "3과목 · 광고학", "question": "태도(態度)를 구분하는 요소가 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "이성적 요소"}, {"idx": 2, "label": "②", "text": "인지적 요소"}, {"idx": 3, "label": "③", "text": "감정적 요소"}, {"idx": 4, "label": "④", "text": "행동적 요소"}], "correct": 1}, {"num": 60, "subject": "3과목 · 광고학", "question": "광고매체로서 신문의 장점이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "긴 수명"}, {"idx": 2, "label": "②", "text": "선택적 주의"}, {"idx": 3, "label": "③", "text": "광범위한 도달"}, {"idx": 4, "label": "④", "text": "메시지 제작의 유연성"}], "correct": 1}, {"num": 61, "subject": "4과목 · 색채학", "question": "다음 중 가장 짧은 파장의 빛은?", "options": [{"idx": 1, "label": "①", "text": "녹색"}, {"idx": 2, "label": "②", "text": "파랑"}, {"idx": 3, "label": "③", "text": "빨강"}, {"idx": 4, "label": "④", "text": "노랑"}], "correct": 2}, {"num": 62, "subject": "4과목 · 색채학", "question": "다음 빛에 대한 설명 중 맞는 것은?", "options": [{"idx": 1, "label": "①", "text": "분광 된 빛을 프리즘에 통과시키면 또 분광이 된다."}, {"idx": 2, "label": "②", "text": "가시광선에서 파장이 긴 부분은 푸른색을 뛴다."}, {"idx": 3, "label": "③", "text": "가시광선의 범위는 380nm에서 780nm라고 한다."}, {"idx": 4, "label": "④", "text": "자외선은 열 작용을 하므로 열선이라고도 한다."}], "correct": 3}, {"num": 63, "subject": "4과목 · 색채학", "question": "조명등과 연색성에 관한 설명 중 틀린 것은?", "options": [{"idx": 1, "label": "①", "text": "청색은 백열등에서 약간 녹색을 띤다."}, {"idx": 2, "label": "②", "text": "청색은 형광등에서는 크게 변하지 않는다."}, {"idx": 3, "label": "③", "text": "나트륨등에서는 빨강이 강조된다."}, {"idx": 4, "label": "④", "text": "적색은 백열등에서 더욱 선명하다."}], "correct": 3}, {"num": 64, "subject": "4과목 · 색채학", "question": "마음을 편안하게 해주며 신경 및 근육의 긴장을 완화시키는 효과가 있다고 알려진 색은?", "options": [{"idx": 1, "label": "①", "text": "회색"}, {"idx": 2, "label": "②", "text": "보라색"}, {"idx": 3, "label": "③", "text": "초록색"}, {"idx": 4, "label": "④", "text": "노란색"}], "correct": 3}, {"num": 65, "subject": "4과목 · 색채학", "question": "빨간 성냥불을 어두운 곳에서 돌리면 길고 선명한 빨간원이 생긴다. 이러한 현상은?", "options": [{"idx": 1, "label": "①", "text": "색의 동화"}, {"idx": 2, "label": "②", "text": "색의 대비"}, {"idx": 3, "label": "③", "text": "색의 잔상"}, {"idx": 4, "label": "④", "text": "색의 시인성"}], "correct": 3}, {"num": 66, "subject": "4과목 · 색채학", "question": "문.스펜서의 면적효과에서 가장 잘 어울리는 강한 색과 약 한 색의 면적의 비는?", "options": [{"idx": 1, "label": "①", "text": "3:5"}, {"idx": 2, "label": "②", "text": "4:26"}, {"idx": 3, "label": "③", "text": "7:20"}, {"idx": 4, "label": "④", "text": "12:32"}], "correct": 2}, {"num": 67, "subject": "4과목 · 색채학", "question": "디자인 사조에서의 양식과 색채의 관계를 묶은 것이다. 잘 못된 조합은?", "options": [{"idx": 1, "label": "①", "text": "미니멀리즘 - 단순한 기하학적 형태를 사용하지만 색채 는 다양하게 사용"}, {"idx": 2, "label": "②", "text": "팝아트 - 전체적으로 어두운 색조 사용하고 그 위에 혼 란한 강조색 사용"}, {"idx": 3, "label": "③", "text": "데스틸 - 검정, 흰색과 빨강, 노랑, 파랑의 순수한 원색"}, {"idx": 4, "label": "④", "text": "아르누보 - 연한 파스텔계통의 부드러운 색조"}], "correct": 1}, {"num": 68, "subject": "4과목 · 색채학", "question": "색의 상징성과 관련된 내용 중 가장 타당한 것은?", "options": [{"idx": 1, "label": "①", "text": "빨강 - 대륙으로는 아프리카 대륙을 상징"}, {"idx": 2, "label": "②", "text": "노랑 - 안전색채로는 주의 또는 경계를 상징"}, {"idx": 3, "label": "③", "text": "파랑 - 신분이나 연령으로는 원숙함을 상징"}, {"idx": 4, "label": "④", "text": "흰색 - 전통 오방에서 남쪽을 상징"}], "correct": 2}, {"num": 69, "subject": "4과목 · 색채학", "question": "KS의 일반 색명은 어느 색명법에 근거를 두고 있는가?", "options": [{"idx": 1, "label": "①", "text": "ASA"}, {"idx": 2, "label": "②", "text": "CIE"}, {"idx": 3, "label": "③", "text": "ISCC-NBS"}, {"idx": 4, "label": "④", "text": "NCS"}], "correct": 3}, {"num": 70, "subject": "4과목 · 색채학", "question": "다음 배색 중 인접색의 조화에 가장 가까운 것은?", "options": [{"idx": 1, "label": "①", "text": "연두-보라-빨강"}, {"idx": 2, "label": "②", "text": "주황-청록-자주"}, {"idx": 3, "label": "③", "text": "빨강-파랑-노랑"}, {"idx": 4, "label": "④", "text": "자주-보라-남색"}], "correct": 4}, {"num": 71, "subject": "4과목 · 색채학", "question": "다음 중 색상대비의 효과가 가장 명료한 것은?", "options": [{"idx": 1, "label": "①", "text": "빨강/자주"}, {"idx": 2, "label": "②", "text": "빨강/파랑"}, {"idx": 3, "label": "③", "text": "파랑/보라"}, {"idx": 4, "label": "④", "text": "보라/검정"}], "correct": 2}, {"num": 72, "subject": "4과목 · 색채학", "question": "다음 중 가장 명도차가 큰 배색의 사례는?", "options": [{"idx": 1, "label": "①", "text": "파랑-빨강"}, {"idx": 2, "label": "②", "text": "연두-청록"}, {"idx": 3, "label": "③", "text": "파랑-주황"}, {"idx": 4, "label": "④", "text": "노랑-녹색"}], "correct": 4}, {"num": 73, "subject": "4과목 · 색채학", "question": "세계의 어린이들이 가장 선호하는 색으로 학문적으로는 사 회과학을 나타내고, 기본적으로 자손의 번창을 의미하는 색 은?", "options": [{"idx": 1, "label": "①", "text": "보라색"}, {"idx": 2, "label": "②", "text": "초록색"}, {"idx": 3, "label": "③", "text": "하늘색"}, {"idx": 4, "label": "④", "text": "노란색"}], "correct": 4}, {"num": 74, "subject": "4과목 · 색채학", "question": "먼셀의 색상기호 \"2.OYR 3.5/4.0\"과 같은 관용색명은?", "options": [{"idx": 1, "label": "①", "text": "황토색(Yellow Ocher)"}, {"idx": 2, "label": "②", "text": "밤색(Maroon)"}, {"idx": 3, "label": "③", "text": "진분홍(Rose Carmine)"}, {"idx": 4, "label": "④", "text": "레몬색(Lemon Yellow)"}], "correct": 2}, {"num": 75, "subject": "4과목 · 색채학", "question": "색료의 3원색이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "blue"}, {"idx": 2, "label": "②", "text": "cyan"}, {"idx": 3, "label": "③", "text": "yellow"}, {"idx": 4, "label": "④", "text": "magenta"}], "correct": 1}, {"num": 76, "subject": "4과목 · 색채학", "question": "먼셀표색계에 관한 다음 기술 중 잘못된 것은?", "options": [{"idx": 1, "label": "①", "text": "채도는 2, 4, 6 등과 같이 2단위로 구분하였으나, 저채 도 부분에 1, 3을 더 추가하였다."}, {"idx": 2, "label": "②", "text": "색상은 적, 황, 녹, 청, 자색을 기본색으로 하였다."}, {"idx": 3, "label": "③", "text": "색표시법은 H C/V이다."}, {"idx": 4, "label": "④", "text": "명도는 1단위로 구분하였으나 정밀한 비교를 감안하여 0.5단위로 나눈 것도 있다."}], "correct": 3}, {"num": 77, "subject": "4과목 · 색채학", "question": "다음 채도의 설명 중 가장 적절한 것은?", "options": [{"idx": 1, "label": "①", "text": "순색으로 반사율이 높은 색이 채도가 높다."}, {"idx": 2, "label": "②", "text": "반사량이 적은 색이 채도가 높다."}, {"idx": 3, "label": "③", "text": "채도에서는 포화도가 존재하지 않는다."}, {"idx": 4, "label": "④", "text": "무채색도 채도 값이 있다."}], "correct": 1}, {"num": 78, "subject": "4과목 · 색채학", "question": "감법혼색에 대한 설명 중 옳은 것은?", "options": [{"idx": 1, "label": "①", "text": "혼합색의 밝기는 사용색의 면적비에 의해 평균되어 나타 난다."}, {"idx": 2, "label": "②", "text": "감법혼색의 삼원색은 자주(M),황색(Y),녹색(G)이다."}, {"idx": 3, "label": "③", "text": "혼합하면 할 수록 명도가 높아진다."}, {"idx": 4, "label": "④", "text": "색을 혼합할 수록 색은 점점 탁하고 어두워진다."}], "correct": 4}, {"num": 79, "subject": "4과목 · 색채학", "question": "추상체와 간상체 양쪽이 작용하지만 상이 흐릿하여 보기 어 렵게 되는 시각상태를 무엇이라 하는가?", "options": [{"idx": 1, "label": "①", "text": "색순응"}, {"idx": 2, "label": "②", "text": "박명시"}, {"idx": 3, "label": "③", "text": "암순응"}, {"idx": 4, "label": "④", "text": "중심시"}], "correct": 2}, {"num": 80, "subject": "4과목 · 색채학", "question": "다음 중 색채조절시 고려해야 할 요소와 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "눈의 피로를 감소시켜야 한다."}, {"idx": 2, "label": "②", "text": "작업의 활동적인 의욕을 높인다."}, {"idx": 3, "label": "③", "text": "위험을 방지하는 안전을 고려한다."}, {"idx": 4, "label": "④", "text": "심미적인 조화를 우선적으로 고려한다."}], "correct": 4}, {"num": 81, "subject": "5과목 · 사진 및 인쇄제판론", "question": "컬러확대기에서 컬러프린터의 색감을 조절하기 위해 주로 사용되는 필터는?", "options": [{"idx": 1, "label": "①", "text": "할로겐 필터"}, {"idx": 2, "label": "②", "text": "혼광 필터"}, {"idx": 3, "label": "③", "text": "박스 필터"}, {"idx": 4, "label": "④", "text": "다이크로익 필터"}], "correct": 4}, {"num": 82, "subject": "5과목 · 사진 및 인쇄제판론", "question": "현상액 중에서 노출된 감광재료를 현상하다가 꺼내어 수세 만하고, 정착액에 담그지 않은 상태에서 제2노출을 주었다 가 다시 현상액에 넣어 현상시키면 반전효과가 나타나는 현 상은?", "options": [{"idx": 1, "label": "①", "text": "근접 효과"}, {"idx": 2, "label": "②", "text": "에버하르트 효과"}, {"idx": 3, "label": "③", "text": "코스틴스키 효과"}, {"idx": 4, "label": "④", "text": "사바티에 효과"}], "correct": 4}, {"num": 83, "subject": "5과목 · 사진 및 인쇄제판론", "question": "빛(Light)을 벽이나 천장 등에 비춰서 그 반사광으로 피사체 를 조명하는 간접광은?", "options": [{"idx": 1, "label": "①", "text": "디퓨즈라이팅"}, {"idx": 2, "label": "②", "text": "바운스라이팅"}, {"idx": 3, "label": "③", "text": "스포트라이팅"}, {"idx": 4, "label": "④", "text": "다이렉트라이팅"}], "correct": 2}, {"num": 84, "subject": "5과목 · 사진 및 인쇄제판론", "question": "자외선을 차단하고 동시에 렌즈의 보호 역할도 하는 무색 필터는?", "options": [{"idx": 1, "label": "①", "text": "CC 필터"}, {"idx": 2, "label": "②", "text": "UV 필터"}, {"idx": 3, "label": "③", "text": "ND 필터"}, {"idx": 4, "label": "④", "text": "R 필터"}], "correct": 2}, {"num": 85, "subject": "5과목 · 사진 및 인쇄제판론", "question": "각기 다른 색으로 모여진 백색광이 렌즈를 투과 할 때에 색 의 파장으로 인해 초점을 맺는 위치가 달라서 해상력이 떨 어질 때 생기는 수차는?", "options": [{"idx": 1, "label": "①", "text": "색수차"}, {"idx": 2, "label": "②", "text": "코마수차"}, {"idx": 3, "label": "③", "text": "왜곡수차"}, {"idx": 4, "label": "④", "text": "구면수차"}], "correct": 1}, {"num": 86, "subject": "5과목 · 사진 및 인쇄제판론", "question": "화학 펄프 70% 이상 사용하며 교과서, 서적, 잡지의 본문에 사용하는 종이는?", "options": [{"idx": 1, "label": "①", "text": "아트지"}, {"idx": 2, "label": "②", "text": "중질지"}, {"idx": 3, "label": "③", "text": "상갱지"}, {"idx": 4, "label": "④", "text": "갱지"}], "correct": 2}, {"num": 87, "subject": "5과목 · 사진 및 인쇄제판론", "question": "컬러 네거티브 필름에 있어서 청감 유제층에서 만들어지는 색은?", "options": [{"idx": 1, "label": "①", "text": "Cyan"}, {"idx": 2, "label": "②", "text": "Magenta"}, {"idx": 3, "label": "③", "text": "Yellow"}, {"idx": 4, "label": "④", "text": "Blue"}], "correct": 3}, {"num": 88, "subject": "5과목 · 사진 및 인쇄제판론", "question": "35mm 필름을 사용하는 카메라의 화면 크기는?", "options": [{"idx": 1, "label": "①", "text": "24x18mm"}, {"idx": 2, "label": "②", "text": "24x36mm"}, {"idx": 3, "label": "③", "text": "6x6mm"}, {"idx": 4, "label": "④", "text": "4x5mm"}], "correct": 2}, {"num": 89, "subject": "5과목 · 사진 및 인쇄제판론", "question": "표면에 질감이 있는 피사체의 디테일 표현과 입체감을 가장 강조할 수 있는 조명은?", "options": [{"idx": 1, "label": "①", "text": "상단조명"}, {"idx": 2, "label": "②", "text": "하단조명"}, {"idx": 3, "label": "③", "text": "후면조명"}, {"idx": 4, "label": "④", "text": "측면조명"}], "correct": 4}, {"num": 90, "subject": "5과목 · 사진 및 인쇄제판론", "question": "다음 중에서 카메라 렌즈를 극단적으로 조였을 때 해상력이 떨어지게 되는 가장 큰 이유는?", "options": [{"idx": 1, "label": "①", "text": "빛의 회절"}, {"idx": 2, "label": "②", "text": "빛의 간섭"}, {"idx": 3, "label": "③", "text": "빛의 굴절"}, {"idx": 4, "label": "④", "text": "빛의 반사,흡수"}], "correct": 1}, {"num": 91, "subject": "5과목 · 사진 및 인쇄제판론", "question": "피사계 심도(Depth of Field)가 가장 깊은 렌즈 구경은?", "options": [{"idx": 1, "label": "①", "text": "F/1.4"}, {"idx": 2, "label": "②", "text": "F/5.6"}, {"idx": 3, "label": "③", "text": "F/8"}, {"idx": 4, "label": "④", "text": "F/22"}], "correct": 4}, {"num": 92, "subject": "5과목 · 사진 및 인쇄제판론", "question": "촬영한 뒤에 필름에 생긴 잠상을 가시상으로 환원시키는 과 정은?", "options": [{"idx": 1, "label": "①", "text": "현상"}, {"idx": 2, "label": "②", "text": "중간정지"}, {"idx": 3, "label": "③", "text": "정착"}, {"idx": 4, "label": "④", "text": "건조"}], "correct": 1}, {"num": 93, "subject": "5과목 · 사진 및 인쇄제판론", "question": "종이의 표면을 아교,송진,녹말,합성수지같은 교질 재료로 피 복 시키는 종이 제조 공정은?", "options": [{"idx": 1, "label": "①", "text": "고해(Beating)"}, {"idx": 2, "label": "②", "text": "사이징(Sizing)"}, {"idx": 3, "label": "③", "text": "전충(Loading)"}, {"idx": 4, "label": "④", "text": "착색(Coloring)"}], "correct": 2}, {"num": 94, "subject": "5과목 · 사진 및 인쇄제판론", "question": "다른 잉크에 비하여 점도와 점착성이 낮고 비화선부의 잉크 를 쉽게 긁어주고 인쇄 후 신속히 증발 건조되는 것이 요구 되는 인쇄잉크는?", "options": [{"idx": 1, "label": "①", "text": "그라비어 잉크"}, {"idx": 2, "label": "②", "text": "볼록판 잉크"}, {"idx": 3, "label": "③", "text": "평판 잉크"}, {"idx": 4, "label": "④", "text": "스크린 잉크"}], "correct": 1}, {"num": 95, "subject": "5과목 · 사진 및 인쇄제판론", "question": "필름의 현상 결과를 좌우하는 요인과 가장 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "현상시간"}, {"idx": 2, "label": "②", "text": "현상온도"}, {"idx": 3, "label": "③", "text": "교반방법"}, {"idx": 4, "label": "④", "text": "감광도"}], "correct": 4}, {"num": 96, "subject": "5과목 · 사진 및 인쇄제판론", "question": "흑백필름 현상약품 성분 중에 현상주약이 아닌 것은?", "options": [{"idx": 1, "label": "①", "text": "메톨"}, {"idx": 2, "label": "②", "text": "하이드로퀴논"}, {"idx": 3, "label": "③", "text": "페니돈"}, {"idx": 4, "label": "④", "text": "요드화칼륨"}], "correct": 4}, {"num": 97, "subject": "5과목 · 사진 및 인쇄제판론", "question": "컬러 필름의 노출시 녹감층과 적감층에 불필요한 청색의 유 입을 막아 주는 역할을 하는 것은?", "options": [{"idx": 1, "label": "①", "text": "할레이션 방지코팅"}, {"idx": 2, "label": "②", "text": "중간층"}, {"idx": 3, "label": "③", "text": "커플러"}, {"idx": 4, "label": "④", "text": "황색필터층"}], "correct": 4}, {"num": 98, "subject": "5과목 · 사진 및 인쇄제판론", "question": "접사 촬영용 도구와 거리가 먼 것은?", "options": [{"idx": 1, "label": "①", "text": "중간링(extension tube)"}, {"idx": 2, "label": "②", "text": "벨로우즈(bellows)"}, {"idx": 3, "label": "③", "text": "시프트렌즈(shift lens)"}, {"idx": 4, "label": "④", "text": "접사렌즈(close-up lens)"}], "correct": 3}, {"num": 99, "subject": "5과목 · 사진 및 인쇄제판론", "question": "1매씩 문자· 사진 등 인쇄물의 내용을 바꾸어 인쇄할 수 있 고, 필요한 때에 필요한 매수를 필요한 내용으로 즉시 인쇄 할 수 있는 방법은?", "options": [{"idx": 1, "label": "①", "text": "오프셋 인쇄"}, {"idx": 2, "label": "②", "text": "볼록판 인쇄"}, {"idx": 3, "label": "③", "text": "스크린 인쇄"}, {"idx": 4, "label": "④", "text": "디지털 인쇄"}], "correct": 4}, {"num": 100, "subject": "5과목 · 사진 및 인쇄제판론", "question": "가이드 넘버가 32인 스트로보로 조명거리가 4m인 피사체 를 촬영할 때 적정 조리개 값은?", "options": [{"idx": 1, "label": "①", "text": "F/5.6"}, {"idx": 2, "label": "②", "text": "F/8"}, {"idx": 3, "label": "③", "text": "F/11"}, {"idx": 4, "label": "④", "text": "F/16"}], "correct": 2}];
+
+    const root = document.getElementById('examRoot');
+    const bySubject = {
+      "1과목 · 시각디자인론": questions.filter(q => q.num >= 1 && q.num <= 20),
+      "2과목 · 조형심리학": questions.filter(q => q.num >= 21 && q.num <= 40),
+      "3과목 · 광고학": questions.filter(q => q.num >= 41 && q.num <= 60),
+      "4과목 · 색채학": questions.filter(q => q.num >= 61 && q.num <= 80),
+      "5과목 · 사진 및 인쇄제판론": questions.filter(q => q.num >= 81 && q.num <= 100),
+    };
+
+    let graded = false;
+
+    function escapeHtml(str) {
+      return str
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function idxLabel(idx) {
+      return {1:'①',2:'②',3:'③',4:'④'}[idx] || '';
+    }
+
+    function getSelected(qnum) {
+      return document.querySelector(`input[name="q${qnum}"]:checked`);
+    }
+
+    function renderCard(q) {
+      const correctOpt = q.options.find(o => o.idx === q.correct);
+      const answerText = correctOpt ? `${correctOpt.label} ${correctOpt.text}` : '-';
+
+      return `
+        <article class="card" data-qnum="${q.num}">
+          <div class="q-head">
+            <span class="q-num">${q.num}번</span>
+            <div class="q-text">${escapeHtml(q.question)}</div>
+</div>
+          <div class="options">
+            ${q.options.map(opt => `
+              <label class="option" data-qnum="${q.num}" data-opt="${opt.idx}">
+                <input type="radio" name="q${q.num}" value="${opt.idx}" onchange="handleSelect()" />
+                <div class="option-label"><span class="option-index">${opt.label}</span> ${escapeHtml(opt.text)}</div>
+              </label>
+            `).join('')}
+          </div>
+          <div class="reveal" id="reveal-${q.num}">
+            <strong>정답:</strong> ${escapeHtml(answerText)}
+          </div>
+        </article>
+      `;
+    }
+
+    function render() {
+      const search = document.getElementById('searchInput').value.trim().toLowerCase();
+      const subject = document.getElementById('subjectFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const subjectNames = subject === 'all' ? Object.keys(bySubject) : [subject];
+
+      root.innerHTML = subjectNames.map(subjectName => {
+        const items = bySubject[subjectName].filter(q => {
+          const checked = getSelected(q.num);
+          const searchTarget = `${q.question} ${q.options.map(o => o.text).join(' ')}`.toLowerCase();
+          const searchOk = !search || searchTarget.includes(search) || String(q.num).includes(search);
+          const statusOk =
+            status === 'all' ||
+            (status === 'answered' && !!checked) ||
+            (status === 'unanswered' && !checked);
+          return searchOk && statusOk;
+        });
+
+        if (!items.length) return '';
+
+        return `
+          <section class="subject-block" data-subject="${subjectName}">
+            <h2 class="subject-title">${subjectName}</h2>
+            <div class="q-list">
+              ${items.map(q => renderCard(q)).join('')}
+            </div>
+          </section>
+        `;
+      }).join('');
+
+      if (graded) {
+        applyResultStyles();
+      }
+      updateStats();
+    }
+
+    function clearStyles() {
+      document.querySelectorAll('.option').forEach(el => el.classList.remove('correct', 'wrong'));
+    }
+
+    function applyResultStyles() {
+      clearStyles();
+      questions.forEach(q => {
+        const selected = getSelected(q.num);
+        const correctEl = document.querySelector(`.option[data-qnum="${q.num}"][data-opt="${q.correct}"]`);
+        const reveal = document.getElementById(`reveal-${q.num}`);
+
+        if (correctEl && graded) {
+          correctEl.classList.add('correct');
+        }
+        if (graded && selected && Number(selected.value) !== q.correct) {
+          const wrongEl = document.querySelector(`.option[data-qnum="${q.num}"][data-opt="${selected.value}"]`);
+          if (wrongEl) wrongEl.classList.add('wrong');
+        }
+        if (reveal) {
+          reveal.style.display = graded ? 'block' : 'none';
+        }
+      });
+    }
+
+    function updateStats() {
+      const answered = questions.filter(q => getSelected(q.num)).length;
+      let correct = 0;
+      questions.forEach(q => {
+        const selected = getSelected(q.num);
+        if (selected && Number(selected.value) === q.correct) {
+          correct += 1;
+        }
+      });
+
+      document.getElementById('answeredCount').textContent = answered;
+      document.getElementById('correctCount').textContent = graded ? correct : 0;
+      document.getElementById('scoreText').textContent = graded ? `${correct}점` : '0점';
+      document.getElementById('liveState').textContent =
+        answered === 0 ? '문제 풀이 전' : `${graded ? '채점 완료' : '응답 중'} · ${answered} / 100`;
+    }
+
+    function handleSelect() {
+      if (graded) applyResultStyles();
+      updateStats();
+    }
+    window.handleSelect = handleSelect;
+
+    document.getElementById('gradeBtn').addEventListener('click', () => {
+      graded = true;
+      applyResultStyles();
+      updateStats();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('input[type="radio"]').forEach(el => { el.checked = false; });
+      graded = false;      clearStyles();
+      document.querySelectorAll('.reveal').forEach(el => el.style.display = 'none');
+      updateStats();
+      document.getElementById('liveState').textContent = '문제 풀이 전';
+    });
+
+    document.getElementById('searchInput').addEventListener('input', render);
+    document.getElementById('subjectFilter').addEventListener('change', render);
+    document.getElementById('statusFilter').addEventListener('change', render);
+
+    render();
+  </script>
+</body>
+</html>
