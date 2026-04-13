@@ -47,6 +47,7 @@
       margin: 0 0 8px;
       font-size: 32px;
       line-height: 1.2;
+      text-align: center;
     }
 
     .hero p {
@@ -130,7 +131,6 @@
       justify-content: space-between;
       align-items: end;
       margin: 24px 0 12px;
-      gap: 12px;
     }
 
     .section-title h2 {
@@ -267,8 +267,8 @@
 <body>
   <div class="wrap">
     <section class="hero">
-      <h1>시각디자인 조사·분석 연습문제</h1>
-      <p>객관식 문제를 풀고, 정답과 해설을 바로 확인할 수 있는 최종 HTML 문제집입니다.</p>
+      <h1>시각디자인 산업기사 모의고사<br>제 2 회</h1>
+      <p>객관식 문제를 풀고, 정답과 해설을 바로 확인할 수 있는 인터랙티브 HTML 문제집입니다.</p>
     </section>
 
     <section class="toolbar">
@@ -296,9 +296,12 @@
         <select id="categoryFilter">
           <option value="all">전체 영역</option>
           <option value="디자인 일반">디자인 일반</option>
+          <option value="디자인 조사·분석">디자인 조사·분석</option>
+          <option value="디자인 경영·관리">디자인 경영·관리</option>
+          <option value="지식재산권">지식재산권</option>
+          <option value="마케팅">마케팅</option>
           <option value="사진·촬영">사진·촬영</option>
           <option value="현상·인화">현상·인화</option>
-          <option value="인쇄">인쇄</option>
         </select>
       </div>
       <div class="controls-right">
@@ -309,11 +312,11 @@
 
     <div class="section-title">
       <h2>문제 목록</h2>
-      <p>추가 요청하신 문제까지 반영한 최종 버전입니다.</p>
+      <p>현재는 시작용 템플릿입니다. 업로드한 문제를 계속 추가하기 쉽게 구성했습니다.</p>
     </div>
 
     <section class="quiz-list" id="quizList"></section>
-    <div class="footer-note">브라우저에서 바로 열어 사용할 수 있습니다.</div>
+    <div class="footer-note">문항 데이터는 script 내부의 quizData 배열에 계속 추가하면 됩니다.</div>
   </div>
 
   <script>
@@ -401,188 +404,6 @@
         ],
         answer: 1,
         explanation: "심벌과 기호를 통해 정보를 전달하는 대표 분야는 시각디자인입니다."
-      },
-      {
-        no: 182,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "초점거리가 아주 짧은 렌즈로 수중의 물고기 가까이를 찍을 때 틀의 끝점들로 수면 위로 모든 것을 볼 수 있다는 뜻에서 유래된 렌즈는?",
-        options: [
-          "줌렌즈",
-          "광각렌즈",
-          "어안렌즈",
-          "비구면렌즈"
-        ],
-        answer: 2,
-        explanation: "물고기의 시야에서 유래한 렌즈는 어안렌즈입니다."
-      },
-      {
-        no: 183,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "사진이나 필름 등의 이미지를 스캐너로 입력할 경우, 규칙적으로 배열된 선·점·동심원 등이 모여 중첩되어 나타나는 간섭무늬나 탈룩반점을 무엇이라 하는가?",
-        options: [
-          "프레이밍(framing)",
-          "크로핑(cropping)",
-          "블러(blur)",
-          "모아레(moire)"
-        ],
-        answer: 3,
-        explanation: "규칙적인 패턴이 겹쳐 생기는 간섭무늬는 모아레입니다."
-      },
-      {
-        no: 184,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "물체를 일정한 방향으로 보았을 때 그 물체의 관측 방향에 수직인 단위면적당 밝기를 지칭하는 말은?",
-        options: [
-          "휘도(luminance)",
-          "광속(luminous flux)",
-          "광도(luminous intensity)",
-          "조도(illumination intensity)"
-        ],
-        answer: 0,
-        explanation: "단위면적당 밝기를 나타내는 것은 휘도입니다."
-      },
-      {
-        no: 185,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "패닝(panning)에 대한 설명으로 틀린 것은?",
-        options: [
-          "동체의 움직임에 맞춰 카메라를 움직이면 셔터하는 방법이다.",
-          "패닝할 수 있는 피사체는 카메라에 대해 직선으로 이동하는 것이라 본다.",
-          "운동방향이 각기 다른 피사체의 움직임을 나타내는 데 적합하다.",
-          "알맞은 노출과 셔터 속도의 선택이 중요하다."
-        ],
-        answer: 2,
-        explanation: "패닝은 한 방향으로 움직이는 피사체를 따라가며 촬영하는 방법이므로 ③이 틀립니다."
-      },
-      {
-        no: 186,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "일안 반사식 카메라의 특징으로 옳지 않은 것은?",
-        options: [
-          "시차가 생긴다.",
-          "렌즈 교환이 가능하다.",
-          "펜타프리즘이 내장되어 있다.",
-          "렌즈가 파인더 및 렌즈와 결합하고 있다."
-        ],
-        answer: 0,
-        explanation: "일안 반사식 카메라는 렌즈를 통해 보는 구조라 시차가 거의 없습니다."
-      },
-      {
-        no: 187,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "카메라와 사람의 눈을 비교할 때 수정체는 카메라의 무엇과 같은 역할을 하는가?",
-        options: [
-          "셔터",
-          "조리개",
-          "렌즈",
-          "필름"
-        ],
-        answer: 2,
-        explanation: "사람의 수정체는 카메라의 렌즈와 같은 역할을 합니다."
-      },
-      {
-        no: 188,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "강한 광선 조건에서 매우 빠른 감도의 필름을 사용할 때 또는 느린 셔터로 촬영하기를 원할 때 사용하는 필터는?",
-        options: [
-          "FL 필터",
-          "ND 필터",
-          "UV 필터",
-          "RED 필터"
-        ],
-        answer: 1,
-        explanation: "빛의 양을 줄여주는 필터는 ND 필터입니다."
-      },
-      {
-        no: 189,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "태양이나 밝은 전구와 같은 강한 광원이 사진에 포함되었을 때 화면상에 조리개 모양의 이미지가 만들어지는 현상은?",
-        options: [
-          "고스팅(ghosting)",
-          "비네팅(vignetting)",
-          "솔라리제이션(solarization)",
-          "이레디에이션(irradiation)"
-        ],
-        answer: 0,
-        explanation: "렌즈 내부 반사로 인해 조리개 모양의 허상이 생기는 현상은 고스팅입니다."
-      },
-      {
-        no: 190,
-        category: "사진·촬영",
-        source: "연습문제",
-        question: "다음 중 접사 도구가 아닌 것은?",
-        options: [
-          "벨로즈",
-          "중간링",
-          "클로즈업 렌즈",
-          "브라케팅"
-        ],
-        answer: 3,
-        explanation: "브라케팅은 노출을 달리해 촬영하는 방법으로 접사 도구가 아닙니다."
-      },
-      {
-        no: 191,
-        category: "현상·인화",
-        source: "연습문제",
-        question: "확대 시 노광을 주는 동안 사진의 일부분에 빛을 차단하여 원하는 인화를 얻는 방법은?",
-        options: [
-          "버닝",
-          "다징",
-          "증감",
-          "감광"
-        ],
-        answer: 1,
-        explanation: "노광 중 일부를 가려 밝게 유지하는 방법은 다징(dodging)입니다."
-      },
-      {
-        no: 192,
-        category: "인쇄",
-        source: "연습문제",
-        question: "다음 인쇄판 형식 중 그라비어 인쇄는 어떤 형식에 속하는가?",
-        options: [
-          "공판",
-          "평판",
-          "오목판",
-          "볼록판"
-        ],
-        answer: 2,
-        explanation: "그라비어 인쇄는 오목판 인쇄 방식입니다."
-      },
-      {
-        no: 193,
-        category: "인쇄",
-        source: "연습문제",
-        question: "인쇄의 5요소 중 화선부를 눈에 보이도록 하여 화선부와 비화선부의 차이를 나타내게 하는 것은?",
-        options: [
-          "원고(copy)",
-          "삭제(ink)",
-          "피인쇄체(paper)",
-          "인쇄판(printing plate)"
-        ],
-        answer: 1,
-        explanation: "화선부와 비화선부의 차이를 실제로 드러내는 요소는 잉크입니다."
-      },
-      {
-        no: 194,
-        category: "인쇄",
-        source: "연습문제",
-        question: "광화학적 방법으로 제판하는 방식이 아닌 것은?",
-        options: [
-          "연판",
-          "선화판",
-          "망점판",
-          "콜로타입"
-        ],
-        answer: 0,
-        explanation: "선화판, 망점판, 콜로타입은 광화학적 제판과 관련되며 연판은 해당되지 않습니다."
       }
     ];
 
