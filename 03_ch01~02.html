@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 05 · 디자인 자료 조사 & 선정</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2d3148;
+  --accent: #7c9ef5;
+  --accent2: #5b7de8;
+  --text: #e2e6f0;
+  --text-muted: #8891aa;
+  --text-dim: #5a6480;
+  --point-bg: #1e2438;
+  --point-border: #3d4870;
+  --tip-bg: #1e2a1e;
+  --tip-border: #3d6040;
+  --tip-text: #7ec87e;
+  --chapter-bar: #252a3d;
+  --nav-bg: #13161f;
+  --tag-exam: #2d3a5c;
+  --tag-exam-text: #8faee8;
+  --h2-color: #c8d8ff;
+  --h3-color: #a8bef5;
+  --h4-color: #d4e0ff;
+  --section-header-bg: #1e2438;
+  --table-head: #222843;
+  --table-row1: #191d2e;
+  --table-row2: #1d2236;
+  --lec-badge: #2a3a6a;
+  --lec-text: #8faaee;
+}
+body.light {
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --border: #d8dde8;
+  --accent: #3a60d8;
+  --accent2: #2a4fc0;
+  --text: #1a1f30;
+  --text-muted: #5a6480;
+  --text-dim: #9aa0b8;
+  --point-bg: #eef2ff;
+  --point-border: #b0bef0;
+  --tip-bg: #eef7ee;
+  --tip-border: #8aba8a;
+  --tip-text: #2a6a2a;
+  --chapter-bar: #e4e8f8;
+  --nav-bg: #f0f2f8;
+  --tag-exam: #dce6ff;
+  --tag-exam-text: #2a50b8;
+  --h2-color: #1a3080;
+  --h3-color: #2a4898;
+  --h4-color: #1e2a60;
+  --section-header-bg: #e0e8ff;
+  --table-head: #dce4f8;
+  --table-row1: #f8faff;
+  --table-row2: #f0f4ff;
+  --lec-badge: #d8e4ff;
+  --lec-text: #2a4cb0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── TOP HEADER ── */
+.top-header {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  gap: 16px;
+}
+.top-header .site-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.day-badge {
+  background: var(--accent2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.site-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.menu-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: none;
+}
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px;
+  gap: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  padding: 28px 0 40px;
+  position: sticky;
+  top: 57px;
+  height: calc(100vh - 57px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.toc-chapter {
+  margin-bottom: 20px;
+}
+.toc-chapter-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 16px 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.toc-lec {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 6px 16px 4px;
+  margin-top: 8px;
+}
+.toc-link {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 5px 16px 5px 28px;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+.toc-link:hover {
+  color: var(--accent);
+  background: var(--surface2);
+  border-left-color: var(--accent);
+}
+.toc-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--surface2);
+  font-weight: 500;
+}
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 0 32px 36px;
+  border-left: 1px solid var(--border);
+}
+
+/* ── HERO ── */
+.hero {
+  margin-bottom: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.hero-tag {
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+.hero-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--h2-color);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.hero-title em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── CHAPTER SECTION ── */
+.chapter-block {
+  margin-bottom: 56px;
+}
+.chapter-header {
+  background: var(--chapter-bar);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.chapter-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.chapter-title-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--h2-color);
+}
+
+/* ── SECTION HEADERS ── */
+.section-part {
+  background: var(--section-header-bg);
+  border-left: 3px solid var(--accent);
+  padding: 8px 14px;
+  margin: 32px 0 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  border-radius: 0 4px 4px 0;
+}
+
+.lec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0 18px;
+}
+.lec-badge {
+  background: var(--lec-badge);
+  color: var(--lec-text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.lec-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--h3-color);
+}
+
+/* ── HEADINGS ── */
+h2.sec {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--h2-color);
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h2.sec .sec-num {
+  background: var(--accent2);
+  color: #fff;
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 3px;
+}
+
+h3.sub {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--h3-color);
+  margin: 22px 0 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+h3.sub::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+  position: relative;
+  top: 2px;
+}
+
+h4.subsub {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--h4-color);
+  margin: 18px 0 8px;
+}
+
+/* ── TEXT ── */
+p { margin-bottom: 12px; color: var(--text); }
+
+.exam-tag {
+  font-size: 11px;
+  background: var(--tag-exam);
+  color: var(--tag-exam-text);
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.high {
+  font-size: 11px;
+  background: #3a2020;
+  color: #e88;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+body.light .high { background: #ffe8e8; color: #c02020; }
+
+/* ── LISTS ── */
+.list-num {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0 14px;
+}
+.list-num > li {
+  display: flex;
+  gap: 10px;
+  padding: 5px 0;
+  align-items: flex-start;
+  font-size: 14.5px;
+  color: var(--text);
+  border-bottom: 1px solid transparent;
+}
+.list-num > li:hover { border-bottom-color: var(--border); }
+.list-num > li .num {
+  flex-shrink: 0;
+  min-width: 22px;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+.list-num > li .content { flex: 1; }
+.list-num > li strong { color: var(--h4-color); }
+
+.list-bullet {
+  list-style: none;
+  padding-left: 8px;
+  margin: 8px 0 12px;
+}
+.list-bullet > li {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--text);
+  align-items: flex-start;
+}
+.list-bullet > li::before {
+  content: '·';
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── POINT BOX ── */
+.point-box {
+  background: var(--point-bg);
+  border: 1px solid var(--point-border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+.point-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.point-box p, .point-box li {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ── TIP BOX ── */
+.tip-box {
+  background: var(--tip-bg);
+  border: 1px solid var(--tip-border);
+  border-left: 3px solid var(--tip-text);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.tip-label {
+  background: var(--tip-text);
+  color: var(--tip-bg);
+  font-size: 10px;
+  font-weight: 900;
+  padding: 3px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+.tip-content { font-size: 13.5px; color: var(--text-muted); }
+.tip-content p { color: var(--text-muted); margin-bottom: 6px; }
+
+/* ── TABLE ── */
+.tbl-wrap {
+  overflow-x: auto;
+  margin: 14px 0;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+thead th {
+  background: var(--table-head);
+  color: var(--h3-color);
+  font-weight: 700;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+tbody tr:nth-child(odd) td { background: var(--table-row1); }
+tbody tr:nth-child(even) td { background: var(--table-row2); }
+tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.td-key { color: var(--h4-color); font-weight: 600; white-space: nowrap; }
+
+/* ── FLOW ── */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.flow-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.flow-arrow { color: var(--accent); font-weight: 700; font-size: 16px; }
+
+/* ── DIVIDER ── */
+hr.sec-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+/* ── SCROLL TO TOP ── */
+.scroll-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--accent2);
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.scroll-top.visible { opacity: 1; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 820px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 57px;
+    width: 260px;
+    height: calc(100vh - 57px);
+    background: var(--nav-bg);
+    border-right: 1px solid var(--border);
+    z-index: 150;
+    transition: left 0.3s;
+    padding: 20px 0 40px;
+  }
+  .sidebar.open { left: 0; }
+  .menu-btn { display: flex; }
+  .layout { padding: 0 12px; gap: 0; }
+  .main-content { padding: 20px 0; border-left: none; }
+  .hero-title { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .top-header { padding: 10px 14px; }
+  .chapter-title-text { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<header class="top-header">
+  <div class="site-info">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <span class="day-badge">DAY 05</span>
+    <span class="site-title">시각디자인산업기사 · 디자인 자료화</span>
+  </div>
+  <div class="header-right">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- SIDEBAR TOC -->
+<nav class="sidebar" id="sidebar">
+
+  <div class="toc-chapter">
+    <div class="toc-chapter-title">CHAPTER 01</div>
+    <div class="toc-lec">제1강 · 마케팅</div>
+    <a class="toc-link" href="#s-01">① 마케팅의 개념</a>
+    <a class="toc-link" href="#s-02">② 마케팅의 기능</a>
+    <a class="toc-link" href="#s-03">③ 마케팅 전략</a>
+    <a class="toc-link" href="#s-04">④ 마케팅의 종류</a>
+    <a class="toc-link" href="#s-05">⑤ 마케팅 구성요소 4P</a>
+    <div class="toc-lec">제2강 · 고객 분석</div>
+    <a class="toc-link" href="#s-06">① 매슬로 욕망 모델</a>
+    <a class="toc-link" href="#s-07">② 소비자 구매과정 AIDMA</a>
+    <a class="toc-link" href="#s-08">③ 구매의사결정</a>
+    <div class="toc-lec">제3강 · 소비자 생활유형</div>
+    <a class="toc-link" href="#s-09">① 생활유형별 소비자집단</a>
+    <a class="toc-link" href="#s-10">② AIO법 · VALS</a>
+    <div class="toc-lec">제4강 · 제품 수명주기</div>
+    <a class="toc-link" href="#s-11">① Product Life Cycle</a>
+  </div>
+
+  <div class="toc-chapter">
+    <div class="toc-chapter-title">CHAPTER 02</div>
+    <div class="toc-lec">Ⅰ. 사진의 역사</div>
+    <a class="toc-link" href="#s-12">① 사진의 발명</a>
+    <a class="toc-link" href="#s-13">② 감광재료의 발달사</a>
+    <div class="toc-lec">Ⅱ. 광원의 종류 및 성질</div>
+    <a class="toc-link" href="#s-14">① 자연광의 종류 및 성질</a>
+    <a class="toc-link" href="#s-15">② 인공광의 종류 및 성질</a>
+    <a class="toc-link" href="#s-16">③ 조명방식</a>
+    <div class="toc-lec">Ⅲ. 필름의 종류 및 구조</div>
+    <a class="toc-link" href="#s-17">① 필름의 종류</a>
+    <a class="toc-link" href="#s-18">② 컬러페이퍼의 종류 및 구조</a>
+    <div class="toc-lec">Ⅳ. 카메라(Camera)</div>
+    <a class="toc-link" href="#s-19">① 카메라의 종류 및 특징</a>
+    <a class="toc-link" href="#s-20">② 렌즈의 종류 및 특징</a>
+    <a class="toc-link" href="#s-21">③ 렌즈의 성능·피사계심도</a>
+    <a class="toc-link" href="#s-22">④ 필터의 종류 및 특징</a>
+    <a class="toc-link" href="#s-23">⑤ 셔터의 종류 및 특징</a>
+    <a class="toc-link" href="#s-24">⑥ 조리개·노출계</a>
+    <div class="toc-lec">Ⅴ. 촬영조건의 결정</div>
+    <a class="toc-link" href="#s-25">① 조명 종류 및 방향</a>
+    <a class="toc-link" href="#s-26">② 접사·구도·기타기법</a>
+  </div>
+
+
+    <div class="toc-lec">Ⅴ. 촬영조건의 결정 (계속)</div>
+    <a class="toc-link" href="#s-27">③ 부속기기의 선정 및 사용법</a>
+    <div class="toc-lec">Ⅵ. 사진재료</div>
+    <a class="toc-link" href="#s-28">① 감광재료의 특성</a>
+    <a class="toc-link" href="#s-29">② 현상품의 종류·성질·용도</a>
+    <a class="toc-link" href="#s-30">③ 표백·정착 약품</a>
+    <div class="toc-lec">Ⅶ. 현상</div>
+    <a class="toc-link" href="#s-31">① 현상의 원리 및 조건</a>
+    <a class="toc-link" href="#s-32">② 필름의 현상 처리 공정</a>
+    <div class="toc-lec">Ⅷ. 인화</div>
+    <a class="toc-link" href="#s-33">① 흑백·컬러 인화 및 현상</a>
+    <a class="toc-link" href="#s-34">② 인화지의 종류·특성</a>
+    <a class="toc-link" href="#s-35">③ 후처리 및 인화 수정법</a>
+
+</nav>
+
+<!-- MAIN -->
+<main class="main-content">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="hero-tag">DAY 05</span>
+      <span class="hero-tag">PART 03 편집디자인 자료 관리</span>
+    </div>
+    <h1 class="hero-title">디자인 자료 조사 &amp; <em>자료 선정</em></h1>
+    <p class="hero-sub">시각디자인산업기사 · 시각디자인기사 · 컴퓨터그래픽운용기능사</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       CHAPTER 01
+  ═══════════════════════════════════════════════ -->
+  <div class="chapter-block">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPTER 01</span>
+      <span class="chapter-title-text">디자인 자료 조사</span>
+    </div>
+
+    <div class="section-part">제1강 · 마케팅</div>
+
+    <!-- 01 마케팅의 개념 -->
+    <h2 class="sec" id="s-01"><span class="sec-num">01</span> 마케팅(marketing)의 개념 <span class="exam-tag">출제빈도高</span></h2>
+
+    <h3 class="sub">(1) 마케팅의 정의</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">마케팅은 제품이나 서비스를 많이 그리고 효율적으로 판매하기 위해 소비자의 심리를 분석하거나 판촉활동을 펼치는 일련의 활동으로 산업제품이 생산자로부터 소비자까지 전달되는 모든 과정과 관련되어 있다.</span></li>
+      <li><span class="num">②</span><span class="content">AMA(미국마케팅협회)에서는 <strong>"개인이나 조직의 목표를 충족시키는 교환이 이루어지도록 제품, 서비스 및 아이디어를 개발하고 가격을 책정하여 이를 촉진 및 유통시키는 활동을 계획하고 실천하는 과정이다"</strong>라고 정의하고 있다. <span class="exam-tag">2018년 4회</span> <span class="exam-tag">2019년 2회·4회</span> <span class="exam-tag">2024년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content">전통적인 고전 마케팅은 기업의 이윤 극대화 추구, 대량 판매를 목적으로 해왔지만 현대의 마케팅은 구매자 중심의 시장, 품질 서비스 중심, 상호 만족, 고객 중심적인 사고와 행동으로 변하고 있다. <span class="exam-tag">2020년 1·2회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 마케팅의 핵심 개념과 순환고리</div>
+      <div class="flow">
+        <span class="flow-item">욕구</span><span class="flow-arrow">→</span>
+        <span class="flow-item">필요</span><span class="flow-arrow">→</span>
+        <span class="flow-item">수요</span><span class="flow-arrow">→</span>
+        <span class="flow-item">제품</span><span class="flow-arrow">→</span>
+        <span class="flow-item">교환</span><span class="flow-arrow">→</span>
+        <span class="flow-item">거래</span><span class="flow-arrow">→</span>
+        <span class="flow-item">시장</span><span class="flow-arrow">→</span>
+        <span class="flow-item">욕구</span>
+      </div>
+    </div>
+
+    <!-- 02 마케팅의 기능 -->
+    <h2 class="sec" id="s-02"><span class="sec-num">02</span> 마케팅의 기능</h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>방향제시의 기준</strong> — 마케팅은 시장조사를 통해 고객의 니즈와 선호도를 파악하고, 이를 바탕으로 제품과 서비스를 개발하며, 이를 통해 기업의 나아가야 할 방향을 제시한다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>고지의 기능</strong> — 마케팅은 기업의 제품과 서비스를 소개하고 홍보하는 역할을 하는데 이를 통해 고객들은 기업의 제품과 서비스에 대한 정보를 얻을 수 있다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>전략적 관리도구</strong> — 마케팅은 기업이 경쟁 환경에서 성장하기 위한 전략을 수립하고 실행하는 도구로 이를 통해 기업은 시장에서 경쟁우위를 확보하고 성장할 수 있다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>집행자원을 지급받는 근거(자원획득의 근거)</strong> — 마케팅은 기업이 수익을 창출하기 위한 수단으로 사용된다. 제품과 서비스의 판매를 통해 수익을 창출하고, 이를 통해 기업의 집행자원을 지원받는다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>자원의 효율적인 배분</strong> — 마케팅은 제한된 자원을 효율적으로 사용하기 위한 방법으로 사용되는데 시장조사를 통해 고객들의 우선순위를 파악하고, 이를 바탕으로 자원을 배분한다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>문제점의 사전예방 및 대처기능</strong> — 마케팅은 시장조사를 통해 문제점을 사전에 파악하고, 이를 대처하기 위한 전략을 수립하여 이를 통해 기업은 문제를 사전에 예방하고 대처할 수 있다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>합리적인 조직운용</strong> — 마케팅은 기업 내부에서도 사용되는데 기업은 마케팅을 통해 자원을 효율적으로 운용하고, 내부 구성원들 간의 협력을 촉진하여 합리적인 조직 운용을 실현할 수 있다.</span></li>
+    </ul>
+
+    <!-- 03 마케팅 전략 -->
+    <h2 class="sec" id="s-03"><span class="sec-num">03</span> 마케팅 전략 <span class="exam-tag">2016년 2회</span></h2>
+
+    <h3 class="sub">(1) 마케팅 전략</h3>
+    <p>마케팅에 전략적이고 디자인적인 기획을 하는 것을 의미한다. 마케팅 전략은 통합적 전략, 직감적 전략, 분석적 전략이 있으며 상황분석과 목표시장을 설정하고 전략을 수립해 일정을 계획하고 실행하는 모든 과정을 전략적으로 수행하는 것을 의미한다.</p>
+
+    <h3 class="sub">(2) 마케팅 전략 진행절차</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>상황분석</strong> — 기업 내·외부 환경을 파악하여 SWOT분석, 경쟁분석, 시장분석 등을 통해 현재 상황을 파악한다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>목표시장 설정</strong> — 상황분석 결과를 바탕으로 시장을 구체적으로 세분화하고, 타깃 마케팅을 통해 목표 시장을 설정한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>전략수립</strong> — 목표시장을 대상으로 한 마케팅 믹스(4P)를 구성하고, 마케팅 전략을 수립한다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>일정계획</strong> — 마케팅 전략을 달성하기 위한 세부적인 일정과 실행 계획을 수립한다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>실행</strong> — 마케팅 믹스를 바탕으로 마케팅 전략을 실행하고, 실행 결과를 모니터링하며 필요한 조정을 실시한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 마이클 포터(Michael E. Porter)의 경쟁전략 3기본형 <span class="exam-tag">2012년 4회</span> <span class="exam-tag">2016년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>차별화 전략</strong> — 제품이나 서비스를 경쟁 업체들과 차별화하여 고객들에게 더 큰 가치를 제공하는 전략으로 높은 가격을 유지하고 고객 충성도를 높일 수 있다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>저원가 전략</strong> — 경쟁 업체들보다 더 저렴한 가격으로 제품이나 서비스를 제공하여 시장 점유율을 확대하는 전략으로 대량 생산, 경영효율화 등을 통해 원가를 줄이고, 경쟁 업체들보다 더 저렴한 가격으로 제품이나 서비스를 제공한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>집중화 전략</strong> — 특정 시장 세그먼트나 지역, 제품, 서비스 등에 집중하여 경쟁 업체들보다 더 높은 수준의 전문성을 갖추고 고객에게 특화된 가치를 제공하는 전략으로 높은 수준의 고객 만족도와 이익을 창출할 수 있다.</span></li>
+    </ul>
+
+    <!-- 04 마케팅의 종류 -->
+    <h2 class="sec" id="s-04"><span class="sec-num">04</span> 마케팅의 종류</h2>
+
+    <h3 class="sub">(1) 그린 마케팅(green marketing) <span class="exam-tag">2019년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">기업활동의 기능과 목표를 환경적인 가치 위에 운영한다.</span></li>
+      <li><span class="num">②</span><span class="content">인간과 자연의 상호 의존성에 초점을 맞춘 마케팅이다.</span></li>
+      <li><span class="num">③</span><span class="content">공해 물질의 배출량이 적거나, 폐기물을 재활용한 녹색상품을 개발한다.</span></li>
+      <li><span class="num">④</span><span class="content">하나뿐인 지구의 환경 보전을 우선으로 하는 환경주의에 바탕을 둔 마케팅이다.</span></li>
+    </ul>
+    <div class="point-box">
+      <div class="point-label">POINT · 3R <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2017년 2회</span></div>
+      <p>3R은 <strong>Reduce(줄이고), Reuse(재사용), Recycle(재활용)</strong>을 의미한다. 그린 마케팅은 환경친화적 디자인으로 재활용 디자인, 재사용 디자인, 소재의 순수성을 높이는 디자인이나 디자인으로 도시가 가지고 있는 문화와 자연환경을 가능한 손상시키지 않는 범위에서 개발을 하자는 의미를 가진다.</p>
+    </div>
+
+    <h3 class="sub">(2) 인터넷 마케팅(internet marketing) <span class="exam-tag">2017년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">가상공간에서 상호작용이 가능한 쌍방 커뮤니케이션이다.</span></li>
+      <li><span class="num">②</span><span class="content">음성, 화면, 동화상 등 다양한 정보를 쌍방적으로 표현할 수 있다.</span></li>
+      <li><span class="num">③</span><span class="content">개인이나 조직이 인터넷을 이용하여 행하는 쌍방향 커뮤니케이션이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 차별화 마케팅(differentiated marketing) <span class="exam-tag">2015년 4회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">여러 세분된 시장에서 제품, 유통, 판촉 등이 서로 다른 제품과 서비스를 제공함으로써 시장별로 높은 매출과 점유율을 달성하려는 전략 마케팅이다.</span></li>
+      <li><span class="num">②</span><span class="content">제품 시장을 철저히 세분화한 결과로 몇 개의 세분시장을 표적시장으로 삼고 세분 시장별로 서로 다른 마케팅 믹스를 적용함으로써 최대한의 매출, 이익, 시장점유율 등을 달성하는 데 목적을 둔 마케팅을 말한다. <span class="exam-tag">2020년 3회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(4) 스토리텔링 마케팅(storytelling marketing)</h3>
+    <p>문화에서 처음 나온 용어로 이야기를 들려주듯 광고하는 TV광고들이 스토리텔링 마케팅의 일종이다. 소비자는 상품 그 자체를 구매한다기보다는 상품에 얽힌 이야기를 산다고 보면 된다.</p>
+
+    <h3 class="sub">(5) 감성 마케팅(emotional marketing)</h3>
+    <p>구운 빵 냄새를 슈퍼마켓에 활용했더니 매출이 올랐다거나, 영화관 입구에서 팝콘 냄새를 내자 판매량이 급격하게 증가한 사례 등이 감성부분을 자극하는 마케팅 기법이다.</p>
+
+    <h3 class="sub">(6) 표적 마케팅(target marketing)</h3>
+    <p>다품종 소량생산체제로 변화하면서 세분화된 시장을 선택하여 이에 알맞은 제품을 제공하는 마케팅 기법이다. 표적 마케팅은 시장 세분화, 시장표적화, 위치선정의 3단계를 거쳐 이루어진다.</p>
+
+    <h3 class="sub">(7) 다이렉트 마케팅(direct marketing) <span class="exam-tag">2015년 1회</span></h3>
+    <p>중간 판매자를 거치지 않고 생산자와 소비자 또는 생산자와 소매업자 사이에서 직접적으로 판매가 이루어지는 마케팅 기법이다.</p>
+
+    <!-- 05 마케팅 구성요소 4P -->
+    <h2 class="sec" id="s-05"><span class="sec-num">05</span> 마케팅의 구성요소(4P, 마케팅 믹스) <span class="exam-tag">출제빈도最高</span></h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">4P는 1960년대에 제롬 메카시(Jerome McCarthy) 교수가 처음으로 제안했으며, 효과적인 마케팅을 위한 네 가지 핵심요소를 의미한다. 4P를 다른 말로 마케팅 믹스라고 하는데, 4가지 핵심요소를 어떻게 잘 혼합하느냐에 따라 마케팅 효과를 극대화할 수 있다.</span></li>
+      <li><span class="num">②</span><span class="content">4P는 <strong>제품(Product), 유통(장소, Place), 촉진(Promotion), 가격(Price)</strong>을 의미한다. <span class="exam-tag">2021년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content">마케팅 믹스는 기업이 표적시장을 통해서 원하는 결과를 얻을 수 있도록 하기 위하여 사용하는 통제 가능한 마케팅 변수의 총집합으로 마케팅 수단이나 마케팅 기능들을 최적으로 조합해 원하는 결과를 얻기 위한 가능한 수단을 활용하는 것을 말한다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 마케팅 4C 믹스</div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content"><strong>고객 가치(customer value)</strong>: 제품이나 서비스를 제공할 때 고객이 느끼는 가치를 최우선적으로 고려한다. 고객이 어떤 가치를 원하는지 파악하고 고에 맞게 제품이나 서비스를 개발하고 마케팅한다.</span></li>
+        <li><span class="num">②</span><span class="content"><strong>고객 비용(customer cost)</strong>: 고객이 제품이나 서비스를 이용할 때 들어가는 비용(돈, 시간, 노력 등)을 고려하는 데 고객이 비용을 줄일 수 있도록 제품이나 서비스의 구성을 최적화하고, 불필요한 비용은 최소화한다.</span></li>
+        <li><span class="num">③</span><span class="content"><strong>고객 소통(customer communication)</strong>: 고객과의 소통을 통해 상호작용을 촉진하고, 고객의 요구사항과 피드백을 통해 고객과의 소통은 제품이나 서비스 개발부터 판매, 서비스 등까지 모든 단계에서 이루어져야 한다.</span></li>
+        <li><span class="num">④</span><span class="content"><strong>고객 편의성(customer convenience)</strong>: 고객이 제품이나 서비스를 이용하는 데 불편함이 없도록 제공한다. 제품의 편리한 사용성, 서비스의 신속한 처리 등 고객이 요구하는 편의성을 최대한 고려하여 제공한다.</span></li>
+      </ul>
+    </div>
+
+    <hr class="sec-divider">
+    <div class="section-part">제2강 · 고객 분석</div>
+
+    <!-- 06 매슬로 욕망 모델 -->
+    <h2 class="sec" id="s-06"><span class="sec-num">01</span> 매슬로(Maslow)의 욕망 모델 <span class="exam-tag">출제빈도高</span></h2>
+
+    <h3 class="sub">(1) 매슬로 욕구단계 이론</h3>
+    <p>매슬로가 인간에 대한 염세(인간과 세계에 대해 비관적 견해)적이고 부정적이며 한정된 개념을 부정한 인본주의 심리학을 근거로 주장한 욕구단계 이론이다. 인간의 행동은 필요와 욕구에 의해 동기(motive)가 유발된다고 주장했다. 매슬로는 인간의 욕구를 생리적 욕구, 생활보존 욕구, 사회적 수용 욕구, 존경 취득 욕구, 자기실현 욕구 등 5단계로 구분하였다. <span class="exam-tag">2021년 2회</span></p>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>생리적 욕구</strong>: 의식주와 관련한 인간의 가장 원초적 욕구 <span class="exam-tag">2018년 1회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>생활보존 욕구</strong>: 지속적으로 생활 속에서 안전을 추구하는 안전욕구</span></li>
+      <li><span class="num">③</span><span class="content"><strong>사회적 수용 욕구</strong>: 사회구성원으로서의 역할을 통해 인정받고자 하는 욕구</span></li>
+      <li><span class="num">④</span><span class="content"><strong>존경 취득 욕구</strong>: 타인에게 인정받고 싶은 권력에 대한 욕구</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>자기실현 욕구</strong>: 고차원적인 자기만족의 단계로 자아개발의 실현단계의 욕구 <span class="exam-tag">2013년 3회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 욕구단계 피라미드 (위에서 아래)</div>
+      <div class="flow">
+        <span class="flow-item">자기실현 욕구</span><span class="flow-arrow">↓</span>
+        <span class="flow-item">존경 취득 욕구</span><span class="flow-arrow">↓</span>
+        <span class="flow-item">사회적 수용 욕구</span><span class="flow-arrow">↓</span>
+        <span class="flow-item">생활보존 욕구</span><span class="flow-arrow">↓</span>
+        <span class="flow-item">생리적 욕구</span>
+      </div>
+    </div>
+
+    <!-- 07 AIDMA -->
+    <h2 class="sec" id="s-07"><span class="sec-num">02</span> 소비자 구매과정(AIDMA 법칙) <span class="exam-tag">출제빈도高</span></h2>
+
+    <p>1920년대 미국의 경제학자 롤랜드 홀(Rolland Hall)이 발표한 구매행동 마케팅 이론이다. 이 모델은 소비자가 상품에 대한 정보와 광고를 접한 후 어떤 단계를 거쳐 상품을 구입하는지를 설명한다.</p>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>A(Attention, 인지)</strong>: 주의를 끈다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>I(Interest, 관심)</strong>: 흥미를 유발한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>D(Desire, 욕구)</strong>: 가지고 싶은 욕망이 발생한다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>M(Memory, 기억)</strong>: 제품을 기억, 광고효과가 가장 크다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>A(Action, 행동)</strong>: 구매한다.(수용) <span class="exam-tag">2016년 4회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 그 외 구매과정</div>
+      <ul class="list-bullet">
+        <li><strong>온라인을 통한 소비자 구매과정(AISAS법칙)</strong><br>
+          <div class="flow" style="margin-top:6px">
+            <span class="flow-item">Attention(주목)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Interest(흥미)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Search(검색)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Action(구매)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Share(공유)</span>
+          </div>
+        </li>
+        <li><strong>고객의 구매심리과정(AIDCA법칙)</strong> <span class="exam-tag">2011년 2회</span> <span class="exam-tag">2012년 1회</span><br>
+          <div class="flow" style="margin-top:6px">
+            <span class="flow-item">Attention</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Interest</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Desire(욕망)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Confidence or Conviction(확신)</span><span class="flow-arrow">→</span>
+            <span class="flow-item">Action(행동)</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 08 구매의사결정 -->
+    <h2 class="sec" id="s-08"><span class="sec-num">03</span> 구매의사결정 <span class="exam-tag">2016년 2회</span> <span class="exam-tag">2023년 4회</span> <span class="exam-tag">2024년 3회</span></h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">구매의사결정은 소비자가 구매를 할 때 거치는 결정과정으로 문제의 인식, 정보의 탐색, 대안의 평가, 구매결정, 구매 그리고 구매 후 행동의 6단계로 구성된다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 소비자 의사결정단계</div>
+      <div class="flow">
+        <span class="flow-item">문제인식</span><span class="flow-arrow">→</span>
+        <span class="flow-item">정보탐색</span><span class="flow-arrow">→</span>
+        <span class="flow-item">대안평가</span><span class="flow-arrow">→</span>
+        <span class="flow-item">의사결정</span><span class="flow-arrow">→</span>
+        <span class="flow-item">구매 후 결정</span><span class="flow-arrow">→</span>
+        <span class="flow-item">구매 후 평가</span>
+      </div>
+    </div>
+
+    <h3 class="sub">(2) 구매결정과정의 다섯 가지 역할 <span class="exam-tag">출제빈도高</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>발안자(initiator)</strong>: 구매를 처음으로 제시하는 사람이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>영향력 부여자(influencer)</strong>: 구매결정에 영향력을 행사하는 사람이다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>결정자(decider)</strong>: 구매 여부, 구매하는 대상, 방법, 시기, 장소 등의 일부 또는 전부를 결정하는 사람이다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>구매자(buyer)</strong>: 실제로 구매를 하는 사람이다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>사용자(user)</strong>: 제품이나 서비스를 소비하거나 사용하는 사람이다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="section-part">제3강 · 소비자 생활유형(Life Style)</div>
+
+    <!-- 09 소비자 집단 -->
+    <h2 class="sec" id="s-09"><span class="sec-num">01</span> 생활유형별 소비자 집단 <span class="exam-tag">출제빈도高</span></h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>관습적인 소비자 집단</strong>: 특정 상품에 대한 고정관념이 있어 브랜드 충성도가 높아 관습적·반복적으로 선호하는 소비자 집단으로 재구매율이 높다. <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2021년 2회</span> <span class="exam-tag">2024년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>유동적 구매를 하는 소비자 집단</strong>: 물건의 외형을 보고 충동구매를 하는 소비자 집단이다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>합리적 소비자 집단</strong>: 합리적인 구매를 추구하는 소비자 집단이다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>감정적 소비자 집단</strong>: 체면과 이미지를 중요시하는 소비자 집단이다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>신소비자 집단</strong>: 심리적으로 아직 안정되지 못한 젊은층으로 뚜렷한 구매 패턴을 형성하지 못하는 집단이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 오늘날 소비자 생활패턴</h3>
+    <ul class="list-bullet">
+      <li>소비자의 평균수명이 연장되고 있다.</li>
+      <li>여성의 사회 참여 기회가 확대되고 있다.</li>
+      <li>여가시간이 증대되고 있다.</li>
+      <li>소비자의 소득과 수입이 점진적으로 증가하고 있다.</li>
+      <li>인터넷을 이용하는 디지털시대가 등장했다.</li>
+    </ul>
+
+    <h3 class="sub">(3) 소비자 행동에 영향을 미치는 요인 <span class="exam-tag">2010년 1회</span> <span class="exam-tag">2014년 1회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>개인적 요인</strong>: 개인의 특성, 성격, 가치관, 태도, 관심사, 인식, 경험, 지식, 자기개념 등이 소비자 행동에 영향을 미친다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>심리적 요인</strong>: 인지적 요소, 정서적 요소, 학습적 요소, 동기 및 욕구 등이 소비자 행동에 영향을 미친다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>사회적 요인</strong>: 문화, 가족, 친구, 동료, 광고, 마케팅, 소비자 그룹, 시장 상황 등이 소비자 행동에 영향을 미친다.</span></li>
+    </ul>
+
+    <h3 class="sub">(4) 소비자운동(consumerism) <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2016년 1회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">생산, 유통, 소비, 폐기라는 구조 속에서 건전하고 합리적인 소비생활을 창조하고 소비자로서의 이익을 수호하려는 목표로 소비자가 단결해서 행하는 운동이다.</span></li>
+      <li><span class="num">②</span><span class="content">구체적인 내용으로는 상품테스트에 기초를 둔 품질과 가격에 대한 항의운동이다.</span></li>
+      <li><span class="num">③</span><span class="content">소비자의 안전과 건강을 해치는 상품에 대한 금지, 불매, 고발 운동, 환경을 오염시키는 폐기물 반대운동이다.</span></li>
+      <li><span class="num">④</span><span class="content">소비자의 입장에 선 상품 공급기관의 창설운동, 생산자와 소비자를 직접 연결시키는 구입운동이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(5) 소비자 생활유형 측정법</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>일차원적 선호성 척도</strong>: 하나의 브랜드를 총체적으로 평가하는 방법이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>비교 척도</strong>: 비교대상에 대하여 순위를 부여하는 순위서열척도와 측정대상을 두 개씩 선정하여 비교하는 쌍대 비교척도법이 있다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>다차원 척도</strong>: 여러 대상 간의 객관적 또는 주관적 관계에 관한 수치적 자료들을 처리하여 다차원 공간상에서 그 대상들을 위치적으로 표시하여 주는 일련의 통계기법이다. <span class="exam-tag">2019년 1회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 소비자 집단별 행동분석</div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content"><strong>트레저 헌터</strong>: 보물을 찾듯이 진취적, 적극적으로 상품을 발굴하는 소비자 집단이다.</span></li>
+        <li><span class="num">②</span><span class="content"><strong>크리슈머</strong>: 창조적 소비자, 주어진 제품을 사는 것에 만족하지 않고 다양한 경로로 기업의 제품개발, 디자인, 판매 등에 적극 개입하는 소비자 집단이다.</span></li>
+        <li><span class="num">③</span><span class="content"><strong>몰링족</strong>: 대형 복합쇼핑몰에서 쇼핑, 놀이, 공연, 교육 등을 원스톱(one-stop)으로 해결하는 것을 뜻하는 '몰링(Malling)'을 즐기는 새로운 소비자층을 일컫는 말이다.</span></li>
+        <li><span class="num">④</span><span class="content"><strong>마이크로 미디어 소비자</strong>: 1인 미디어로 세상과 소통하는 마이크로 미디어 소비자는 네티즌들이 온라인상에서 1인 미디어인 UCC(사용자 생산 콘텐츠), 블로그, 미니홈피 등을 제작·공유하는 것을 의미한다.</span></li>
+      </ul>
+    </div>
+
+    <!-- 10 AIO법 · VALS -->
+    <h2 class="sec" id="s-10"><span class="sec-num">02</span> AIO법 · VALS</h2>
+
+    <h3 class="sub">(1) AIO법(소비자 생활유형 측정법, 심리도법) <span class="exam-tag">2013년 4회</span> <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2020년 3회</span></h3>
+    <p>AIO는 "Activities, Interests, Opinions"의 약자로, 소비자 행동을 이해하기 위한 마케팅 분석 도구 중 하나이다. AIO법은 이러한 소비자의 활동, 흥미, 의견 등을 종합하여 마케팅 전략을 수립하거나 상품을 개발하는 데 활용된다.</p>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>Activities(활동)</strong>: 소비자가 어떤 활동을 즐기며 시간을 보내는지를 분석한다. 예를 들어, 스포츠, 여행, 쇼핑, 음악 등 다양한 활동 중 소비자가 어떤 것을 즐기는지를 파악한다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>Interests(흥미)</strong>: 소비자가 관심을 가지는 주제나 분야를 분석한다. 예를 들어, 소설, 역사, 스포츠, 여행 등 다양한 주제 중 소비자가 어떤 것에 관심을 가지는지를 파악한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>Opinions(의견)</strong>: 소비자가 가지고 있는 견해나 태도를 분석한다. 예를 들어, 환경보호, 윤리, 정치, 경제 등 다양한 주제 중 소비자가 어떤 태도를 가지고 있는지를 파악한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) VALS(Values And Life Styles)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">스탠포드 연구기관(SRI, Stanford Research Institute)에서 개발된 VALS(Value and Life Style)는 가치(value)와 라이프 스타일(lifestyle)의 머릿글자를 딴 약어로서, 인구통계적인 자료나 소비통계뿐만 아니라 시장 세분화를 위한 생활유형 연구에 가장 많이 쓰이며 미국인을 기준으로 하였다.</span></li>
+      <li><span class="num">②</span><span class="content">VALS 1은 동기와 발달심리학 이론(매슬로의 욕구단계)에 바탕을 두어 개발되었고, VALS 2는 소비자 구매 패턴을 측정하기 위해 개발되었다.</span></li>
+    </ul>
+
+    <div class="tip-box">
+      <span class="tip-label">TIP</span>
+      <div class="tip-content">
+        <p><strong>사이코그래픽스 <span class="exam-tag">2023년 2회</span></strong></p>
+        <p>① 소비자의 심리나 정신을 나타내는 '사이코(psycho)'와 윤곽, 도식, 묘사를 나타내는 그래픽의 합성어로 소비자들 간의 개인차를 확인하고 생활양식을 연구하는 데 사용한다.</p>
+        <p>② 소비자가 생활하고 즐기는 방식에 의해 소비자를 세분화하려는 소비자 연구의 한 형태로 마케팅 분석에 주로 사용된다.</p>
+        <p>③ 사이코그래픽스에는 AIO, VALS법 등이 있다.</p>
+      </div>
+    </div>
+
+    <hr class="sec-divider">
+    <div class="section-part">제4강 · 제품의 수명주기</div>
+
+    <!-- 11 PLC -->
+    <h2 class="sec" id="s-11"><span class="sec-num">01</span> 제품의 수명주기(Product Life Cycle) <span class="exam-tag">출제빈도高</span></h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>도입기</strong>: 신제품이 시장에 도입되는 시기이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>성장기</strong>: 광고와 홍보를 통해 제품의 판매와 이윤이 급격히 상승하는 시기이다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>성숙기</strong>: 가장 오래 지속이 되며 수익과 마케팅에 문제가 나타나는 시기이다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>쇠퇴기</strong>: 판매망 감소, 매출 감소, 소비시장 위축으로 제품이 사라지는 시기이다.</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>도입기</th>
+            <th>성장기</th>
+            <th>성숙기</th>
+            <th>쇠퇴기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-key">판매</td>
+            <td>낮음</td>
+            <td>급속성장</td>
+            <td>최대</td>
+            <td>감소</td>
+          </tr>
+          <tr>
+            <td class="td-key">비용</td>
+            <td>높음</td>
+            <td>평균</td>
+            <td>낮음</td>
+            <td>낮음</td>
+          </tr>
+          <tr>
+            <td class="td-key">이익</td>
+            <td>적자</td>
+            <td>증대</td>
+            <td>높음</td>
+            <td>감소</td>
+          </tr>
+          <tr>
+            <td class="td-key">경쟁사</td>
+            <td>적음</td>
+            <td>점차 증대</td>
+            <td>점차 감소</td>
+            <td>감소</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /chapter-block 01 -->
+
+  <!-- ═══════════════════════════════════════════════
+       CHAPTER 02
+  ═══════════════════════════════════════════════ -->
+  <div class="chapter-block">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPTER 02</span>
+      <span class="chapter-title-text">디자인 자료 선정</span>
+    </div>
+
+    <div class="section-part">Ⅰ. 사진의 역사</div>
+
+    <div class="lec-header">
+      <span class="lec-badge">제1강</span>
+      <span class="lec-title">사진의 발달 과정</span>
+    </div>
+
+    <!-- 12 사진의 발명 -->
+    <h2 class="sec" id="s-12"><span class="sec-num">01</span> 사진기계의 발달사</h2>
+
+    <h3 class="sub">(1) 사진의 발명</h3>
+
+    <h4 class="subsub">가. 사진의 어원 <span class="exam-tag">2014년 1회</span></h4>
+    <p>그리스어 '빛(phos)'과 '그리다(graphos)'의 합성어 → <strong>'빛으로 그리다', '빛의 그림'</strong>을 의미한다.</p>
+
+    <h4 class="subsub">나. 카메라 옵스쿠라(Camera Obscura) <span class="exam-tag">2003년 2회</span> <span class="exam-tag">2018년 2회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">라틴어로 카메라(Camera)는 '방', 옵스쿠라(Obscura)는 '어두운'의 의미로 어두운 방, 암실을 의미한다.</span></li>
+      <li><span class="num">②</span><span class="content">구멍으로 상자 안에 빛이 들어와 맺힌 상에 그림을 그리는 형식에서 시작해 맺힌 상을 정착시키려는 노력이 곧 사진으로 발전하게 되었으며, 현대 카메라의 효시이다.</span></li>
+      <li><span class="num">③</span><span class="content">19세기 토마스 웨지우드(Tomas Wedgwood)는 화합물을 이용해 최초로 카메라 옵스쿠라의 렌즈로 맺힌 상을 기록하려고 시도했으나 실패했다. <span class="exam-tag">2014년 1회</span></span></li>
+    </ul>
+
+    <!-- 13 감광재료 발달사 -->
+    <h2 class="sec" id="s-13"><span class="sec-num">02</span> 감광재료의 발달사</h2>
+
+    <h3 class="sub">(1) 헬리오그래프(Heliograph) <span class="exam-tag">2008년 2회</span></h3>
+    <p>그리스어로 helios는 태양, graphos는 그림을 의미한다.</p>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">1826년 프랑스 발명가 "조셉 니세포어 니엡스(Joseph Nicephore Niepce)"가 발견한 최초의 사진술이다.</span></li>
+      <li><span class="num">②</span><span class="content">광선에 노출되면 굳어지는 아스팔트의 일종인 비투멘(역청)을 사용해서 옵스쿠라의 상을 정착시키는 데 성공하였다. 이를 이용해 최초로 "르그라의 집 창문에서 내다본 풍경"을 촬영하였으나 선명도는 떨어지고 실용적이지 못하였다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 다게레오타입(daguerreotype)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">프랑스인 "루이 자크 망데 다게르(Louis Jacques Mande Daguerre)"가 발명하여, 1839년 1월 7일 프랑스 과학 아카데미에 발표하였다. 8시간 이상 노출해야 했던 헬리오그래프와 달리 20~30분 정도의 노출시간으로 단축시켰다. 상업화할 수 있는 최초의 사진술이었다.</span></li>
+      <li><span class="num">②</span><span class="content">요오드 처리한 은으로 도금한 구리판(은판에 영상을 남기고 수은중기를 쪼여 소금물로 정착시킴)에 만들어졌다. 그러나 다게레오타입의 큰 결점은 한 번 찍으면 다시는 복제할 수 없다는 것이었다. <span class="exam-tag">2005년 2회</span> <span class="exam-tag">2007년 1회</span> <span class="exam-tag">2019년 1회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(3) 칼로타입 <span class="exam-tag">그리스어 kalos 아름다운, typos 인상의 의미</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">영국의 아마추어 과학자 "윌리엄 헨리 폭스 탈보트(William Henry Fox Talbot)"가 발명했다.</span></li>
+      <li><span class="num">②</span><span class="content">1840년 6월 탈보트는 노출시간을 단축시킬 뿐 아니라, 현대 사진화학의 기초가 되는 기술을 발표했다.</span></li>
+      <li><span class="num">③</span><span class="content">감광재료로는 다게레오타입과 같은 질산암화 요오드화은을 사용한 네거포지법을 사용하여 여러 장으로 복제가 가능했다. 그러나 화질이 다게레오타입에 비해 떨어져 인기를 얻지 못했다.</span></li>
+    </ul>
+
+    <h3 class="sub">(4) 콜로디온 습판(collodion wet-plate) 프로세스 <span class="exam-tag">2010년 4회</span> <span class="exam-tag">2019년 4회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">1851년 영국의 아처(Frederick Scott Archer)가 발명한 콜로디온 습판 프로세스는 많은 결정적 결점을 가지고 있음에도 불구하고, 1851년부터 젤라틴건판(gelatin dryplate)이 나오기까지 30년 동안 대부분의 사진가들이 사용했을 정도로 많은 장점을 가지고 있었다.</span></li>
+      <li><span class="num">②</span><span class="content">다게레오타입의 가장 큰 특징인 선명도와 한 장의 음화로 여러 장의 양화를 얻을 수 있는 복제성을 함께 갖추었다. 베이스가 유리이기 때문에 상이 선명하며 이전의 프로세스에 비해 노광시간이 짧다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="section-part">Ⅱ. 광원의 종류 및 성질</div>
+
+    <div class="lec-header">
+      <span class="lec-badge">제1강</span>
+      <span class="lec-title">광원의 종류 및 성질</span>
+    </div>
+
+    <!-- 14 자연광 -->
+    <h2 class="sec" id="s-14"><span class="sec-num">01</span> 광원의 종류 및 성질</h2>
+
+    <h3 class="sub">(1) 자연광의 종류 및 성질</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>태양광</strong>은 시간대에 따라 크게 광량(땅과 가까울수록 줄어든다)과 색온도를 변화시켜 뜨고 지기를 반복한다. 해가 뜰 때와 질 때 색온도가 가장 낮고 해가 뜨기 직전이나 지고 난 얼마 후 색온도가 가장 높다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>천공광</strong>은 자연광 중 태양직사광 이외의 빛으로 하늘에서 반사되고 확산되어 간접적으로 도달하는 빛을 말하며 흐린 날에 천공광의 비율이 높아지고 색온도는 올라간다.</span></li>
+    </ul>
+
+    <h4 class="subsub">가. 색온도와 흑체 <span class="exam-tag">2024년 1회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">흑체는 모든 파장의 광선을 흡수하고 반사하지 않는 물체를 말한다. 이러한 흑체는 에너지를 흡수하면서 온도가 오르게 되는데, 이때 흑체가 방출하는 복사선의 색상은 해당 온도에 따라 달라진다. 이처럼 색상을 나타내는 온도를 색온도라고 한다.</span></li>
+      <li><span class="num">②</span><span class="content">색온도는 절대온도인 켈빈(Kelvin) 온도 체계를 사용하여 측정하는데 색온도는 흑체의 절대온도와 같으며, 이 절대온도는 섭씨온도와 273℃를 합한 값이다.
+        <br>• <strong>색온도 = 절대온도 = 섭씨온도 + 273℃</strong></span></li>
+      <li><span class="num">③</span><span class="content">흑체의 온도가 높아질수록 붉은색에서 푸른색으로 색이 변한다. 즉, 저온에서는 붉은색을 띠고, 온도가 높아짐에 따라 점차 붉은색, 주황색, 노란색, 흰색, 파란색 붉은색으로 변한다.</span></li>
+      <li><span class="num">④</span><span class="content">색온도는 빛의 색을 구별하여 표시하기 위해 고안된 것으로, 가시 스펙트럼 내에서는 연속 스펙트럼, 선 스펙트럼 또는 띠 모양의 스펙트럼에 관계없이 같은 색상을 나타낼 때 사용된다.</span></li>
+    </ul>
+
+    <h4 class="subsub">나. 광원별 색온도 <span class="exam-tag">2019년 2회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 2회·3회</span></h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>색온도(K)</th><th>광원 종류</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-key">1,600~2,300K</td><td>해뜨기 직전 — 배열전등, 촛불의 광색</td></tr>
+          <tr><td class="td-key">2,500~3,000K</td><td>가정용 텅스텐램프, 온백색 형광등, 고압나트륨램프</td></tr>
+          <tr><td class="td-key">3,500~4,500K</td><td>백색 형광등, 할로겐램프</td></tr>
+          <tr><td class="td-key">4,000~4,500K</td><td>아침과 저녁의 야외</td></tr>
+          <tr><td class="td-key">5,800K</td><td>정오의 태양 — 냉백색 형광등</td></tr>
+          <tr><td class="td-key">6,500~6,800K</td><td>구름이 얇고 고르게 낀 상태</td></tr>
+          <tr><td class="td-key">8,000K</td><td>약간 구름 낀 하늘 — 주광색 형광등</td></tr>
+          <tr><td class="td-key">12,000K</td><td>맑은 파란 하늘</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 15 인공광 -->
+    <h2 class="sec" id="s-15"><span class="sec-num">02</span> 인공광의 종류 및 성질</h2>
+
+    <h3 class="sub">(1) 저압방전등</h3>
+    <p>저압방전등은 전극 간의 가압기를 사용하여 전기를 통해 기체를 이온화시켜 빛을 내는 방식으로 고압방전등에 비해 작은 크기와 효율성을 가진다. 저압방전등의 대표적인 주광색(6,500K)은 실제 색에 가까우므로 상점이나 의류 등에 많이 사용된다. 그리고 온백색 형광등(3,000K)은 안락한 분위기의 고급매장, 전시공간, 세미나실 등에 쓰인다. 삼파장등은 연색성이 우수해 가정용, 사무용으로 많이 사용된다.</p>
+
+    <ul class="list-num">
+      <li><span class="num">②</span><span class="content"><strong>형광등(fluorescent lamp)</strong> — 저압방전등의 일종으로 관내에서 발생하는 자외선의 자극으로 생기는 형광(가시광선)을 이용하는 등으로 빛에 푸른기가 돌아 차가운 느낌을 줄 뿐 아니라, 연색성이 낮은 단점을 가진다. 형광물질에 따라 다양한 광원색을 만들 수 있다. 수명이 길고, 램프의 교체가 용이해 많이 쓰인다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>고압방전등</strong> — 전극 간의 방전에 의해 전자와 기체 분자의 충돌로 빛이 방출되는 광원으로 고압수은등, 메탈할라이드등, 고압나트륨등이 있다. 전기를 많이 사용하지만 높은 광도와 내구성, 긴 수명의 장점이 있어 거리나 공장, 경기장 등에 넣어 사용된다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>수은등(mercury lamp)</strong> — 고압의 수은 증기 속의 아크 방전에 의해서 빛을 내는 전등으로 단파장의 푸른색을 내며, 초고압 수은등은 백색에 가까운 빛을 낸다. 주로 도로, 공원, 광장, 고속도로에 사용된다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>메탈할라이드등</strong> — 수은램프에 금속할로겐 화합물을 첨가하여 만든 고압 수은등으로 효율과 연색성이 높은 조명용 광원이다. 푸른빛을 내며 눈부심이 적어 야간의 운동장 조명으로 많이 사용된다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>나트륨등</strong> — 나트륨의 증기방전을 이용해 빛을 내는 광원으로 황색빛을 띤다. 안개 속에서도 빛을 잘 투과하여 장애물 발견에 유효하다는 점에서 교량, 고속도로, 일반도로, 터널 내의 조명 등에 사용된다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>백열등(incandescent lamp)</strong> <span class="exam-tag">2023년 4회</span> — 전류가 필라멘트를 가열하여 빛이 방출되는 열광원으로 장파장의 붉은색을 띤다. 일반적으로 적외선 영역에 가까운 가시광선의 분광분포 특성을 보이며 백열전구 아래에서의 난색 계열은 보다 생생히 보인다. 장파장의 빛이 주로 방출되어 따뜻한 느낌을 주지만 전력 소모에 비해 빛이 약하고 수명이 짧은 단점이 있다.</span></li>
+      <li><span class="num">⑧</span><span class="content"><strong>텅스텐등</strong> — 텅스텐 필라멘트를 사용하는 백열램프의 종류로 장파장의 붉은색을 띤다.</span></li>
+      <li><span class="num">⑨</span><span class="content"><strong>할로겐등(halogen lamp)</strong> — 전구 안에 질소와 같은 불활성가스와 미량의 요오드, 브롬, 염소 등의 원소나 그 화합물을 넣어서 텅스텐 필라멘트가 소모되는 것을 방지한 것으로 높은 효율과 뛰어난 연색성을 지녀 전시물의 하이라이트 악센트 조명으로 널리 사용되며 장파장의 붉은색을 띤다.</span></li>
+      <li><span class="num">⑩</span><span class="content"><strong>크세논등(Xenon lamp)</strong> <span class="exam-tag">2016년 1회</span> — 고압가스방전에 의한 빛을 이용하는 광원으로서 평균 주광의 에너지 분포와 매우 닮은 특색이 있는 광원으로 제논 기체를 넣은 방전관을 방전하여 흰색 빛을 얻는 등으로 흰색 광원, 사진용 광원, 자외선 광원 등으로 쓰이며 고체 레이저의 들뜬 상태 광원으로도 쓰인다. 연색성이 좋고 열선 흡수 필터와 냉각팬이 내장되어 있는 광원이다.</span></li>
+      <li><span class="num">⑪</span><span class="content"><strong>LED램프</strong> — 형광등 및 일반전구에 비해 에너지 효율이 높은 램프로 전력소모는 형광등의 1/2 수준이며 자외선이 방출되지 않아 친환경적이다. 열 발생이 적고, 자전거 전조등, 후미등에 많이 쓰이나 형광등 및 일반전구에 비해 가격이 비싸다.</span></li>
+    </ul>
+
+    <!-- 16 조명방식 -->
+    <h2 class="sec" id="s-16"><span class="sec-num">02</span> 조명방식 <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2020년 1회</span> <span class="exam-tag">2023년 2회</span></h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>직접조명(direct lighting)</strong> <span class="exam-tag">2013년 2회</span> — 광원에서부터 빛이 대부분 90~100% 작업면에 직접 비추는 조명방식으로 조명효율이 좋은 반면, 눈부심이 일어나고 균일한 조도를 얻을 수가 없어 그림자가 강하게 나타난다. 대표적으로 좁은 조사각의 빛을 만들어 내는 스포트라이트(spotlight)가 있다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>간접조명(indirect lighting)</strong> <span class="exam-tag">2014년 2회</span> — 90% 이상 빛을 벽이나 천장에 투사하여 조명하는 방식으로 광원에서 빛의 대부분을 천장이나 벽에 투사하여 여기에서 반사되는 광속을 이용한다. 효율은 떨어지지만 방 바닥을 고르게 비출 수 있으며 빛이 물체에 가려도 그림자가 생기지 않고, 빛이 부드러우며, 눈부심이 적고 온화하며 차분한 느낌을 준다. 바운스라이트(bounce light)가 이에 속한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>반간접조명</strong> — 대부분의 조명은 벽이나 천장에 조사되지만, 아래 방향으로 어느 정도(10~40% 정도) 조사하는 방식으로 그늘짐이 부드러우며 눈부심도 적다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>전반확산조명</strong> — 간접조명과 직접조명의 중간 방식으로 투명한 확산성 덮개를 사용하여 빛이 확산되도록 하는 방식이다. 조명기구를 일정한 높이와 간격으로 배치하여 방 전체를 균일하게 조명하여 눈부심이 거의 없다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>반직접조명</strong> <span class="exam-tag">2016년 1회</span> — 반간접조명과 반대되는 조명방식이다. 반투명유리나 플라스틱을 사용하여 광원 빛의 60~90%가 대상체에 직접 조사되는 방식으로 그림자와 눈부심이 생긴다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="section-part">Ⅲ. 필름의 종류 및 구조</div>
+
+    <!-- 17 필름의 종류 -->
+    <h2 class="sec" id="s-17"><span class="sec-num">01</span> 필름의 종류</h2>
+
+    <h3 class="sub">(1) 감광층의 구성</h3>
+    <ul class="list-num">
+      <li><span class="num">④</span><span class="content"><strong>녹감유제층(G감광층)</strong>은 녹색광만 감광 발색 후에는 분홍색(마젠타 계열)으로 발색한다. <span class="exam-tag">2020년 3회</span></span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>적감유제층(R감광층)</strong>은 적색광만 감광 발색 후에는 푸른색(사이안 계열)으로 발색한다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>보호층</strong>은 유제를 마찰 등의 손상에서 보호하는 동시에 유제의 보존성 향상과 흐림 방지의 역할을 하는 투명 젤라틴 막의 얇은 층으로 되어 있다. <span class="exam-tag">2017년 2회</span> <span class="exam-tag">2017년 4회</span> <span class="exam-tag">2018년 4회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(2) 필름의 종류</h3>
+
+    <h4 class="subsub">가. 리버설 필름(reversal film) <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2015년 1회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">일반적으로 흑백필름이나 컬러 슬라이드 필름의 현상과정에서 반전처리를 하여 원래 피사체의 색상과 명암이 필름상에서 반전 상태로 표현되는 필름이다.</span></li>
+      <li><span class="num">②</span><span class="content">현상 도중 반전 처리하여 피사체의 명암과 색상이 필름상에 똑같이 만들어지면 일반적으로 인쇄 원고용으로 사용하거나 필름을 직접 슬라이드로 감상하기 위한 용도로 사용된다.</span></li>
+    </ul>
+
+    <h4 class="subsub">나. 인스턴트 필름(instant film)</h4>
+    <p>현상을 위해 암실에 들어갈 필요가 없이 필름 자체에 현상액이 포함되어 있어 바로 현상이 가능한 필름을 말한다. 대표적으로 폴라로이드 필름(Polaroid Corporation)이 있다. <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2015년 2회</span></p>
+
+    <h4 class="subsub">다. 적외선 필름(infrared film) <span class="exam-tag">2011년 2회</span> <span class="exam-tag">2017년 1회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">적외선 필름은 인체 눈으로 볼 수 없는 적외선 영역의 빛을 필름에 노출하여 촬영하는 필름으로 인간의 육안으로 느끼는 것과는 전혀 다른 시각적 효과를 얻고자 할 때 사용한다.</span></li>
+      <li><span class="num">②</span><span class="content">이러한 필름은 적외선 필름 카메라에서 사용되며, 700nm 이상의 장파장광에 주로 감광되는 필름으로 일반 초점거리보다 약간 앞에다 맞춰야 한다. 적외선 필름을 사용하여 촬영한 사진은 일반적으로 흑백이며, 매우 부드러운 톤과 높은 해상도를 가진다.</span></li>
+      <li><span class="num">③</span><span class="content">적외선 필름은 적외선 빛을 감도 있는 실버 할라이드 결정체로 변환시켜 노출하는데, 이 때문에 일반적인 필름보다 노출시간이 길어지는 특징이 있어서 대개 천체, 조경, 건축, 의약분야 또는 어둠 속 동물 등의 형태 촬영에 많이 사용되며, 적외선 영역의 빛에 대한 민감도가 높기 때문에 이러한 피사체들의 세부적인 특징과 질감을 더 잘 포착할 수 있다.</span></li>
+    </ul>
+
+    <h4 class="subsub">라. 필름의 형태에 따른 분류</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>롤 필름(roll film)</strong>: 휴대가 간편하며 한 번에 많은 양을 찍을 수 있다. 35mm 필름과 120형, 220형 필름 등이 있다. <span class="exam-tag">2017년 1회</span> <span class="exam-tag">2024년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>시트 필름(첫필름)</strong>: 4×5, 5×7, 8×10, 11×14인치의 필름을 필름홀더에 끼워 사용한다. 한 컷 한 컷 정화하게 촬영할 수 있다. 필름의 해상력(화대력)이 뛰어나지만 가격대가 비싸다는 단점이 있다.</span></li>
+    </ul>
+
+    <!-- 18 컬러페이퍼 -->
+    <h2 class="sec" id="s-18"><span class="sec-num">02</span> 컬러페이퍼의 종류 및 구조</h2>
+
+    <h3 class="sub">(1) 포맷(format)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>35mm 필름(135 필름)</strong>: 원통형 카세트 안에 들어 있으며 24×36mm의 네거티브를 찍을 수 있다. <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2017년 1회</span> <span class="exam-tag">2018년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>롤 필름(roll film)</strong>: 햇빛 아래에서 카메라에 바꿔 넣을 수 있고 휴대하기 편리하며 연속 촬영이 가능하다. 광선을 차단하기 위한 길고 검은 종이와 함께 스풀에 감겨 있다. <span class="exam-tag">2020년 1·2회</span></span></li>
+      <li><span class="num">③</span><span class="content"><strong>시트 필름(sheet film)</strong>: 특정 용도에 맞게 만들어진 약간 딱딱한 필름으로 뷰카메라에서 사용된다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>컷 필름(cut film)</strong>: 4×7이나 그보다 큰 규격에 사용된다. 사용 시 한 장씩 넣어 사용한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 네거티브 필름(negative film)과 포지티브 필름(positive film) <span class="exam-tag">2019년 1회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">네거티브 필름은 실제와는 반대되는 톤(흑은 색)으로 필름의 상을 만든다. 나중에 인화지 위에 프린트가 되면 실제의 피사체와 같은 톤의 포지티브 이미지로 나온다.</span></li>
+      <li><span class="num">②</span><span class="content">네거티브는 가장 어두운 부분이 사진에서는 가장 밝은 부분으로 나타나게 된다.</span></li>
+      <li><span class="num">③</span><span class="content">포지티브 필름은 사진제관에서 색분해 원고로 사용하기 적당하다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="section-part">Ⅳ. 카메라(Camera)</div>
+
+    <div class="lec-header">
+      <span class="lec-badge">제1강</span>
+      <span class="lec-title">카메라의 종류 및 특징과 사용법</span>
+    </div>
+
+    <!-- 19 카메라 종류 -->
+    <h2 class="sec" id="s-19"><span class="sec-num">01</span> 카메라의 종류 및 특징 <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2019년 2회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 1회</span></h2>
+
+    <h3 class="sub">(1) 뷰카메라(view camera) <span class="exam-tag">2024년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">눈으로 본 장면이 그대로 필름으로 기록된다. 초점판 유리가 크며 잘 맞아 있는지는 확대경으로 확인이 가능하다. 필름은 큰 판(4×5, 5×7, 8×10나 그 이상)을 사용하기에 선명한 상을 얻을 수 있다. 필름은 한 장씩 찍을 수 있다.</span></li>
+      <li><span class="num">②</span><span class="content">주로 상업사진 촬영용으로 많이 사용되는 카메라로서 왜곡 또는 시차를 없애기 위해서 사용하는 대형 카메라이다. <span class="exam-tag">2010년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content">건축사진, 스튜디오작업, 정밀하고 좋은 화질을 원하는 풍경사진 등에 사용된다.</span></li>
+      <li><span class="num">④</span><span class="content">카메라의 무게와 부피가 커서 삼각대를 이용해야 하며, 초점판 유리에 맺힌 상을 자세히 보기 위해 자광포를 뒤집어써야 하는 불편함이 있다. 초점판에 맺히는 상이 상하좌우가 바뀐다는 단점도 있다.</span></li>
+      <li><span class="num">⑤</span><span class="content">4×5" 뷰카메라로 촬영할 때 수직면의 왜곡을 보정하기 위한 무브먼트(movement)는 피사체의 왜곡을 수정하고, 피사계심도를 증대하며, 이미지 형태를 임의로 변형하는 데 사용된다. <span class="exam-tag">2010년 2회</span> <span class="exam-tag">2010년 4회</span> <span class="exam-tag">2014년 2회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 뷰카메라 무브먼트의 종류 <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2016년 2회</span> <span class="exam-tag">2018년 2회</span></div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content"><strong>틸트(tilt)</strong>: 카메라의 앞뒤 판을 경사지게 하는 장치로 수직면의 왜곡을 보정하는 장치</span></li>
+        <li><span class="num">②</span><span class="content"><strong>라이즈(rise)와 폴(fall)</strong>: 카메라의 앞뒤 판을 위로 올리거나 내리는 장치</span></li>
+        <li><span class="num">③</span><span class="content"><strong>시프트(shift)</strong>: 카메라의 앞뒤 판을 좌우방향으로 이동하는 장치</span></li>
+        <li><span class="num">④</span><span class="content"><strong>스윙(swing)</strong>: 카메라의 수직축의 좌우로 카메라의 앞뒤 면을 좌우로 비틀어 주는 것으로 길이감을 강조하거나 특정 부분 초점을 맞추는 장치</span></li>
+      </ul>
+    </div>
+
+    <h3 class="sub">(2) 레인지파인더 카메라(rangefinder camera, 거리계 연동식 카메라) <span class="exam-tag">2010년 2회</span> <span class="exam-tag">2024년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">뷰파인더 카메라에서는 찍히는 장면을 작은 유리창(뷰파인더)으로 볼 수가 있다. 간편하게 촬영할 수 있는 카메라로서 자동초점장치도 내장되어 있어 정확한 초점을 맞출 수 있으며, 선예한 화상을 얻을 수 있다.</span></li>
+      <li><span class="num">②</span><span class="content">레인지파인더 카메라에는 뷰파인더와 함께 초점을 수동으로 조절할 수 있는 한 쌍의 레인지파인더가 내장되어 있다.</span></li>
+      <li><span class="num">③</span><span class="content">가볍고 소형이라 다루기 쉽다. 소음과 진동이 적으며 초점을 빨리 맞출 수 있다.</span></li>
+      <li><span class="num">④</span><span class="content">렌즈와 뷰파인더가 다른 곳에 위치하고 있으므로 실제로 필름에 찍히는 것이 다르며 시차(parallax, 뷰파인더와 렌즈 사이에 생기는 공간 차)가 생긴다는 단점이 있다. 접사(가깝게 촬영) 시 일부가 잘려 나갈 수도 있다. <span class="exam-tag">2018년 2회</span> <span class="exam-tag">2018년 4회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(3) 일안리플렉스 카메라(single-lens reflex camera) <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 1회·2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">뷰파인더 카메라는 렌즈와 뷰파인더(보는 유리창)가 서로 다르게 되어 있어서 좌우가 상이 바뀌어서 보이지만 일안리플렉스 카메라는 펜타프리즘(pentaprism)을 달아 정립 정상(좌우가 바뀌지 않은 상)으로 볼 수가 있다. <span class="exam-tag">2014년 1회</span> <span class="exam-tag">2014년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content">초점 맞추기가 쉬워 어떤 렌즈를 사용하여도 모두 실제의 장면과 일치되는 직접적인 시야를 얻을 수 있다. 노출계가 측정하는 부분과 눈으로 보는 부분이 정확하게 일치하게 된다. 시차가 적어 접사촬영에 용이하다. <span class="exam-tag">2020년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content">레인지파인더 카메라에 사용되는 필름보다 무겁고 작동 시 소음이 발생한다. 중형카메라일 경우 소음으로 인해 조용하게 촬영할 수 없다. 현재 신문, 잡지, 보도 사진 등에 가장 많이 사용되고 있다. <span class="exam-tag">2015년 4회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(4) 이안리플렉스 카메라(twin lens reflex camera)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">일안반사식 카메라처럼 초점판 유리에 상을 반사시키는 거울을 사용한다. 하지만 거울이 일안처럼 소음이 적고 노출 시 오르락내리락하지 않으며 그대로 고정되어 있고 초점판 유리가 커서 초점 맞추기가 쉽다.</span></li>
+      <li><span class="num">②</span><span class="content">이안반사식 카메라는 대형 뷰카메라와 레인지파인더 같은 소형 카메라의 특성을 묶어 놓은 카메라이다.</span></li>
+      <li><span class="num">③</span><span class="content">시차가 발생하며 초점판 유리에 투영된 상은 좌우가 반대로 보이기 때문에 움직이는 물체를 찍기는 어렵다. 그리고 대부분은 렌즈교환이 어렵다.</span></li>
+    </ul>
+
+    <h3 class="sub">(5) 기타 카메라</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>콤팩트 카메라</strong>: 35mm 필름을 사용, 모든 것이 자동으로 작동된다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>인스턴트 카메라</strong>: 몇 분 이내에 찍을 수 있는 카메라로 폴라로이드식 카메라가 있다. <span class="exam-tag">2017년 4회</span></span></li>
+      <li><span class="num">③</span><span class="content"><strong>수중 카메라</strong>: 물속에서 촬영이 가능한 카메라</span></li>
+      <li><span class="num">④</span><span class="content"><strong>파노라마 카메라</strong>: 화면이 길게 또는 좁게 찍히므로 풍경사진에 많이 사용</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>스테레오 카메라</strong>: 양쪽에 두 개의 렌즈가 동시에 촬영, 3차원의 입체적 영상을 찍을 때 사용</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>포켓용 최소형 카메라</strong>: 8mm, 16mm, 110mm, 126mm, 127mm, 828mm용이 있고 자동으로 감겨 촬영이 된다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>중형 카메라</strong>: 리디카메라에 감겨진 브로니 필름을 사용하는 카메라, 거리연동계식, 일안리플렉스, 이안리플렉스 등이 있다.</span></li>
+      <li><span class="num">⑧</span><span class="content"><strong>대형 카메라</strong>: 주로 뷰카메라로 규격은 4×5inch, 5×7inch, 8×10inch, 11×14inch 등이 있고 프로 사진가들이 주로 사용한다. <span class="exam-tag">2023년 4회</span></span></li>
+      <li><span class="num">⑨</span><span class="content"><strong>자동초점 카메라</strong>: 대부분 촬영거리에 따라 초점을 맞추는 존 포커스(zone focus)방식, 초점조절을 셔터버튼을 누르면 전류가 흘러 자동으로 거리가 측정된다. <span class="exam-tag">2013년 1회</span> <span class="exam-tag">2019년 4회</span></span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="lec-header">
+      <span class="lec-badge">제2강</span>
+      <span class="lec-title">렌즈, 필터, 셔터의 종류 및 특징</span>
+    </div>
+
+    <!-- 20 렌즈 종류 -->
+    <h2 class="sec" id="s-20"><span class="sec-num">01</span> 렌즈의 종류 및 특징</h2>
+
+    <h3 class="sub">(1) 카메라에 있어서 매우 중요한 렌즈 <span class="exam-tag">2017년 2회</span> <span class="exam-tag">2018년 1회</span> <span class="exam-tag">2020년 3회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">카메라의 시초는 방만한 크기에 카메라 옵스쿠라에 구멍을 뚫어 그 구멍을 통해 들어오는 빛에 의해 생기는 상에 그림을 그려 내는 것으로부터 시작했는데 단점은 맺힌 상이 선명하지 않았기에, 선명한 상을 얻어내는 유일한 방법은 구멍(0.5mm 정도)을 최대한 작게 뚫고 노출시간을 길게 줘야 하는 단점이 있었다.</span></li>
+      <li><span class="num">②</span><span class="content">4세기 베니스의 귀족인 "다니엘로 바르바로(Danielo Barbaro)"는 구멍에 렌즈를 끼워 넣었다. 그 렌즈는 이전의 바늘구멍보다 훨씬 선명하고 밝은 상을 반대 벽면에 투영시켰다. 그로 인해 1초도 안 되는 노출시간으로도 충분히 사진을 만들 수 있었으며 현재는 "바르바로"가 사용했던 것처럼 볼록렌즈가 사용되고 있다.</span></li>
+      <li><span class="num">③</span><span class="content">렌즈를 구성하는 기본적인 특징은 초점거리, 렌즈의 밝기, 렌즈의 화각이며 렌즈표면에 코팅을 하는 주된 목적은 플레어나 고스트 이미지를 제거하기 위함이다. <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2017년 2회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(2) 렌즈의 종류 <span class="exam-tag">2023년 4회</span> <span class="exam-tag">2024년 2회</span></h3>
+
+    <h4 class="subsub">1) 표준렌즈(standard lens) <span class="exam-tag">2015년 1회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">표준렌즈는 인간의 시각과 가장 비슷한 느낌을 주는 렌즈로 35mm 필름 카메라에서 대략 50mm 정도의 초점거리를 갖는 렌즈를 말한다. 표준렌즈의 화각은 44~55° 정도이다.</span></li>
+      <li><span class="num">②</span><span class="content">인간의 시야각과 유사하고 광학적 왜곡이 적어 사진의 왜곡이 적기 때문에 자연스러운 느낌을 줄 수 있고 원근감이라든가 과장된 표현이 없게 찍을 수 있다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 초점거리(focal length) <span class="exam-tag">2011년 2회</span> <span class="exam-tag">2016년 1회</span></div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content">렌즈가 빛을 모아 초점을 맞추는 거리로, 렌즈의 굴절력에 따라 결정된다. 일반적으로 렌즈의 초점거리가 짧을수록 시야각이 넓고 물체가 커지며, 초점거리가 길수록 시야각이 좁아지고 물체가 작아진다.</span></li>
+        <li><span class="num">②</span><span class="content">초점거리는 mm 단위로 표시되며, 카메라나 렌즈의 뒷면에 표기된다. 예를 들어, 50mm 렌즈는 초점거리가 50mm인 렌즈를 말한다. 초점거리는 렌즈의 굴절력과 렌즈의 굴절점 사이의 거리에 따라 결정되기 때문에, 렌즈마다 다양한 초점거리를 가지고 있다.</span></li>
+        <li><span class="num">③</span><span class="content"><strong>표준렌즈의 초점거리</strong> <span class="exam-tag">2010년 2회</span> <span class="exam-tag">2012년 4회</span> <span class="exam-tag">2019년 4회</span><br>
+          · 4×5" 카메라에서의 표준렌즈는 150mm<br>
+          · 6×6" 카메라에서의 표준렌즈는 80mm<br>
+          · 35mm 카메라에서의 표준렌즈는 50mm</span></li>
+      </ul>
+    </div>
+
+    <h4 class="subsub">2) 장초점 렌즈(long focal length lens, 망원렌즈) <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2017년 2회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">표준렌즈에 비해 화각이 좁아 상을 확대시킨다. 근접촬영이 어려울 때 사용한다.(야생동물, 운동경기 등 촬영에 사용) <span class="exam-tag">2017년 4회</span></span></li>
+      <li><span class="num">②</span><span class="content">단초점렌즈와 달리 왜곡현상을 피할 수 있고 초점거리가 깊어 깊이감이 강조될 수 있다.</span></li>
+      <li><span class="num">③</span><span class="content">장초점 렌즈는 무게와 부피가 크며 값이 비싼 편이고 초점을 맞추기 어렵고 밝기가 낮아질 수 있다.</span></li>
+      <li><span class="num">④</span><span class="content">렌즈의 유효 초점 거리를 늘려주는 광학적 도구로, 렌즈와 카메라 사이에 장착해서 초점 거리를 늘리는 연장렌즈 또는 텔레컨버터가 있다.</span></li>
+      <li><span class="num">⑤</span><span class="content">장초점 렌즈의 화각(카메라로 포착하는 장면의 시야): <strong>30° 이하</strong></span></li>
+    </ul>
+
+    <h4 class="subsub">3) 단초점 렌즈(short focal length lens, 광각렌즈) <span class="exam-tag">2010년 1회</span> <span class="exam-tag">2011년 2회</span> <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2014년 4회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 2회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">화각을 증가시켜 표준렌즈로 찍은 이미지에 비해서 이미지의 크기가 줄어들게 하여 많은 광경을 보여 주는 렌즈로 좁은 장소에서 벽 등으로 인해 더 이상 물러날 수 없을 때 사용하면 편리하며 왜곡된 사진을 만들 수도 있어 때도 많이 사용된다.</span></li>
+      <li><span class="num">②</span><span class="content">일안 반사식 카메라를 사용할 때는 필름 면이 너무 가깝게 있어서 반사경 작동을 방해하므로 이트로 포커스 렌즈를 사용하면 이 문제를 해결할 수 있다.</span></li>
+      <li><span class="num">③</span><span class="content">광각렌즈의 초점거리는 필름 대각선의 2/3쯤 되고 광각렌즈는 24~35mm 정도의 초점거리를 가진다.</span></li>
+      <li><span class="num">④</span><span class="content">단초점 렌즈의 화각(카메라로 포착하는 장면의 시야): <strong>60~80° 이하</strong> <span class="exam-tag">2019년 1회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 렌즈의 유효구경 공식 <span class="exam-tag">출제빈도 매우 높음</span></div>
+      <p><strong>초점거리 : 유효구경 = 렌즈의 밝기 : 1</strong></p>
+      <p style="margin-top:8px">예) 초점거리가 90mm이고 렌즈의 밝기가 1.4일 때 렌즈의 유효구경은?<br>
+      50 : X = 1.4 : 1 → <strong>X = 35.7</strong></p>
+    </div>
+
+    <h4 class="subsub">4) 특수목적렌즈</h4>
+
+    <h4 class="subsub">가. 어안 렌즈(fisheye lens) <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2013년 2회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">초점거리가 아주 짧은 렌즈로 수중의 물고기가 위를 볼 때 물의 굴절률로 수면 위의 모든 것을 볼 수 있다는 뜻에서 유래된 어원을 갖는 렌즈이다. <span class="exam-tag">2010년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content">구면수차를 이용하여 만든 초광각렌즈로 180° 또는 그 이상의 시야를 갖는 화상을 어떤 한정된 크기의 범위에 마이너스의 왜곡을 갖게 결상시키는 렌즈이다. <span class="exam-tag">2018년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content">어안렌즈는 화각과 피사계 심도가 무척 크고 깊다. 또 곧은 직선이 볼록해지는 술통형 왜곡(마이너스의 왜곡)이 생겨서 화면의 가장자리에서 직선이 곡선으로 휘어진다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 수차(aberration) <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2023년 4회</span></div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content">수차란 렌즈에 상이 맺힐 때 한 점에서 나온 빛이 광학계를 지난 다음 한 점에 모이지 않고 화상이 일그러지거나 흐리게 보인다든가 콘트라스트를 떨어뜨려 색을 번지게 하는 현상을 말한다. 피사체의 상을 변형시키거나 흐리게 보인다. 수차는 구면수차, 코마수차, 비점수차, 상면만곡수차, 왜곡수차이다.</span></li>
+        <li><span class="num">②</span><span class="content"><strong>색수차</strong>: 프리즘을 통한 후 무지개가 생기는 것은 색수차에 의한 것이다. 이러한 색수차는 사진에서 여러 가지 문제를 일으킨다. 입사한 빛이 렌즈를 통과하면서 굴절의 차이로 분산이 파장대별로 각기 다른 곳에 초점이 생겨 화상의 선명도가 저하되는 현상을 말한다. <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2020년 3회</span></span></li>
+      </ul>
+    </div>
+
+    <h4 class="subsub">나. 연초점 렌즈(soft-focus lens, 포트레이트 렌즈)</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">연초점 렌즈는 포트레이트나 풍경사진 등을 찍을 때, 특별한 효과를 내기 위해 사용되는 렌즈로 초상사진용 렌즈(portrait lens)라고도 불리며 의도적으로 수차가 생기도록 설계한 렌즈로 초점을 조절하여, 이미지의 테두리를 부드럽게 처리하고 중앙 부분만 선명하게 보이도록 만들어져 있다.</span></li>
+      <li><span class="num">②</span><span class="content">연초점 렌즈는 사진 속 인물의 피부를 부드럽고 촉감 있게 만들어내는 효과를 얻을 수 있고 연초점 렌즈는 빛의 반사와 확산을 통해 부드러운 빛의 감촉을 전달하며, 고해상도의 렌즈보다 부드러운 이미지를 제공한다.</span></li>
+    </ul>
+
+    <h4 class="subsub">다. 시프트 렌즈(shift lens)</h4>
+    <p>35mm 카메라에서 대형카메라의 무브먼트 효과를 낼 수 있으며 건축물이나 실내인테리어 사진을 촬영할 때 수직·수평선이 왜곡되어 일그러지거나 원근감이 과장되는 현상을 줄이거나 조명이 부족한 실내에서 전체적인 이미지를 밝게 만들 수 있다. <span class="exam-tag">2017년 2회</span> <span class="exam-tag">2018년 1회</span> <span class="exam-tag">2018년 4회</span></p>
+
+    <h4 class="subsub">라. 컨버전 렌즈(conversion lens)</h4>
+    <p>촬영용 렌즈의 앞 또는 뒤에 설치하여 초점거리를 늘려주어 망원 효과를 얻을 수 있는 렌즈로 비용을 절약하면서도 다양한 화각을 쉽게 구현할 수 있다. <span class="exam-tag">2019년 2회</span></p>
+
+    <!-- 21 렌즈 성능 -->
+    <h2 class="sec" id="s-21"><span class="sec-num">02</span> 렌즈의 성능</h2>
+
+    <h3 class="sub">(1) 초점과 피사계 심도</h3>
+
+    <h4 class="subsub">가. 피사계 심도(depth of field) <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 2회</span> <span class="exam-tag">2024년 3회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">피사계 심도는 사진에서 초점이 맞은 부분을 중심으로 전방과 후방으로 일정 영역 내에서 선명하게 보이는 범위를 말한다.</span></li>
+      <li><span class="num">②</span><span class="content">일반적으로 피사체에 초점을 맞추면 그 초점 주변의 일정 범위 안에 있는 피사체들이 선명하게 나타나며, 사람들은 이 선명한 영역을 먼저 인지하게 된다. 이러한 요소들이 결합하여 피사계 심도가 형성된다.</span></li>
+      <li><span class="num">③</span><span class="content">초점을 맞춘 피사체에서 가장 선명하게 보이는 부분을 "임계 초점면(plane of critical focus)"이라고 한다. <span class="exam-tag">2019년 1회</span> <span class="exam-tag">2019년 2회</span></span></li>
+    </ul>
+
+    <h4 class="subsub">나. 피사계 심도를 조절하는 법 <span class="exam-tag">출제빈도 매우 높음</span></h4>
+    <p>피사계 심도는 조리개 값, 초점거리, 촬영거리 등의 영향을 받는다.</p>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>조리개 값(aperture)</strong>: 조리개는 렌즈 내부의 작은 구멍으로, 빛이 들어오는 양을 조절한다. 조리개의 크기가 작을수록(조리개 값이 크면) 빛이 제한되어 더 넓은 영역이 피사계 심도 안에 포함된다. 따라서 조리개 값이 클수록 피사계 심도가 깊어진다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>초점거리(focal length)</strong>: 초점거리는 카메라 렌즈의 초점을 맞춘 거리를 의미한다. 초점거리가 길면(즉, 망원 렌즈를 사용하면) 피사계 심도가 얕아지고, 초점거리가 짧으면(즉, 광각 렌즈를 사용하면) 피사계 심도가 깊어진다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>촬영거리(distance to subject)</strong>: 피사체와 카메라의 거리도 피사계 심도에 영향을 준다. 피사체와 카메라의 거리가 멀면 피사계 심도가 깊어지고, 거리가 가까우면 피사계 심도가 얕아진다.</span></li>
+    </ul>
+
+    <h4 class="subsub">다. 피사계 심도 촬영법</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>팬 포커스(pan focus)</strong>: 이 촬영법은 가까운 거리부터 먼 거리까지 전체 영역을 선명하게 촬영하는 것을 목표로 한다. 이를 위해 피사계 심도를 가능한 한 길게 설정하고, 조리개 값을 크게 선택하여 빛이 넓은 범위에 퍼지도록 한다. 이 방법은 풍경 사진이나 건물 등 넓은 영역을 담은 사진에서 자주 사용된다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>인 포커스(in focus)</strong>: 인 포커스는 주로 주제를 강조하기 위해 사용되는 촬영법으로 주제를 중심으로 피사계 심도를 얕게 설정하여, 앞은 흐리고 뒷부분은 선명하게 촬영하는 것으로 이를 위해 조리개 값을 작게 선택하여 빛을 제한된 영역에 집중시킨다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>아웃 포커스(out focus)</strong>: 아웃 포커스는 대상을 선명하게 표현하면서 배경을 흐리게 만들어 독특한 시각적 효과를 연출하는 촬영법이다. 이를 위해 피사계 심도를 얕게 설정하고, 조리개 값을 크게 선택하여 배경에 흐릿함을 부여한다. 이 방법은 주로 초점을 맞춘 대상이 독특하거나 아름다운 형태를 가지고 있을 때 사용되며, 주로 인물 사진이나 꽃 사진 등에서 활용된다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 렌즈에 생기는 현상들</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>플레어(flare) 현상</strong> <span class="exam-tag">2024년 1회</span> — 렌즈와 카메라의 내부에서 광선이 반사를 일으켜 생기는 현상이다. 렌즈후드는 플레어 현상을 효과적으로 방지해 준다. 단, 화면의 가장자리가 둥글게 가려지는 비네팅(vignetting) 현상을 주의해야 한다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>고스팅(ghosting)</strong> <span class="exam-tag">2017년 2회</span> — 태양이나 밝은 전구와 같은 강렬한 광원이 렌즈의 화각 안에 들어와 조리개 모양의 이미지가 생기는 현상을 말한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>안개현상(fogging)</strong> — 사진 이미지가 안개처럼 뿌옇게 흐려지는 현상으로 포그현상이라고 한다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>적목현상(red eye effect)</strong> <span class="exam-tag">2014년 1회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 2회</span> — 어두운 장소에서 플래시를 이용하여 인물 사진을 찍으면 눈의 동공이 빨갛게 나타나는 현상을 말한다.</span></li>
+    </ul>
+
+    <!-- 22 필터 -->
+    <h2 class="sec" id="s-22"><span class="sec-num">02</span> 필터의 종류 및 특징</h2>
+
+    <h3 class="sub">(1) 필터(filter)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">필터는 불필요한 파장을 제거하거나 사진의 대상물을 다르게 보이도록 하는 장치로 주로 젤라틴이나 유리로 만들어진다. 렌즈 앞에 필터를 끼어서 사용을 하게 되면 필름에 도달하는 광선의 성질이 달라진다. <span class="exam-tag">2017년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content">젤라틴 필터는 렌즈 앞에 부착하거나 필터 홀더에 넣어서 사용한다. 투과력이 우수하며 해상력에 큰 변화가 없는 필터이다.</span></li>
+      <li><span class="num">③</span><span class="content">유리필터는 렌즈 앞에 끼우도록 되어 있으며 젤라틴보다 사용하기 편하지만 값이 비싸다. 그리고 필터를 설치할 경우 노출을 더 주어야 한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 필터의 종류</h3>
+
+    <h4 class="subsub">1) 컬러 필터(colored filter) <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2020년 2회</span></h4>
+    <p>컬러 필터는 특정 색상의 광선을 강조하거나 차단하여 사진의 색조나 대비를 조절하는 필터이다. 이러한 필터는 주로 흑백사진 촬영에서 사용되며, 특정 색상을 강조하거나 억제하여 명암을 더욱 강조하거나 부드럽게 만들 수 있다.</p>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 컬러 필터 <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2015년 1회</span> <span class="exam-tag">2017년 2회</span></div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content"><strong>빨간색(R) 필터</strong>: 빨간색 필터는 푸른색(Cyan)을 억제하여 흑백사진에서 빨간색 대상을 강조한다. 주로 피부 톤을 부드럽게 만들거나 하늘의 대비를 높이는 데 사용된다.</span></li>
+        <li><span class="num">②</span><span class="content"><strong>녹색(G) 필터</strong>: 녹색 필터는 빨간색(Magenta)과 일부 파란색을 억제하여 흑백사진에서 녹색 대상을 강조한다. 주로 풍경 사진에서 식물이나 잎사귀의 세부사항을 강조하거나 대비를 조절하는 데 사용된다.</span></li>
+        <li><span class="num">③</span><span class="content"><strong>파랑(B) 필터</strong>: 파랑 필터는 노란색(Yellow)을 억제하여 흑백사진에서 파란색 대상을 강조한다. 주로 흑백사진의 대비 또는 푸른 하늘의 대비를 높이거나 수중 사진의 색상 보정에 사용된다.</span></li>
+      </ul>
+    </div>
+
+    <h4 class="subsub">2) ND 필터(neutral-density filter) <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2015년 2회·4회</span> <span class="exam-tag">2018년 2회</span> <span class="exam-tag">2024년 3회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">ND 필터는 광선의 모든 파장을 고르게 흡수하거나 컬러 밸런스를 그대로 유지시키면서 필름이나 디지털 센서에 도달하는 빛의 양을 조절한다. 색과는 관계없이 노출광량만을 조절하기 위한 중성회색 필터로 색균형에는 영향을 주지 않는 필터이다.</span></li>
+      <li><span class="num">②</span><span class="content">ND 필터는 강한 광선 조건에서 매우 빠른 감도의 필름을 사용하거나 느린 셔터 스피드로 촬영을 원할 때 사용된다. 감도를 낮추기 위해 ND 필터를 사용하면 셔터 스피드를 느리게 조절하여 더 많은 빛을 캡처할 수 있다. 이는 노출 시간을 조절하여 흐릿한 움직임 효과나 장면의 동적인 표현을 담기 위해 사용될 수 있다.</span></li>
+    </ul>
+
+    <h4 class="subsub">3) 편광 필터(PL 필터: polarizing light filter) <span class="exam-tag">2014년 1회</span> <span class="exam-tag">2015년 2회</span> <span class="exam-tag">2015년 4회</span> <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2017년 2회</span> <span class="exam-tag">2018년 2회</span></h4>
+    <p>편광 필터는 촬영 환경에서 편광 빛을 조절하는 데 사용되는 광학 필터이다. 이 필터는 특정 방향으로 진동하는 빛을 차단하고 특정 방향의 빛을 선택적으로 통과시킴으로써 다양한 효과를 얻을 수 있다. 불투명한 표면 반사 감소, 하늘의 푸른색 강조, 물과 유리의 반사제어, 색상 포화도 향상시킬 수 있으며 흑백이나 컬러사진에 모두 사용한다.</p>
+
+    <h4 class="subsub">4) 특수효과를 주는 필터들</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>포그 필터(fog filter)</strong>: 안개 효과를 주기 위해 사용되는 필터 <span class="exam-tag">2009년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>FL 필터(fluorescent filter)</strong>: 녹색광을 제거하기 위한 필터 <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2016년 2회</span></span></li>
+      <li><span class="num">③</span><span class="content"><strong>UV 필터</strong>: 자외선을 차단하고 동시에 렌즈를 보호하는 무색필터 <span class="exam-tag">2006년 2회</span></span></li>
+      <li><span class="num">④</span><span class="content"><strong>색온도 변환필터(color temperature conversion filter)</strong>: 사용하는 필름과 광원의 광질 차이에서 오는 색조의 불균형을 맞추기 위한 필터 <span class="exam-tag">2016년 2회</span> <span class="exam-tag">2021년 2회</span></span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>SL 필터(sky light filter)</strong>: 스카이라이트 필터로 자외선을 흡수하여 푸른색을 막기 위한 컬러 촬영용 필터 <span class="exam-tag">2012년 1회</span></span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>젤라틴 필터(gelatin filter)</strong>: 투과력이 우수하며 해상력에 큰 변화가 없는 필터 <span class="exam-tag">2012년 4회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 기타 흑백사진용 콘트라스트 강조용 필터의 종류 <span class="exam-tag">2018년 1회</span></div>
+      <ul class="list-num">
+        <li><span class="num">①</span><span class="content">Y1, Y2, Y3(Yellow): 흑백사진에서 강조용 필터로 사용</span></li>
+        <li><span class="num">②</span><span class="content">O1, O2, O3(Orange): 흑백사진에서 강조용 필터로 사용, Yellow보다 강한 느낌</span></li>
+        <li><span class="num">③</span><span class="content">R1, R2, R3(Red): 흑백사진에서 강조용 필터로 사용, 가장 강한 콘트라스트 강조 효과를 가진다.</span></li>
+        <li><span class="num">④</span><span class="content">YG(Yellow Green): 자외선과 빨강, 파랑을 흡수하여 검게 묘사; 인물이나 정물의 정색 묘사용으로 사용하는 필터</span></li>
+      </ul>
+    </div>
+
+    <!-- 23 셔터 -->
+    <h2 class="sec" id="s-23"><span class="sec-num">03</span> 셔터의 종류 및 특징</h2>
+
+    <h3 class="sub">(1) 셔터(shutter) <span class="exam-tag">2015년 2회</span> <span class="exam-tag">2020년 1·2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">사진이 너무 밝거나 어둡지 않게 하기 위해서는 필름에 도달하는 빛의 양을 적절히 조절해야 하는데, 대표적으로 셔터와 조리개로 광량을 조절할 수 있다. <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2017년 4회</span></span></li>
+      <li><span class="num">②</span><span class="content">셔터는 카메라 내부에 위치한 구조로 촬영시간을 조절하여 빛이 필름에 도달하는 시간을 제어한다. 셔터가 열려 있는 시간은 시간의 분모로만 표시한다. 예를 들어 1이라고 하는 것은 1초를, 2라는 것은 1/2초를, 4로 표시하는 것은 1/4초를 의미한다. 1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000 등으로 표시할 수 있으며, 숫자가 커질수록 셔터속도가 빨라진다. <span class="exam-tag">2013년 1회</span> <span class="exam-tag">2015년 2회</span> <span class="exam-tag">2016년 2회</span> <span class="exam-tag">2024년 2회</span></span></li>
+    </ul>
+
+    <h3 class="sub">(2) 셔터의 종류</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>B(Bulb) 셔터</strong>: 셔터를 누르고 있는 동안 렌즈가 계속해서 열려 있도록 설계된 단시간 노출용의 셔터이다. <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2019년 2회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>T(Time) 셔터</strong>: 릴리즈를 한 번 누르면 셔터가 열리고, 다시 누를 때까지 계속 열려 있도록 설계되었다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>전자셔터</strong>: 1/38초와 같이 어떤 속도도 조절이 가능하다. 하지만 일반적인 카메라에서 셔터 속도를 임의로 조정하는 것은 불가능하다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>리프 셔터(leaf shutter)</strong>: 여러 개의 금속 날이 얇게 겹쳐져서 셔터를 누르면 금속 날이 열렸다가 다시 닫히게 설계된 셔터로 일반적으로 렌즈 안에 설치가 된다. 기계작동 소음이 적으며 플래시 사용이 가능하다. <span class="exam-tag">2023년 4회</span></span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>포컬 플레인 셔터(focal plane shutter)</strong>: 초점 면이나 필름 면 바로 앞에 설치되어 있으며, 선막과 후막이라고 하는 2매의 천이나 금속 막으로 이루어져 있어서 셔터막이 옆으로 움직이는 속도와 슬리트(slit)폭을 변화시켜 시간을 조절하는 셔터로 렌즈교환식 사진기에 설치해 사용한다. <span class="exam-tag">2010년 4회</span> <span class="exam-tag">2012년 1회</span> <span class="exam-tag">2015년 1회</span> <span class="exam-tag">2020년 3회</span> <span class="exam-tag">2021년 2회</span></span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 접점 <span class="exam-tag">2010년 4회</span></div>
+      <p>셔터가 열림과 동시에 플래시의 전기접점이 작동하도록 되어 있는 스트로보용 카메라의 전기적 연결장치</p>
+      <ul class="list-num" style="margin-top:8px">
+        <li><span class="num">①</span><span class="content">X접점: 스트로보용</span></li>
+        <li><span class="num">②</span><span class="content">M접점: M급 섬광전구용</span></li>
+        <li><span class="num">③</span><span class="content">FP접점: 포컬 플레인 셔터와 FP급 섬광전구용</span></li>
+        <li><span class="num">④</span><span class="content">F접점: F급 섬광전구용</span></li>
+      </ul>
+    </div>
+
+    <!-- 24 조리개·노출계 -->
+    <h2 class="sec" id="s-24"><span class="sec-num">04</span> 기타 부속기기의 종류 및 특징</h2>
+
+    <h3 class="sub">(1) 조리개(aperture) <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2020년 1·2회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 2회</span></h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">조리개는 렌즈 내부에 위치한 구조로 조리개의 크기를 조절함으로써 필름에 도달하는 빛의 양을 조절할 수 있다. 사람의 눈에서 동공과 같은 역할을 하는 것으로 렌즈 안에 규칙적으로 겹쳐진 얇은 금속판으로 되어 있다.</span></li>
+      <li><span class="num">②</span><span class="content">셔터속도가 빛이 필름에 닿는 시간의 양을 조절한다면, 조리개는 광선의 양을 조절하게 된다. 셔터와 조리개는 반대로 조절이 된다. 셔터속도가 한 단 올라가면 조리개의 광량은 반으로 줄게 되고 반대로 셔터 속도가 한 단 내려가면 조리개의 광량은 2배로 늘어난다. 셔터와 조리개는 서로 상호 보완적으로 동작하여 빛의 양을 제어한다. <span class="exam-tag">예: 1/60초에 f/5.6 = 1/125초에 f/4</span></span></li>
+      <li><span class="num">③</span><span class="content">렌즈 구경의 크기는 <strong>f 스톱(f-stop)</strong>, 또는 <strong>f 넘버(f-number)</strong>로 표시한다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · f 스톱</div>
+      <p>렌즈의 구경을 표시할 때 사용된다. 렌즈의 구경을 작게 했을 경우 "조리개를 닫았다(stop down)"라고 표현한다.</p>
+      <p style="margin-top:8px"><strong>표준화된 f 스톱의 숫자는</strong> f 1.4, f 2, f 2.8, f 4, f 5.6, f 8, f 11, f 16, f 22, f 32, f 45, f 64의 배열로 되어 있다. f 8에서 촬영을 하다가 다른 조건은 그대로 두고 f 11로 설정을 했다면 밝기의 변화는 1/2 감소한다.</p>
+    </div>
+
+    <h4 class="subsub">⑤ 조리개 값 계산하기</h4>
+    <div class="point-box">
+      <div class="point-label">공식 · 스트로보(카메라의 외장 플래시)의 가이드 넘버 <span class="exam-tag">출제빈도 매우 높음</span></div>
+      <p><strong>가이드 넘버 = 조리개 값 × 촬영거리</strong></p>
+      <p style="margin-top:6px">예) 가이드 넘버가 32인 스트로보로 조명거리가 4m인 피사체를 촬영할 때 적정 조리개 값은 f/8가 된다.</p>
+    </div>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 가이드 넘버(guide number) <span class="exam-tag">2024년 2회</span></div>
+      <p>주어진 필름 감도를 사용할 때 플래시를 사용하기 위한 비율로 ASA(ISO)100의 감도를 기준으로 측정된 플래시의 빛세기를 말하며 숫자가 크면 빛의 세기가 크다.</p>
+    </div>
+
+    <h3 class="sub">(2) 노출계(light meter)</h3>
+    <p>필름에 적당한 양의 빛을 카메라로 조절하여 공급해주는 것을 노출이라고 한다. 너무 어둡거나 밝지 않은 사진을 찍기 위해서는 정확한 노출량을 계산하는 노출계(exposure meter)를 사용하게 된다. 노출은 피사체의 명암, 피사체의 상태(색채, 거리, 장소), 사용 필름에 따라 결정된다. <span class="exam-tag">2015년 1회</span></p>
+
+    <h4 class="subsub">가. 반사광식 노출계(reflected-light meter) <span class="exam-tag">2009년 4회</span> <span class="exam-tag">2020년 1·2회</span> <span class="exam-tag">2023년 2회</span> <span class="exam-tag">2024년 1회</span></h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">피사체에 빛이 반사되어 나오는 노출값을 측정하는 방식으로 광선의 명도를 측정할 때 사용한다.</span></li>
+      <li><span class="num">②</span><span class="content">광선을 받아들이는 각도는 표준렌즈의 화각과 같은 30~50° 사이이다.</span></li>
+      <li><span class="num">③</span><span class="content">좁은 범위의 정밀한 노출 측정이나 좋은 풍경 등 원거리 피사체의 노출을 측정할 때 도움이 된다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 스포트 노출계 <span class="exam-tag">2014년 4회</span> <span class="exam-tag">2015년 2회</span> <span class="exam-tag">2016년 2회</span></div>
+      <p>피사체를 선택적으로 1~5° 정도의 좁은 부분만 측정하고자 할 때 사용하는 반사광식 노출계</p>
+    </div>
+
+    <div class="point-box">
+      <div class="point-label">POINT · TTL 노출계</div>
+      <p>카메라에 노출계를 조립해 넣을 때는 일반적으로 수광부를 렌즈와는 다른 위치에 고정시키며, 수광부가 렌즈의 뒤쪽에 주로 일안(一眼) 리플렉스 파인더의 광학계 내에 조립되어 렌즈의 투과광(透過光)으로 노출을 측정하는 방식</p>
+    </div>
+
+    <h4 class="subsub">나. 입사광식 노출계(incident-light meter)</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">반사광식 노출계와 달리 피사체가 직접 받아들이는 빛의 노출값을 측정하는 방식으로 광선의 조도를 측정할 때 사용한다.</span></li>
+      <li><span class="num">②</span><span class="content">180° 정도의 넓은 측정각도를 갖는다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+    <div class="section-part">Ⅴ. 촬영조건의 결정</div>
+
+    <div class="lec-header">
+      <span class="lec-badge">제1강</span>
+      <span class="lec-title">촬영조건 및 방법</span>
+    </div>
+
+    <!-- 25 조명 -->
+    <h2 class="sec" id="s-25"><span class="sec-num">01</span> 피사체의 특징에 따른 촬영조건 및 방법</h2>
+
+    <h3 class="sub">(1) 조명(lighting)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">물체의 질감과 양감을 주는 조명은 조명 방향과 확산 정도에 의해 그림자의 농도를 조절할 수 있다. 컬러필름을 사용할 때는 조명의 색이 중요한 역할을 한다. 조명에는 직접광과 확산광, 보조광 등이 있다. <span class="exam-tag">2010년 1회</span> <span class="exam-tag">2016년 1회</span></span></li>
+      <li><span class="num">②</span><span class="content">조명의 직접광은 명확한 분리선과 짙은 그림자 효과를 낼 수 있고 확산광은 여러 방향에서 피사체를 조사하게 되어 부드러운 광선과 약한 그림자 효과를 얻을 수 있다. 보조광은 반사판을 이용하고 스플릿라이팅, 소프트라이팅, 브로드라이팅 등을 이용해 부드러운 조명을 얻는 데 사용한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>조명의 방향</strong> <span class="exam-tag">2012년 1회</span> <span class="exam-tag">2013년 2회</span> <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2015년 2회</span><br>
+      조명의 방향에 따라 상단조명(top light), 측면조명(side light), 정면조명(front light), 후면조명(back light), 하단조명(under lighting)으로 나뉜다.</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>조명 방향</th><th>별칭</th><th>특징</th><th>주요 출제</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-key">정면조명(front light)</td>
+            <td>정면광, 순광</td>
+            <td>그림자가 피사체 뒤로 생기는 평범하고 평면적인 조명이다.</td>
+            <td><span class="exam-tag">2015년 1회</span></td>
+          </tr>
+          <tr>
+            <td class="td-key">측면조명(side light)</td>
+            <td>사면광, 사광</td>
+            <td>45° 조명으로 적당한 입체감과 깊이가 표현되며 모든 조명의 기본적인 조명이다.</td>
+            <td><span class="exam-tag">2014년 2회</span> <span class="exam-tag">2017년 4회</span> <span class="exam-tag">2024년 1회</span></td>
+          </tr>
+          <tr>
+            <td class="td-key">상단조명(top light)</td>
+            <td>-</td>
+            <td>인물의 머리 위에서 90° 각도로 비추는 빛, 입체감이 강조되고 콘트라스트가 힘 있는 표현과 인물의 눈 주위나 코, 턱 밑에 아주 짙은 그림자를 만든다. 굴곡이 큰 서양인에게 적합하다.</td>
+            <td><span class="exam-tag">2015년 2회</span> <span class="exam-tag">2016년 4회</span></td>
+          </tr>
+          <tr>
+            <td class="td-key">후면조명(back light)</td>
+            <td>역광</td>
+            <td>뒤쪽에서 비추는 빛으로 가장자리에 후광 같은 형태를 만든다. 실루엣 촬영 시 용이하다.</td>
+            <td><span class="exam-tag">2011년 2회</span> <span class="exam-tag">2012년 2회</span> <span class="exam-tag">2014년 2회</span></td>
+          </tr>
+          <tr>
+            <td class="td-key">하단조명(under light)</td>
+            <td>-</td>
+            <td>아래에서 위로 비추는 빛으로 자연에 거의 없는 조명으로 얼굴이 부자연스럽고 이상하게 보인다.</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 조명비(ratio) <span class="exam-tag">2014년 1회</span></div>
+      <p>피사체에 조명이 비치는 부분과 그림자가 진 부분의 밝기 차이를 조명비라 한다. 조명비가 커질수록 콘트라스트가 강해진다.</p>
+      <ul class="list-bullet" style="margin-top:8px">
+        <li>1:1 조명이 비추는 면과 그림자의 차이가 없다.</li>
+        <li>2:1 밝은 부분의 그림자보다 2배 밝다.</li>
+      </ul>
+    </div>
+
+    <!-- 26 접사·구도·기타 -->
+    <h2 class="sec" id="s-26"><span class="sec-num">02</span> 접사·구도·기타 촬영기법</h2>
+
+    <h3 class="sub">(2) 접사(close-up) <span class="exam-tag">2015년 1회</span> <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2024년 2회</span></h3>
+
+    <h4 class="subsub">1) 접사기법(close-up techniques)</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">가까운 거리에서 커다란 이미지를 찍을 때 사용하는 근접촬영기법으로 접사기법을 이용하면 보다 좋은 결과를 얻을 수 있다.</span></li>
+      <li><span class="num">②</span><span class="content">촬영 시 삼각대를 반드시 사용해야 하는데, 그 이유는 카메라가 피사체에 가까이 다가가게 되면 피사계 심도가 떨어져 약간의 변화에도 초점이 변하기 때문이다.</span></li>
+      <li><span class="num">③</span><span class="content">일안 반사식 카메라와 뷰카메라는 직접렌즈를 통해 보면서 촬영하기에 접사하기 쉽다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 구도</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">구도란 화면을 어떻게 구성할 것인가를 말한다. 또한 필름의 화면 위에 작가의 정신세계를 점진적으로 구성해 나가는 기법인 동시에 사진의 주제를 어떠한 방법으로 배치하여 더욱 효과적이고 아름다운 구성을 할 것인가를 결정하는 일이다.</span></li>
+      <li><span class="num">②</span><span class="content">구도를 결정하는 요소에는 점과 선, 면이 있으며, 여기에 명암, 색채 등을 화면 속에 잘 배치하여 안정감 있고 보기 좋은 사진이 되게 해야 한다.</span></li>
+      <li><span class="num">③</span><span class="content">사진에 있어서 <strong>"선, 형, 명암의 톤"</strong>이 구도의 3요소이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(4) 기타 촬영기법</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>패닝(panning) 기법</strong>: 움직이는 물체의 속도와 진행방향에 맞춰서 카메라를 이동시키며 촬영하는 기법으로 알맞은 흐름과 셔터 속도의 선택이 중요하다. 패닝을 할 수 있는 피사체는 카메라에 대해 90° 각도로 이동하는 것이 좋다. <span class="exam-tag">2011년 2회</span> <span class="exam-tag">2013년 4회</span> <span class="exam-tag">2014년 1회</span> <span class="exam-tag">2014년 2회</span> <span class="exam-tag">2016년 4회</span> <span class="exam-tag">2021년 2회</span> <span class="exam-tag">2024년 2회·3회</span></span></li>
+      <li><span class="num">②</span><span class="content"><strong>주밍(zooming) 기법</strong>: 스포츠 사진에서 피사체를 중심으로 한 배경을 방사형태로 표현하고자 할 때의 촬영기법을 말한다.</span></li>
+    </ul>
+
+    <div class="section-part">Ⅴ. 촬영조건의 결정 · 계속</div>
+
+    <h2 class="sec" id="s-27"><span class="sec-num">03</span> 부속기기의 선정 및 사용법</h2>
+
+    <h3 class="sub">(1) 촬영 목적에 적합한 부속기기의 선정 및 사용법</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>렌즈 후드(lens hood)</strong> — 카메라의 시각 밖에서 오는 유해광선을 막아주어 선명한 상을 얻을 수 있도록 해주는 장치로, 렌즈 플레어 현상을 줄여 준다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>파인더(finder)</strong> — 아이레벨 파인더와 웨이스트레벨 파인더가 있다. 아이레벨 파인더는 펜타프리즘이라고도 하며 피사체 상을 정립정상으로 보면서 촬영할 수 있도록 도와주고, 웨이스트레벨 파인더는 상하좌우 역상으로 보며 촬영하는 장치이다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>삼각대(tripod)</strong> — 카메라의 흔들림을 방지해 주는 장치로 스냅촬영, 정밀묘사, 야경촬영 등에 사용된다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>모터 드라이브</strong> — 전동 모터 장치에 의해 필름 감기나 셔터 조작 등이 자동으로 되는 장치이다.</span></li>
+    </ul>
+
+    <hr class="sec-divider">
+
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPTER 02 · 계속</span>
+      <span class="chapter-title-text">사진재료 · 현상 · 인화</span>
+    </div>
+
+    <div class="section-part">Ⅵ. 사진재료</div>
+
+    <h2 class="sec" id="s-28"><span class="sec-num">01</span> 감광재료의 종류, 성질, 용도, 구조, 취급과 보관</h2>
+
+    <h3 class="sub">(1) 필름의 특성</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>감광도(sensitivity)</strong> — 감광재료가 일정한 빛에 대해 반응하는 속도로서, 일정한 양의 빛에서 빛에 반응하는 속도에 따라 나눈 값이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>감색성(color sensitivity)</strong> — 감광재료가 빛의 파장, 즉 색에 대해 느끼는 성질을 말한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>포그(fog)</strong> — 빛을 받지 않은 할로겐화은이 어느 정도 현상되어 나와 입상성과 해상력이 많이 떨어져 나오는 현상이다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>해상력(resolving power)</strong> — 렌즈의 결상 능력이나 감광재료의 묘사 능력을 표시하는 것으로 피사체를 정확하게 묘사하는 정도를 말한다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>입상성(graininess)</strong> — 필름의 유제 안에 입자가 어느 정도 가늘고 고르게 분포되어 있는가를 나타내는 정도이다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>관용도(latitude)</strong> — 노출의 과부족을 어느 정도 허용하느냐의 허용 범위를 나타낸다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>콘트라스트(contrast)</strong> — 피사체의 밝고 어두움의 차이를 나타내는 것으로, 연조·중간조·경조의 특성과 현상 시간, 인화지 호수, 필름 감도 등에 의해 달라진다.</span></li>
+      <li><span class="num">⑧</span><span class="content"><strong>이레이디에이션(irradiation)</strong> — 필름 유제층에 입사한 빛의 일부가 유제층 안에서 반사 또는 굴절하여 화상의 선명도를 낮추는 현상이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 감도(film speed)의 표시법</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">필름 감도는 숫자가 클수록 감광도가 높고, 적정 노출을 얻기 위해 필요한 광량은 적어진다. 일반적인 저감도 필름은 할로겐화은 입자가 가늘고 고르게 분포되어 있는 미립자형이다.</span></li>
+      <li><span class="num">②</span><span class="content">등급체계는 보통 <strong>ISO 50 = 저감도</strong>, <strong>ISO 100 = 중감도</strong>, <strong>ISO 400 = 고감도</strong>, <strong>ISO 1000 이상 = 초고감도</strong>로 구분한다.</span></li>
+      <li><span class="num">③</span><span class="content">감도 표시는 <strong>ASA</strong>, <strong>ISO</strong>, <strong>DIN</strong>으로 나눌 수 있으나 현재는 ISO가 주로 사용된다. 예: 100/21, 200/24, 400/27.</span></li>
+    </ul>
+
+    <h2 class="sec" id="s-29"><span class="sec-num">02</span> 현상품의 종류, 성질, 용도</h2>
+
+    <h3 class="sub">(1) 현상액(developer)</h3>
+    <p>촬영에 의해 만들어진 잠상을 눈에 보이는 실상으로 만들어 주는 약품으로, 온도가 높거나 습기가 많은 곳에 보관하면 안 된다. 특히 유효기간 내에 사용해야 하며 황화수소, 암모니아 가스가 발생하는 곳에 보관해서는 안 된다.</p>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 잠상(latent image)</div>
+      <p>사진 감광판을 놓고 노광벽에 노출하면 감광판에서는 눈에 보이지 않는 피사체의 영상이 기록되는데, 이 상태를 잠상이라 한다.</p>
+    </div>
+
+    <h3 class="sub">(2) 현상주약과 보조약</h3>
+    <h4 class="subsub">가. 현상주약</h4>
+    <ul class="list-bullet">
+      <li>메톨(metol)</li>
+      <li>하이드로퀴논(hydroquinone)</li>
+      <li>페니돈(phenidone)</li>
+    </ul>
+
+    <h4 class="subsub">나. 보조약</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>현상촉진제</strong> — 붕사(Na₂B₄O₇·10H₂O), 수산화나트륨(NaOH), 탄산수소나트륨(NaHCO₃) 등을 사용한다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>보항제(산화방지제)</strong> — 사진 현상액이 산화하여 현상능력이 떨어지는 것을 막기 위해 아황산나트륨을 사용한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>억제제(restrainer)</strong> — 필름이나 인화지의 현상액에 포함되어 있는 현상 보조약으로, 빛을 받지 않은 부분이 현상되어 나타나는 포그를 방지하는 역할을 하며 브롬화칼륨, 브롬화나트륨, 요오드화칼륨 등을 사용한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 현상액의 종류</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>MQ 현상액</strong> — 코닥 계열의 현상액으로 미립자 현상액이며, 현상주약이 메톨과 하이드로퀴논 중심인 약품이다. 톤이 좋고 사용하기 편리하여 가장 보편적으로 쓰인다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>PQ 현상액</strong> — 페니돈과 하이드로퀴논이 중심인 약품으로 많은 양을 처리할 수 있고 현상시간을 연장해도 입자가 거칠지 않으며 콘트라스트도 그리 강하지 않아 증감현상력이 좋다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 메톨과 하이드로퀴논</div>
+      <ul class="list-bullet">
+        <li><strong>메톨</strong> — 흑화 진행이 빠르며 새도(shadow)에 대한 현상능력이 좋다.</li>
+        <li><strong>하이드로퀴논</strong> — 온도에 가장 민감한 약품으로 흑화 진행이 느리며 높은 콘트라스트의 경조를 만든다.</li>
+      </ul>
+    </div>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 페니돈 / 증감현상</div>
+      <p><strong>페니돈</strong>은 단독 사용 시 현상능력이 떨어지지만 하이드로퀴논과 함께 쓰면 현상능력이 커지고 포그와 입상성에 대한 영향을 적게 받는다.</p>
+      <p><strong>증감현상</strong>은 필름의 실제 감도를 높여 현상하는 방법으로, 예를 들어 감도 100인 필름을 400으로 세팅해 촬영한 뒤 현상시간을 연장해 노출 부족을 보상하는 현상법을 말한다.</p>
+    </div>
+
+    <h2 class="sec" id="s-30"><span class="sec-num">03</span> 표백정착 약품의 종류, 성질, 용도</h2>
+
+    <h3 class="sub">(1) 정지액(stop bath)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">현상이 끝난 뒤에도 필름이나 인화지에 묻은 현상액은 계속 작용하므로, 이 현상작용을 정지시킬 때 사용하는 용액을 말한다.</span></li>
+      <li><span class="num">②</span><span class="content">일반 필름이나 인화지 현상 시 정지액 대신 물을 사용해도 되지만 지정 정지액을 쓰는 것이 좋다. 보통 <strong>빙초산 15 : 물 1,000</strong> 비율로 사용한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 정착액(fixer)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">현상이 끝난 필름이나 인화지에는 화상으로 환원된 부분의 금속은과 환원되지 않은 할로겐화은이 함께 남아 있다. 정착은 아직도 빛을 받으면 반응하는 불필요한 할로겐화은을 쉽게 녹여 없애는 과정이다.</span></li>
+      <li><span class="num">②</span><span class="content">정착액의 주성분은 <strong>티오황산나트륨(하이포, Hypo)</strong>으로, 현상 시 헐레이션 방지층을 제거하고 산화방지제로도 사용된다. 남아 있는 불필요한 할로겐화은을 용해·제거한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 정착액의 종류</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>산성 정착액(acid fixing solution)</strong> — 사용 시간을 준수해야 하며, 산성의 힘으로 알칼리성 현상액에서 진행되던 화상을 정지시키는 데 유리하다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>산성 경막 정착액</strong> — 고온에서 사용하기 좋으며 하이포와 산성 경막제로 이루어져 있다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>신속 정착액</strong> — 하이포 대신 염화암모늄을 사용하여 처리 시간을 단축한다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 경막제</div>
+      <p>경막제는 사진 유제막을 경화시키는 작용을 하는 물질로, 사진 유제에 가하는 경막제로는 포름알데히드, 아세트알데히드, 글리옥살 등의 유기화합물이 있으며 정착액에는 크롬명반, 칼륨명반 등이 첨가된다.</p>
+    </div>
+
+    <div class="section-part">Ⅶ. 현상</div>
+
+    <h2 class="sec" id="s-31"><span class="sec-num">01</span> 현상의 원리 및 조건</h2>
+
+    <h3 class="sub">(1) 암실(DPE) 작업</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">현상(Developing), 인화(Print), 확대(Enlarging) 등의 사진처리를 위해 빛을 차단한 방을 암실(DPE)이라 한다. 사진의 현상, 인화, 확대 등의 작업은 모두 암실에서 이루어진다.</span></li>
+      <li><span class="num">②</span><span class="content">암실의 조건은 <strong>완전한 차광</strong>, <strong>환기</strong>, 그리고 전압안정기를 사용해 일정한 전원 공급이 이루어지는 것이다. 또한 습한 환경을 피해야 한다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 필름의 현상과정</div>
+      <div class="flow">
+        <span class="flow-item">현상</span><span class="flow-arrow">→</span>
+        <span class="flow-item">정지</span><span class="flow-arrow">→</span>
+        <span class="flow-item">정착</span><span class="flow-arrow">→</span>
+        <span class="flow-item">수세</span><span class="flow-arrow">→</span>
+        <span class="flow-item">건조</span>
+      </div>
+      <div class="flow" style="margin-top:8px;">
+        <span class="flow-item">컬러네거티브 필름</span><span class="flow-arrow">:</span>
+        <span class="flow-item">현상</span><span class="flow-arrow">→</span>
+        <span class="flow-item">표백</span><span class="flow-arrow">→</span>
+        <span class="flow-item">정착</span><span class="flow-arrow">→</span>
+        <span class="flow-item">수세</span><span class="flow-arrow">→</span>
+        <span class="flow-item">건조</span>
+      </div>
+    </div>
+
+    <h3 class="sub">(2) 현상에 필요한 도구</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>현상탱크(developing tank)</strong> — 스테인리스 제품과 플라스틱 제품이 있다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>릴(reel)</strong> — 필름을 감을 때 사용한다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>온도계</strong> — 현상을 할 때 가장 중요한 것은 온도이다. 수은, 바이메탈, 디지털 온도계 등을 사용한다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>암실타이머(현상타이머)</strong> — 온도와 함께 중요한 요소가 시간이므로, 정확한 시간을 위해 간편하고 정확성이 높은 타이머를 사용한다.</span></li>
+      <li><span class="num">⑤</span><span class="content">그 밖에 가위, 네거핀, 필름클립(집게), 스퀴지, 고무장갑 등의 보조도구가 있다.</span></li>
+    </ul>
+
+    <h2 class="sec" id="s-32"><span class="sec-num">02</span> 필름의 현상 처리 공정</h2>
+
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>현상 릴에 필름 감기</strong></span></li>
+      <li><span class="num">②</span><span class="content"><strong>릴을 현상탱크에 넣기</strong></span></li>
+      <li><span class="num">③</span><span class="content"><strong>현상탱크에 현상액 넣기</strong> — 약품의 적정 온도는 대체로 20℃ 정도가 적당하며, 약품이 가득 찰 때 바로 교반을 시작한다. 현상시간, 온도, 교반 방법이 현상 결과에 큰 영향을 미친다.</span></li>
+    </ul>
+
+    <div class="point-box">
+      <div class="point-label">POINT · 교반</div>
+      <p>규칙적으로 현상탱크를 흔들어 현상액이 필름에 고르게 작용하도록 하는 작업이다. 교반이 적으면 브로마이드 끌림이나 줄무늬가 생기고, 많으면 심한 얼룩이 생긴다. 보통 <strong>처음 30초간 연속 교반</strong> 후, <strong>매 30초마다 5초씩 교반</strong>하는 것이 표준이다.</p>
+    </div>
+
+    <ul class="list-num">
+      <li><span class="num">④</span><span class="content"><strong>중간정지</strong> — 현상작용을 정지시키는 과정으로 빙초산 또는 물을 사용하여 약 30초간 처리한다. 작은 점이나 핀홀 등이 생기지 않도록 주의한다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>정착</strong> — 정착액 주입 후 처음 30초 동안은 현상과 같이 연속 교반을 하고, 이후에는 1분마다 10초씩 교반한다. 보통 최소 10분 이상 처리한다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>수세</strong> — 필름 베이스 속에 남아 있는 정착액을 완전히 제거하여 금속은 화상의 변색을 막기 위한 작업이다. 흐르는 물에 수세하는 것이 좋고, 시간·온도·수질·pH·정착액 종류가 수세 효과에 영향을 준다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>수적 방지</strong> — 약 30초간 담가 두어 물방울에 의한 건조 얼룩과 수축에 의한 마름 현상 등을 방지하고 감광유제면을 보호한다.</span></li>
+      <li><span class="num">⑧</span><span class="content"><strong>건조</strong> — 자연건조와 열건조가 있으나 자연건조를 많이 사용한다. 특히 먼지가 없는 곳에서 건조해야 한다.</span></li>
+    </ul>
+
+    <div class="section-part">Ⅷ. 인화</div>
+
+    <h2 class="sec" id="s-33"><span class="sec-num">01</span> 흑백, 컬러 인화 및 현상</h2>
+
+    <h3 class="sub">(1) 인화과정(현상과정과 동일)</h3>
+    <div class="flow">
+      <span class="flow-item">노광</span><span class="flow-arrow">→</span>
+      <span class="flow-item">현상</span><span class="flow-arrow">→</span>
+      <span class="flow-item">표백</span><span class="flow-arrow">→</span>
+      <span class="flow-item">정착</span><span class="flow-arrow">→</span>
+      <span class="flow-item">수세</span><span class="flow-arrow">→</span>
+      <span class="flow-item">건조</span>
+    </div>
+
+    <h3 class="sub">(2) 인화현상에 필요한 장비</h3>
+    <h4 class="subsub">가. 확대기(enlarger)의 구조</h4>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>구성 요소</th><th>설명</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-key">확대기 헤드</td><td>사진 사이즈를 결정한다.</td></tr>
+          <tr><td class="td-key">램프</td><td>인화지를 노출시키기 위한 빛으로, 보통 텅스텐 전구를 사용한다.</td></tr>
+          <tr><td class="td-key">콘덴서</td><td>양면 볼록렌즈로 네거티브에 균일한 빛을 보내는 장치이다.</td></tr>
+          <tr><td class="td-key">렌즈</td><td>일반 카메라 렌즈와 같은 원리로 사용한다.</td></tr>
+          <tr><td class="td-key">필름 캐리어</td><td>네거티브 필름을 고정하는 부분이다.</td></tr>
+          <tr><td class="td-key">상하 조절나사</td><td>확대 비율과 높이를 조절한다.</td></tr>
+          <tr><td class="td-key">초점나사</td><td>선명한 상이 맺히도록 초점을 맞춘다.</td></tr>
+          <tr><td class="td-key">베이스보드</td><td>인화지를 올려 놓는 평면 받침대이다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="subsub">나. 확대기의 형식과 종류</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>산광식 확대기</strong> — 할로겐 램프를 광원으로 하고 오팔글라스를 사용하여 빛을 부드럽게 만들어 화상을 맺게 한다. 먼지나 흠이 잘 나타나지 않아 초상사진, 컬러인화, 팀칼인화 등에 사용된다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>집광식 확대기</strong> — 광원과 필름 사이에 볼록렌즈에 의해 광선이 집중되는 방식으로 흑백프린트에 사용한다. 먼지 자국이 뚜렷하고 콘트라스트가 가장 높게 나타난다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>집산광식 확대기</strong> — 할로겐 램프에 콘덴서와 오팔글라스를 이용한 확대기로 집광식과 산광식의 중간 형태이다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>반사식 확대기</strong> — 거울을 이용한 LPL 확대기가 있다.</span></li>
+    </ul>
+
+    <h4 class="subsub">다. 확대기의 광원</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>텅스텐 램프</strong> — 일반적으로 많이 사용되며 광력은 150와트, 수명은 약 100시간 정도이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>할로겐 램프</strong> — 컬러 확대기에 일반적으로 사용되며 광력은 27~250와트, 수명은 약 100시간이다. 와트 수가 적어 노광시간이 오래 걸린다.</span></li>
+    </ul>
+
+    <h2 class="sec" id="s-34"><span class="sec-num">02</span> 인화지의 종류와 특성</h2>
+
+    <h3 class="sub">(1) 인화지(printing paper)</h3>
+    <h4 class="subsub">가. 인화지의 종류</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>파이버 베이스(fiber base)</strong> — 원지의 유지층과 지지체 사이의 표면에 황산바륨을 미세하게 젤라틴 용액에 분산시켜 도포한 건조층으로, 바리타지(baryta)라고도 한다. 톤이 풍부하고 표면 질감이 좋아 장기 보관에 적합하다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>RC 인화지(Resin-Coated Paper)</strong> — 원지 양면에 황산바륨 대신 폴리에틸렌 등의 수지층을 도포한 것으로 수세와 건조 시간이 짧고 현상 농도의 변화가 거의 없다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>가변조 인화지</strong> — 일반 인화지와 달리 인화지 호수(그레이드 넘버)를 가지고 있지 않으며, 필터를 바꿔 끼우며 계조를 조절할 수 있는 인화지로 가변 콘트라스트지 또는 무호지라고도 한다.</span></li>
+    </ul>
+
+    <h4 class="subsub">나. 인화지의 계조(인화지 호수)</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">No.1 — 가장 낮은 콘트라스트</span></li>
+      <li><span class="num">②</span><span class="content">No.2 — 표준 콘트라스트지</span></li>
+      <li><span class="num">③</span><span class="content">No.3 — 조금 높은 콘트라스트지</span></li>
+      <li><span class="num">④</span><span class="content">No.4 — 높은 콘트라스트지</span></li>
+      <li><span class="num">⑤</span><span class="content">No.5 — 매우 높은 콘트라스트지</span></li>
+    </ul>
+
+    <h4 class="subsub">다. 인화지의 결</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">fine grain — 결이 곱다.</span></li>
+      <li><span class="num">②</span><span class="content">pearl — 결 자체가 중간 정도이다.</span></li>
+      <li><span class="num">③</span><span class="content">silk — 결이 조금 거칠다.</span></li>
+      <li><span class="num">④</span><span class="content">smooth luster — 부드러운 윤이 난다.</span></li>
+      <li><span class="num">⑤</span><span class="content">rough — 거칠다.</span></li>
+    </ul>
+
+    <h4 class="subsub">라. 인화지의 두께</h4>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">premium weight — 가장 두꺼운 두께</span></li>
+      <li><span class="num">②</span><span class="content">double weight — 두꺼운 두께</span></li>
+      <li><span class="num">③</span><span class="content">medium weight — 중간 두께</span></li>
+      <li><span class="num">④</span><span class="content">single weight — 얇은 두께</span></li>
+      <li><span class="num">⑤</span><span class="content">light weight — 아주 얇은 두께</span></li>
+    </ul>
+
+    <h2 class="sec" id="s-35"><span class="sec-num">03</span> 사진 후처리 및 수정, 인화 수정법</h2>
+
+    <h3 class="sub">(1) 버닝(burning)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">특정 부분의 노광을 더 주어서 부분적으로 짙게 만들 때 사용한다. 손 또는 구멍 난 마분지를 사용하거나, 밝은 부분에 빛을 더 주어 디테일을 살리는 작업을 말한다.</span></li>
+      <li><span class="num">②</span><span class="content">전체 인화 시 기본 노출을 준 다음, 어둡게 하고 싶은 부분에 추가 광선을 더 주는 수정 인화기법이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(2) 다징(dodging)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">확대기의 빛을 부분적으로 막는 기법으로, 얇은 철사 또는 마분지를 사용해 사진의 한 부분의 톤을 약화시키는 인화방법이다.</span></li>
+      <li><span class="num">②</span><span class="content">확대 인화 시 기본 노출을 주는 동안 사진의 일부를 밝게 하기 위해 광선을 가려주는 수정 인화기법이다.</span></li>
+    </ul>
+
+    <h3 class="sub">(3) 스포팅(spotting)과 에칭(etching)</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content">인화지에 생기는 불필요한 점과 선을 없애는 수정작업이다.</span></li>
+      <li><span class="num">②</span><span class="content">스포팅용 물감, 붓, 용해액, 조명, 수정 칼, 휴지 등을 사용한다.</span></li>
+    </ul>
+
+    <h3 class="sub">(4) 크로핑(cropping)</h3>
+    <p>인화된 사진에서 불필요한 부분을 잘라내는 작업이다.</p>
+
+    <h3 class="sub">(5) 트리밍(trimming)</h3>
+    <p>삐뚤어진 화상을 바로잡을 때 사용하며, 사진에서 화면에 필요한 부분만 일정한 윤곽으로 다듬고 다른 부분은 잘라내어 전달하고자 하는 내용을 강조할 때 사용한다.</p>
+
+    <h3 class="sub">(6) 토닝(toning)</h3>
+    <p>사진을 인화한 후에 사진의 보존성을 높이거나 특별한 색감을 첨가하기 위한 작업을 말한다.</p>
+
+    <h3 class="sub">(7) 특수인화법</h3>
+    <ul class="list-num">
+      <li><span class="num">①</span><span class="content"><strong>조색</strong> — 인화지에 화합물을 가하여 변색하게 하여 더 이상 변하지 않게 만드는 동시에 임의의 색감을 넣는 방법이다.</span></li>
+      <li><span class="num">②</span><span class="content"><strong>조립자 현상</strong> — 입자가 거칠게 형성되는 특수효과이다.</span></li>
+      <li><span class="num">③</span><span class="content"><strong>하이 콘트라스트 사진</strong> — 하프톤을 생략하여 흑백만의 강한 영상으로 표현된 사진을 말한다.</span></li>
+      <li><span class="num">④</span><span class="content"><strong>디퓨전(diffusion)</strong> — 이미지를 부드럽게 또는 흐리게 하거나 인물사진에 주름살이나 흠을 나타내지 않을 때 사용한다.</span></li>
+      <li><span class="num">⑤</span><span class="content"><strong>포토그램(photogram)</strong> — 필름을 사용하지 않고(즉 카메라 없이) 만드는 사진으로 추상사진에 사용된다. 투명체, 반투명체, 불투명체의 물체를 직접 인화지 위에 올려놓고 빛을 주어 생긴 그림자로 도안적인 사진을 만들 수 있다.</span></li>
+      <li><span class="num">⑥</span><span class="content"><strong>솔라리제이션(solarization, Sabatier effect)</strong> — 인화지를 현상 도중 빛에 노광시키면 화면에 음화와 양화가 동시에 나타나는 반전효과이다. 하이라이트와 암부의 경계를 따라 선이 생기며, 현상 중 꺼내어 수세만 하고 정착하지 않은 상태에서 제2노출 후 다시 현상액에 넣어 반전효과를 낸다.</span></li>
+      <li><span class="num">⑦</span><span class="content"><strong>감력</strong> — 노출 과다나 현상 과다된 필름의 화상의 농도나 콘트라스트를 산화·용해 제거해 보정하는 방법이다.</span></li>
+      <li><span class="num">⑧</span><span class="content"><strong>몽타주(montage)</strong> — 두 장의 사진을 합성하거나 이어 붙이거나 중복 인화·중복 노출로 새로운 시각효과를 구성하기 위해 제작된 작품 또는 기법이다.</span></li>
+      <li><span class="num">⑨</span><span class="content"><strong>포스터리제이션(posterization)</strong> — 연속적인 톤을 평면적인 톤으로 단순화해 3~4개의 특정 톤으로 분리한 뒤 각각 노출하여 상을 얻는 인화기법이다.</span></li>
+      <li><span class="num">⑩</span><span class="content"><strong>밀착 인화(contact print)</strong> — 필름 한 롤에 촬영된 이미지를 인화지에 필름과 같은 크기로 인화하여 프레임 구성과 노출 상태 등을 한 번에 관찰하기 위한 인화방법이다.</span></li>
+      <li><span class="num">⑪</span><span class="content"><strong>릴리프 포토(relief photo)</strong> — 피사체 윤곽에 흰선과 검은선이 나타나 조각의 부조처럼 보이는 효과를 내는 사진이다.</span></li>
+      <li><span class="num">⑫</span><span class="content"><strong>보력</strong> — 노광 부족이나 현상 부족으로 네거티브 농도가 엷을 때 콘트라스트를 높이기 위한 사진 처리 방법이다.</span></li>
+      <li><span class="num">⑬</span><span class="content"><strong>인터 네거티브(intermediate negative)</strong> — 컬러 슬라이드를 컬러 네거티브로 만들어 컬러 인화지에 인화하는 방법이다.</span></li>
+    </ul>
+
+
+  </div><!-- /chapter-block 02 -->
+
+</main>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Theme
+const saved = localStorage.getItem('theme');
+if (saved === 'light') document.body.classList.add('light');
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀️';
+}
+if (saved === 'light') document.getElementById('themeBtn').textContent = '🌙';
+else document.getElementById('themeBtn').textContent = '🌙';
+
+// Sidebar toggle
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.menu-btn')) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// Scroll top
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+});
+
+// Active TOC
+const links = document.querySelectorAll('.toc-link');
+const sections = [];
+links.forEach(l => {
+  const id = l.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ el, link: l });
+});
+window.addEventListener('scroll', () => {
+  let current = null;
+  for (const { el } of sections) {
+    if (el.getBoundingClientRect().top <= 100) current = el.id;
+  }
+  links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+}, { passive: true });
+</script>
+</body>
+</html>

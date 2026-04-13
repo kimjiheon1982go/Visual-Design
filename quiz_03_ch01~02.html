@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DAY 05 · 사진재료·현상·인화 기출문제 30선</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2d3148;
+  --accent: #7c9ef5;
+  --accent2: #5b7de8;
+  --text: #e2e6f0;
+  --text-muted: #98a3c0;
+  --text-dim: #68728f;
+  --good: #1f9d55;
+  --bad: #d64545;
+  --good-bg: rgba(31,157,85,0.18);
+  --bad-bg: rgba(214,69,69,0.18);
+  --card-shadow: 0 18px 40px rgba(0,0,0,.24);
+}
+body.light {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface2: #eef2fb;
+  --border: #d8deed;
+  --accent: #355fd6;
+  --accent2: #284cb8;
+  --text: #1c2336;
+  --text-muted: #5b6786;
+  --text-dim: #8d96af;
+  --good: #198754;
+  --bad: #c73939;
+  --good-bg: #e9f8f0;
+  --bad-bg: #fdeeee;
+  --card-shadow: 0 14px 32px rgba(29,41,71,.08);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.7;
+}
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #fff;
+  background: var(--accent2);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.header-actions { display: flex; gap: 8px; }
+.btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary {
+  background: var(--accent2);
+  color: #fff;
+  border-color: var(--accent2);
+}
+.btn.primary:hover { filter: brightness(1.05); color: #fff; }
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 18px 64px;
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr .8fr;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--card-shadow);
+}
+.hero-main {
+  padding: 28px;
+}
+.hero h1 {
+  margin: 0 0 10px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.35;
+}
+.hero p {
+  margin: 0;
+  color: var(--text-muted);
+}
+.hero-side {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+.meta-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.progress-bar {
+  height: 10px;
+  background: var(--surface2);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .25s ease;
+}
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.stat {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+}
+.stat .label {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.stat .value {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.quiz-list {
+  display: grid;
+  gap: 18px;
+}
+.quiz-box {
+  padding: 22px;
+}
+.quiz-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.quiz-no {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .08em;
+}
+.quiz-tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.quiz-question {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.quiz-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.quiz-options li {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: .18s ease;
+}
+.quiz-options li:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.quiz-options li.correct {
+  border-color: var(--good);
+  background: var(--good-bg);
+}
+.quiz-options li.wrong {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+.quiz-options li.disabled {
+  pointer-events: none;
+  opacity: .92;
+}
+.quiz-explanation {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface2) 75%, transparent);
+  display: none;
+}
+.quiz-explanation strong { color: var(--accent); }
+.footer-box {
+  margin-top: 28px;
+  padding: 22px;
+}
+.result-text {
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.top-link {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--card-shadow);
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .header-inner { align-items: flex-start; flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<header class="header" id="top">
+  <div class="header-inner">
+    <div>
+      <span class="badge">DAY 05 · QUIZ 30</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="themeBtn">🌙 테마</button>
+      <button class="btn primary" id="resetBtn">다시 풀기</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="card hero-main">
+      <div class="meta-title">Photo Material · Development · Printing</div>
+      <h1>사진재료 · 현상 · 인화<br>기출문제 30선</h1>
+      <p>올려주신 DAY 05 범위를 바탕으로 만든 객관식 30문제입니다. 선택지를 누르면 정답과 해설이 바로 표시됩니다.</p>
+    </div>
+    <div class="card hero-side">
+      <div>
+        <div class="meta-title">진행률</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="score-grid">
+        <div class="stat"><div class="label">푼 문제</div><div class="value" id="solvedCount">0</div></div>
+        <div class="stat"><div class="label">정답</div><div class="value" id="correctCount">0</div></div>
+        <div class="stat"><div class="label">오답</div><div class="value" id="wrongCount">0</div></div>
+        <div class="stat"><div class="label">점수</div><div class="value" id="scoreText">0점</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quiz-list" id="quizList"></section>
+
+  <section class="card footer-box">
+    <h2 style="margin:0 0 8px;font-size:22px;">마무리 체크</h2>
+    <div class="result-text" id="finalComment">아직 문제를 풀기 전입니다. 위에서 1번부터 차근차근 풀어보세요.</div>
+  </section>
+</div>
+
+<a class="top-link" href="#top">↑</a>
+
+<script>
+const quizData = [
+  {
+    no: 1,
+    tag: '부속기기',
+    q: '렌즈 후드(lens hood)의 기능으로 가장 알맞은 것은?',
+    options: ['초점을 자동으로 조절한다', '외부의 유해광선을 막아 플레어를 방지한다', '필름 감도를 높인다', '셔터 속도를 일정하게 유지한다'],
+    answer: 1,
+    explanation: '렌즈 후드는 카메라 밖에서 들어오는 불필요한 빛을 차단해 선명한 상을 얻도록 도와준다.'
+  },
+  {
+    no: 2,
+    tag: '부속기기',
+    q: '아이레벨 파인더에 대한 설명으로 옳은 것은?',
+    options: ['상하좌우가 역상으로 보인다', '피사체상을 정립정상으로 보면서 촬영할 수 있다', '허리 높이에서만 관찰 가능하다', '주로 대형카메라에서만 사용된다'],
+    answer: 1,
+    explanation: '아이레벨 파인더는 펜타프리즘 등을 통해 피사체상을 정립정상으로 보여준다.'
+  },
+  {
+    no: 3,
+    tag: '부속기기',
+    q: '삼각대(tripod)의 주된 사용 목적으로 가장 적절한 것은?',
+    options: ['색온도 보정', '카메라의 흔들림 방지', '필름 자동 감기', '콘트라스트 조절'],
+    answer: 1,
+    explanation: '삼각대는 카메라 흔들림을 방지해 스냅촬영, 정밀묘사, 야경촬영 등에 사용된다.'
+  },
+  {
+    no: 4,
+    tag: '감광재료',
+    q: '다음 중 감광재료의 특성이 아닌 것은?',
+    options: ['감광도', '해상력', '관용도', '초점거리'],
+    answer: 3,
+    explanation: '초점거리는 렌즈의 특성이고, 감광재료의 특성에는 감광도·감색성·해상력·관용도 등이 있다.'
+  },
+  {
+    no: 5,
+    tag: '감광재료',
+    q: '감광재료가 빛의 파장, 즉 색에 대해 느끼는 성질을 무엇이라 하는가?',
+    options: ['감광도', '감색성', '입상성', '관용도'],
+    answer: 1,
+    explanation: '감색성(color sensitivity)은 감광재료가 색에 대해 반응하는 성질이다.'
+  },
+  {
+    no: 6,
+    tag: '감광재료',
+    q: '관용도(latitude)에 대한 설명으로 가장 옳은 것은?',
+    options: ['빛의 번짐 현상 정도', '노출의 과부족을 어느 정도 허용하는 범위', '입자의 분포 상태', '피사체의 색 재현 능력'],
+    answer: 1,
+    explanation: '관용도는 노출 과다나 부족을 어느 정도까지 허용할 수 있는지의 범위를 뜻한다.'
+  },
+  {
+    no: 7,
+    tag: '필름 감도',
+    q: '필름 감도 표시에 대한 설명으로 옳지 않은 것은?',
+    options: ['숫자가 클수록 감광도가 높다', 'ISO 50은 저감도 필름에 속한다', 'ISO 400은 일반적으로 고감도 필름에 해당한다', '숫자가 클수록 적정 노출에 필요한 광량이 많아진다'],
+    answer: 3,
+    explanation: '감도가 높을수록 적정 노출에 필요한 광량은 작아진다.'
+  },
+  {
+    no: 8,
+    tag: '현상품',
+    q: '현상액(developer)의 역할로 가장 적절한 것은?',
+    options: ['필름을 건조시킨다', '잠상을 눈에 보이는 실제 화상으로 만든다', '필름의 유제를 제거한다', '인화지의 광택을 높인다'],
+    answer: 1,
+    explanation: '현상액은 촬영으로 만들어진 잠상을 눈에 보이는 실상으로 바꾸는 약품이다.'
+  },
+  {
+    no: 9,
+    tag: '현상품',
+    q: '잠상(latent image)에 대한 설명으로 옳은 것은?',
+    options: ['정착 후에만 나타나는 화상', '현상 전에는 보이지 않지만 감광판에 기록된 영상', '인화지 표면의 광택 현상', '유제층이 벗겨진 상태'],
+    answer: 1,
+    explanation: '잠상은 노광 직후 감광판에는 기록되어 있으나 눈에는 보이지 않는 영상이다.'
+  },
+  {
+    no: 10,
+    tag: '현상주약',
+    q: '다음 중 현상주약에 해당하는 것은?',
+    options: ['메톨, 하이드로퀴논, 페니돈', '티오황산나트륨, 명반', '빙초산, 염화암모늄', '포름알데히드, 크롬명반'],
+    answer: 0,
+    explanation: '현상주약에는 메톨, 하이드로퀴논, 페니돈 등이 사용된다.'
+  },
+  {
+    no: 11,
+    tag: '현상 보조약',
+    q: '현상 촉진제로 사용하는 약품으로 알맞은 것은?',
+    options: ['붕사, 수산화나트륨, 탄산수소나트륨', '아황산나트륨', '브롬화칼륨', '빙초산'],
+    answer: 0,
+    explanation: '현상촉진제에는 붕사, 수산화나트륨, 탄산수소나트륨 등이 쓰인다.'
+  },
+  {
+    no: 12,
+    tag: '현상 보조약',
+    q: '현상액의 산화를 막기 위해 사용하는 보항제(산화방지제)는?',
+    options: ['아황산나트륨', '브롬화나트륨', '수산화나트륨', '명반'],
+    answer: 0,
+    explanation: '보항제는 현상액의 산화를 방지해 현상능력이 떨어지는 것을 막는다.'
+  },
+  {
+    no: 13,
+    tag: '억제제',
+    q: '빛을 받지 않은 부분이 현상되어 생기는 포그를 막는 역할을 하는 것은?',
+    options: ['억제제', '경막제', '착색제', '증감제'],
+    answer: 0,
+    explanation: '억제제(restrainer)는 불필요한 현상을 억제하여 포그 발생을 막는다.'
+  },
+  {
+    no: 14,
+    tag: '현상액 종류',
+    q: 'MQ 현상액에 대한 설명으로 가장 옳은 것은?',
+    options: ['페니돈만을 주약으로 하는 현상액이다', '메톨과 하이드로퀴논이 중심 약품이며 가장 보편적으로 사용된다', '고온 처리에만 적합하다', '콘트라스트가 매우 약한 상만 만든다'],
+    answer: 1,
+    explanation: 'MQ 현상액은 메톨과 하이드로퀴논을 중심 주약으로 사용하는 대표적 현상액이다.'
+  },
+  {
+    no: 15,
+    tag: '주약 특성',
+    q: '하이드로퀴논(hydroquinone)의 특성으로 옳은 것은?',
+    options: ['온도 영향이 거의 없다', '흑화 진행이 빠르지만 콘트라스트는 약하다', '온도에 민감하며 높은 콘트라스트의 강한 상을 만든다', '포그와 입상성에 대한 영향이 크지 않다'],
+    answer: 2,
+    explanation: '하이드로퀴논은 온도에 민감하고 흑화 진행이 느리지만 높은 콘트라스트의 강한 상을 만든다.'
+  },
+  {
+    no: 16,
+    tag: '페니돈',
+    q: '페니돈(phenidone)에 대한 설명으로 옳은 것은?',
+    options: ['단독 사용 시 현상능력이 강하다', '하이드로퀴논과 함께 쓰면 현상능력이 커진다', '포그에 매우 취약하다', '입자를 거칠게 하여 콘트라스트만 높인다'],
+    answer: 1,
+    explanation: '페니돈은 단독보다 하이드로퀴논과 함께 쓸 때 현상능력이 커지고 포그·입상성의 영향이 적다.'
+  },
+  {
+    no: 17,
+    tag: '정지액',
+    q: '정지액(stop bath)의 용도로 가장 알맞은 것은?',
+    options: ['현상 작용을 중지시킨다', '미노출 할로겐화은을 용해 제거한다', '사진 보존성을 높인다', '농도를 약화시켜 밝게 한다'],
+    answer: 0,
+    explanation: '정지액은 현상 후에도 계속되는 현상액의 작용을 멈추게 하는 용액이다.'
+  },
+  {
+    no: 18,
+    tag: '정착액',
+    q: '정착액(fixer)의 기능으로 옳은 것은?',
+    options: ['현상 속도를 높인다', '환원되지 않은 할로겐화은을 제거하여 화상을 안정화한다', '잠상을 형성한다', '인화지의 톤을 조절한다'],
+    answer: 1,
+    explanation: '정착액은 미노출·미현상된 할로겐화은을 제거해 더 이상 빛에 반응하지 않도록 한다.'
+  },
+  {
+    no: 19,
+    tag: '정착액',
+    q: '정착액의 주성분으로 알맞은 것은?',
+    options: ['티오황산나트륨(하이포)', '메톨', '빙초산', '브롬화칼륨'],
+    answer: 0,
+    explanation: '정착액의 대표적 주성분은 티오황산나트륨, 즉 하이포이다.'
+  },
+  {
+    no: 20,
+    tag: '경막 정착액',
+    q: '산성 경막 정착액에 대한 설명으로 옳은 것은?',
+    options: ['사용 시간을 지킬 필요가 없다', '알칼리성 현상액의 작용을 정지시키는 데 유리하다', '항상 수세 시간이 가장 짧다', '염화암모늄만으로 구성된다'],
+    answer: 1,
+    explanation: '산성 경막 정착액은 산성이라 알칼리성 현상액의 작용을 멈추는 데 유리하다.'
+  },
+  {
+    no: 21,
+    tag: '현상 원리',
+    q: '필름의 일반적인 현상 처리 공정 순서로 옳은 것은?',
+    options: ['현상 → 정지 → 정착 → 수세 → 건조', '정착 → 현상 → 정지 → 수세 → 건조', '현상 → 정착 → 정지 → 건조 → 수세', '수세 → 현상 → 정지 → 정착 → 건조'],
+    answer: 0,
+    explanation: '일반적인 필름 현상 순서는 현상, 정지, 정착, 수세, 건조이다.'
+  },
+  {
+    no: 22,
+    tag: '현상 도구',
+    q: '현상에 필요한 도구가 아닌 것은?',
+    options: ['현상탱크', '릴', '온도계', '확대기 헤드'],
+    answer: 3,
+    explanation: '확대기 헤드는 인화에 필요한 장비이고, 현상에는 현상탱크·릴·온도계 등이 필요하다.'
+  },
+  {
+    no: 23,
+    tag: '현상 조건',
+    q: '현상 결과에 큰 영향을 미치는 요소로만 묶인 것은?',
+    options: ['온도, 현상시간, 교반', '초점거리, 조리개, 파인더', '수세, 크로핑, 트리밍', '광택, 질감, 두께'],
+    answer: 0,
+    explanation: '현상은 온도, 시간, 교반 방법의 영향을 크게 받는다.'
+  },
+  {
+    no: 24,
+    tag: '교반',
+    q: '교반에 대한 설명으로 가장 옳은 것은?',
+    options: ['교반이 너무 많아도 항상 좋은 결과를 준다', '현상액이 필름에 골고루 작용하도록 흔들어 주는 작업이다', '교반은 정착 단계에서만 필요하다', '교반이 부족하면 콘트라스트가 지나치게 높아진다'],
+    answer: 1,
+    explanation: '교반은 현상액이 필름에 고르게 작용하도록 해 얼룩이나 줄무늬를 방지한다.'
+  },
+  {
+    no: 25,
+    tag: '인화',
+    q: '흑백·컬러 인화 및 현상 과정에 대한 설명으로 옳은 것은?',
+    options: ['인화 과정은 현상과 완전히 무관하다', '흑백 인화 과정은 일반적으로 노광 → 현상 → 표백 → 정착 → 수세 → 건조이다', '흑백 인화 과정은 현상 과정과 같은 흐름을 따른다', '인화에는 정착 과정이 필요 없다'],
+    answer: 2,
+    explanation: '교재에서는 흑백·컬러 인화 및 현상 과정이 같은 흐름을 따른다고 정리한다.'
+  },
+  {
+    no: 26,
+    tag: '확대기',
+    q: '확대기의 헤드(head)의 역할은 무엇인가?',
+    options: ['사진 사이즈 결정', '인화지에 노출시키기 위한 빛 제공', '네거티브에 균일한 빛 분산', '확대기 전체를 지지'],
+    answer: 0,
+    explanation: '교재에서는 확대기 헤드의 역할을 사진 사이즈 결정으로 정리하고 있다.'
+  },
+  {
+    no: 27,
+    tag: '광원',
+    q: '확대기의 광원에 대한 설명으로 옳은 것은?',
+    options: ['텅스텐 램프는 일반적으로 사용되며 수명은 약 100시간 정도이다', '할로겐 램프는 흑백 확대기에 사용할 수 없다', '텅스텐 램프는 광력이 항상 27와트 이하이다', '할로겐 램프는 와트 수가 많을수록 노광시간이 길어진다'],
+    answer: 0,
+    explanation: '텅스텐 램프는 일반적으로 사용되고 광력 150와트, 수명 약 100시간 정도로 정리된다.'
+  },
+  {
+    no: 28,
+    tag: '인화지',
+    q: 'Fiber base 인화지의 특징으로 옳은 것은?',
+    options: ['수세와 건조 시간이 매우 짧다', '톤과 표면 질감이 좋고 장기 보관에 적합하다', '그레이드 넘버가 없는 무호지이다', '폴리에틸렌 수지층만으로 이루어진다'],
+    answer: 1,
+    explanation: '파이버 베이스 인화지는 톤이 풍부하고 표면감이 좋으며 장기 보관에 적합하다.'
+  },
+  {
+    no: 29,
+    tag: '후처리',
+    q: '다징(dodging)에 대한 설명으로 옳은 것은?',
+    options: ['특정 부분에 추가 노광을 주어 어둡게 한다', '확대기 빛을 부분적으로 막아 사진 일부를 밝게 만든다', '인화지를 일정한 윤곽으로 잘라낸다', '사진에 보존성을 높이기 위해 색을 입힌다'],
+    answer: 1,
+    explanation: '다징은 확대 인화 시 일부 빛을 가려 특정 부분을 밝게 만드는 수정 인화 기법이다.'
+  },
+  {
+    no: 30,
+    tag: '후처리',
+    q: '버닝(burning)에 대한 설명으로 옳은 것은?',
+    options: ['사진의 일부를 밝게 하는 기법이다', '불필요한 부분을 잘라내는 작업이다', '특정 부분에 노광을 더 주어 부분적으로 어둡게 만드는 기법이다', '입자를 거칠게 만드는 특수효과이다'],
+    answer: 2,
+    explanation: '버닝은 기본 노광 후 어둡게 하고 싶은 부분에 추가 광선을 주는 수정 인화 기법이다.'
+  }
+];
+
+const quizList = document.getElementById('quizList');
+const solvedCount = document.getElementById('solvedCount');
+const correctCount = document.getElementById('correctCount');
+const wrongCount = document.getElementById('wrongCount');
+const scoreText = document.getElementById('scoreText');
+const progressFill = document.getElementById('progressFill');
+const finalComment = document.getElementById('finalComment');
+const resetBtn = document.getElementById('resetBtn');
+const themeBtn = document.getElementById('themeBtn');
+
+let solved = 0;
+let correct = 0;
+let wrong = 0;
+
+function renderQuiz() {
+  quizList.innerHTML = '';
+  quizData.forEach(item => {
+    const box = document.createElement('article');
+    box.className = 'card quiz-box';
+    box.innerHTML = `
+      <div class="quiz-head">
+        <div class="quiz-no">QUESTION ${item.no}</div>
+        <div class="quiz-tag">${item.tag}</div>
+      </div>
+      <div class="quiz-question">${item.q}</div>
+      <ul class="quiz-options">
+        ${item.options.map((opt, idx) => `<li data-index="${idx}">${['①','②','③','④'][idx]} ${opt}</li>`).join('')}
+      </ul>
+      <div class="quiz-explanation"><strong>해설</strong><br>${item.explanation}</div>
+    `;
+
+    const options = box.querySelectorAll('li');
+    const explanation = box.querySelector('.quiz-explanation');
+    options.forEach((li, idx) => {
+      li.addEventListener('click', () => {
+        if (box.dataset.answered === 'true') return;
+        box.dataset.answered = 'true';
+        solved += 1;
+        options.forEach(opt => opt.classList.add('disabled'));
+        options[item.answer].classList.add('correct');
+        if (idx === item.answer) {
+          correct += 1;
+        } else {
+          wrong += 1;
+          li.classList.add('wrong');
+        }
+        explanation.style.display = 'block';
+        updateStats();
+      });
+    });
+
+    quizList.appendChild(box);
+  });
+}
+
+function updateStats() {
+  solvedCount.textContent = solved;
+  correctCount.textContent = correct;
+  wrongCount.textContent = wrong;
+  const score = Math.round((correct / quizData.length) * 100);
+  scoreText.textContent = `${score}점`;
+  progressFill.style.width = `${(solved / quizData.length) * 100}%`;
+
+  if (solved === 0) {
+    finalComment.textContent = '아직 문제를 풀기 전입니다. 위에서 1번부터 차근차근 풀어보세요.';
+  } else if (solved < quizData.length) {
+    finalComment.textContent = `현재 ${solved}문제를 풀었고 ${correct}문제 정답입니다. 끝까지 풀면 전체 점수를 바로 확인할 수 있습니다.`;
+  } else {
+    if (score >= 90) {
+      finalComment.textContent = `훌륭합니다. ${score}점으로 매우 안정적인 점수입니다. 헷갈린 개념만 다시 보면 좋습니다.`;
+    } else if (score >= 75) {
+      finalComment.textContent = `좋습니다. ${score}점입니다. 틀린 문항의 해설을 다시 읽으면 실전 점수가 더 올라갑니다.`;
+    } else if (score >= 60) {
+      finalComment.textContent = `기본은 잡혀 있습니다. ${score}점입니다. 현상 순서, 정지·정착, 인화지 종류를 다시 복습해 보세요.`;
+    } else {
+      finalComment.textContent = `지금은 개념 재정리가 필요합니다. ${score}점입니다. 감광재료 특성, 현상품 기능, 후처리 개념부터 다시 보면 빠르게 올라갑니다.`;
+    }
+  }
+}
+
+resetBtn.addEventListener('click', () => {
+  solved = 0;
+  correct = 0;
+  wrong = 0;
+  renderQuiz();
+  updateStats();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  themeBtn.textContent = document.body.classList.contains('light') ? '☀️ 테마' : '🌙 테마';
+});
+
+renderQuiz();
+updateStats();
+</script>
+</body>
+</html>
