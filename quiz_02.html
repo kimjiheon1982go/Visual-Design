@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시각디자인 조사·분석 연습문제</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --line: #dbe3ef;
+      --text: #1f2937;
+      --sub: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #eaf2ff;
+      --ok: #16a34a;
+      --bad: #dc2626;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .stat, .controls, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      padding: 16px 18px;
+    }
+
+    .stat .label {
+      font-size: 13px;
+      color: var(--sub);
+    }
+
+    .stat .value {
+      margin-top: 6px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .controls {
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="search"], select {
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 0 14px;
+      background: white;
+      color: var(--text);
+      min-width: 180px;
+    }
+
+    button {
+      height: 42px;
+      border: 0;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-light { background: var(--primary-soft); color: var(--primary); }
+    .btn-dark { background: #111827; color: white; }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin: 24px 0 12px;
+      gap: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 14px;
+    }
+
+    .quiz-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .q {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: #f8fbff;
+      border-color: #bfd3ff;
+    }
+
+    .option input {
+      margin-top: 3px;
+    }
+
+    .card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .feedback {
+      font-size: 14px;
+      font-weight: 700;
+      min-height: 22px;
+    }
+
+    .feedback.ok { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+
+    .answer {
+      display: none;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px dashed var(--line);
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .answer.show { display: block; }
+
+    .empty {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--sub);
+      background: var(--panel);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+    }
+
+    .footer-note {
+      color: var(--sub);
+      font-size: 13px;
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .toolbar { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 16px; }
+      .hero { padding: 24px; border-radius: 22px; }
+      .hero h1 { font-size: 26px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .controls-left, .controls-right { width: 100%; }
+      input[type="search"], select, button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>시각디자인 조사·분석 연습문제</h1>
+      <p>객관식 문제를 풀고, 정답과 해설을 바로 확인할 수 있는 최종 HTML 문제집입니다.</p>
+    </section>
+
+    <section class="toolbar">
+      <div class="stat">
+        <div class="label">전체 문제</div>
+        <div class="value" id="totalCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">풀이 완료</div>
+        <div class="value" id="solvedCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">정답 수</div>
+        <div class="value" id="correctCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">정답률</div>
+        <div class="value" id="rateCount">0%</div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="controls-left">
+        <input type="search" id="searchInput" placeholder="문제 번호, 키워드 검색" />
+        <select id="categoryFilter">
+          <option value="all">전체 영역</option>
+          <option value="디자인 일반">디자인 일반</option>
+          <option value="사진·촬영">사진·촬영</option>
+          <option value="현상·인화">현상·인화</option>
+          <option value="인쇄">인쇄</option>
+        </select>
+      </div>
+      <div class="controls-right">
+        <button class="btn-light" id="showAllAnswersBtn">정답 모두 보기</button>
+        <button class="btn-dark" id="resetBtn">초기화</button>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>문제 목록</h2>
+      <p>추가 요청하신 문제까지 반영한 최종 버전입니다.</p>
+    </div>
+
+    <section class="quiz-list" id="quizList"></section>
+    <div class="footer-note">브라우저에서 바로 열어 사용할 수 있습니다.</div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        no: 1,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "디자인의 개념에 관한 설명 중 거리가 먼 것은?",
+        options: [
+          "‘설계하다’, ‘계획하다’라는 의미를 갖는다.",
+          "사물의 재료, 기능, 구조에 조형성을 부여하는 종합적인 계획이다.",
+          "인간이 보고 즐길 수 있는 매우 아름다운 예술영역을 의미한다.",
+          "더욱 쾌적한 생활환경 형성에 기여하는 행위이다."
+        ],
+        answer: 2,
+        explanation: "디자인은 단순히 아름다움을 위한 예술영역만을 뜻하지 않으므로 ③이 거리가 있습니다."
+      },
+      {
+        no: 2,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "디자인에 대한 설명으로 옳은 것은?",
+        options: [
+          "주관적인 사고의 표현",
+          "주로 감상을 목적으로 제작",
+          "소비자라는 평가자가 존재",
+          "우연적 효과와 표현"
+        ],
+        answer: 2,
+        explanation: "디자인은 사용 대상과 평가 주체가 존재하며, 소비자라는 평가자가 있다는 점이 중요합니다."
+      },
+      {
+        no: 3,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "다음 중 시각디자인에 관한 내용으로 틀린 것은?",
+        options: [
+          "시각디자인의 역할은 의미전달보다는 감성적 만족을 주는 것이 가장 중요하다.",
+          "시각 커뮤니케이션에 있어 색채는 매우 중요한 역할을 한다.",
+          "시각디자인은 일차적으로 시각적 흥미를 불러일으킬 필요가 있다.",
+          "시각디자인의 매체는 인쇄매체에서 점차 영상매체로 확대되고 있다."
+        ],
+        answer: 0,
+        explanation: "시각디자인은 감성적 만족만이 아니라 정보 전달과 커뮤니케이션 기능이 핵심입니다."
+      },
+      {
+        no: 4,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "다음 중 시각디자인 분야에 속하는 것은?",
+        options: [
+          "자동차와 가전제품의 기능이해와 모델링",
+          "주택의 인테리어 설계 및 가구의 구성과 배치",
+          "전시장 작품 디스플레이와 조명연출",
+          "책과 잡지의 출판을 위한 편집과 인쇄 제작"
+        ],
+        answer: 3,
+        explanation: "편집디자인과 인쇄 제작은 대표적인 시각디자인 분야입니다."
+      },
+      {
+        no: 5,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "다음 디자인의 영역 중 주로 시각적인 전달수단을 이용하여 사람과 사람의 관계를 연결해 주는 것은?",
+        options: [
+          "산업디자인",
+          "프로덕트 디자인",
+          "커뮤니케이션 디자인",
+          "환경디자인"
+        ],
+        answer: 2,
+        explanation: "사람과 사람 사이를 시각적 전달수단으로 연결하는 것은 커뮤니케이션 디자인입니다."
+      },
+      {
+        no: 6,
+        category: "디자인 일반",
+        source: "연습문제",
+        question: "디자인의 역할 중에서 커뮤니케이션이 중심이 되고 심벌과 기호를 통해 정보를 전달하는 분야는?",
+        options: [
+          "제품디자인",
+          "시각디자인",
+          "생면디자인",
+          "환경디자인"
+        ],
+        answer: 1,
+        explanation: "심벌과 기호를 통해 정보를 전달하는 대표 분야는 시각디자인입니다."
+      },
+      {
+        no: 182,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "초점거리가 아주 짧은 렌즈로 수중의 물고기 가까이를 찍을 때 틀의 끝점들로 수면 위로 모든 것을 볼 수 있다는 뜻에서 유래된 렌즈는?",
+        options: [
+          "줌렌즈",
+          "광각렌즈",
+          "어안렌즈",
+          "비구면렌즈"
+        ],
+        answer: 2,
+        explanation: "물고기의 시야에서 유래한 렌즈는 어안렌즈입니다."
+      },
+      {
+        no: 183,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "사진이나 필름 등의 이미지를 스캐너로 입력할 경우, 규칙적으로 배열된 선·점·동심원 등이 모여 중첩되어 나타나는 간섭무늬나 탈룩반점을 무엇이라 하는가?",
+        options: [
+          "프레이밍(framing)",
+          "크로핑(cropping)",
+          "블러(blur)",
+          "모아레(moire)"
+        ],
+        answer: 3,
+        explanation: "규칙적인 패턴이 겹쳐 생기는 간섭무늬는 모아레입니다."
+      },
+      {
+        no: 184,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "물체를 일정한 방향으로 보았을 때 그 물체의 관측 방향에 수직인 단위면적당 밝기를 지칭하는 말은?",
+        options: [
+          "휘도(luminance)",
+          "광속(luminous flux)",
+          "광도(luminous intensity)",
+          "조도(illumination intensity)"
+        ],
+        answer: 0,
+        explanation: "단위면적당 밝기를 나타내는 것은 휘도입니다."
+      },
+      {
+        no: 185,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "패닝(panning)에 대한 설명으로 틀린 것은?",
+        options: [
+          "동체의 움직임에 맞춰 카메라를 움직이면 셔터하는 방법이다.",
+          "패닝할 수 있는 피사체는 카메라에 대해 직선으로 이동하는 것이라 본다.",
+          "운동방향이 각기 다른 피사체의 움직임을 나타내는 데 적합하다.",
+          "알맞은 노출과 셔터 속도의 선택이 중요하다."
+        ],
+        answer: 2,
+        explanation: "패닝은 한 방향으로 움직이는 피사체를 따라가며 촬영하는 방법이므로 ③이 틀립니다."
+      },
+      {
+        no: 186,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "일안 반사식 카메라의 특징으로 옳지 않은 것은?",
+        options: [
+          "시차가 생긴다.",
+          "렌즈 교환이 가능하다.",
+          "펜타프리즘이 내장되어 있다.",
+          "렌즈가 파인더 및 렌즈와 결합하고 있다."
+        ],
+        answer: 0,
+        explanation: "일안 반사식 카메라는 렌즈를 통해 보는 구조라 시차가 거의 없습니다."
+      },
+      {
+        no: 187,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "카메라와 사람의 눈을 비교할 때 수정체는 카메라의 무엇과 같은 역할을 하는가?",
+        options: [
+          "셔터",
+          "조리개",
+          "렌즈",
+          "필름"
+        ],
+        answer: 2,
+        explanation: "사람의 수정체는 카메라의 렌즈와 같은 역할을 합니다."
+      },
+      {
+        no: 188,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "강한 광선 조건에서 매우 빠른 감도의 필름을 사용할 때 또는 느린 셔터로 촬영하기를 원할 때 사용하는 필터는?",
+        options: [
+          "FL 필터",
+          "ND 필터",
+          "UV 필터",
+          "RED 필터"
+        ],
+        answer: 1,
+        explanation: "빛의 양을 줄여주는 필터는 ND 필터입니다."
+      },
+      {
+        no: 189,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "태양이나 밝은 전구와 같은 강한 광원이 사진에 포함되었을 때 화면상에 조리개 모양의 이미지가 만들어지는 현상은?",
+        options: [
+          "고스팅(ghosting)",
+          "비네팅(vignetting)",
+          "솔라리제이션(solarization)",
+          "이레디에이션(irradiation)"
+        ],
+        answer: 0,
+        explanation: "렌즈 내부 반사로 인해 조리개 모양의 허상이 생기는 현상은 고스팅입니다."
+      },
+      {
+        no: 190,
+        category: "사진·촬영",
+        source: "연습문제",
+        question: "다음 중 접사 도구가 아닌 것은?",
+        options: [
+          "벨로즈",
+          "중간링",
+          "클로즈업 렌즈",
+          "브라케팅"
+        ],
+        answer: 3,
+        explanation: "브라케팅은 노출을 달리해 촬영하는 방법으로 접사 도구가 아닙니다."
+      },
+      {
+        no: 191,
+        category: "현상·인화",
+        source: "연습문제",
+        question: "확대 시 노광을 주는 동안 사진의 일부분에 빛을 차단하여 원하는 인화를 얻는 방법은?",
+        options: [
+          "버닝",
+          "다징",
+          "증감",
+          "감광"
+        ],
+        answer: 1,
+        explanation: "노광 중 일부를 가려 밝게 유지하는 방법은 다징(dodging)입니다."
+      },
+      {
+        no: 192,
+        category: "인쇄",
+        source: "연습문제",
+        question: "다음 인쇄판 형식 중 그라비어 인쇄는 어떤 형식에 속하는가?",
+        options: [
+          "공판",
+          "평판",
+          "오목판",
+          "볼록판"
+        ],
+        answer: 2,
+        explanation: "그라비어 인쇄는 오목판 인쇄 방식입니다."
+      },
+      {
+        no: 193,
+        category: "인쇄",
+        source: "연습문제",
+        question: "인쇄의 5요소 중 화선부를 눈에 보이도록 하여 화선부와 비화선부의 차이를 나타내게 하는 것은?",
+        options: [
+          "원고(copy)",
+          "삭제(ink)",
+          "피인쇄체(paper)",
+          "인쇄판(printing plate)"
+        ],
+        answer: 1,
+        explanation: "화선부와 비화선부의 차이를 실제로 드러내는 요소는 잉크입니다."
+      },
+      {
+        no: 194,
+        category: "인쇄",
+        source: "연습문제",
+        question: "광화학적 방법으로 제판하는 방식이 아닌 것은?",
+        options: [
+          "연판",
+          "선화판",
+          "망점판",
+          "콜로타입"
+        ],
+        answer: 0,
+        explanation: "선화판, 망점판, 콜로타입은 광화학적 제판과 관련되며 연판은 해당되지 않습니다."
+      }
+    ];
+
+    const quizList = document.getElementById('quizList');
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const totalCount = document.getElementById('totalCount');
+    const solvedCount = document.getElementById('solvedCount');
+    const correctCount = document.getElementById('correctCount');
+    const rateCount = document.getElementById('rateCount');
+    const resetBtn = document.getElementById('resetBtn');
+    const showAllAnswersBtn = document.getElementById('showAllAnswersBtn');
+
+    const state = {
+      selected: {},
+      checked: {}
+    };
+
+    function render() {
+      const keyword = searchInput.value.trim();
+      const category = categoryFilter.value;
+
+      const filtered = quizData.filter(item => {
+        const text = `${item.no} ${item.category} ${item.question} ${item.options.join(' ')}`;
+        const matchKeyword = !keyword || text.includes(keyword);
+        const matchCategory = category === 'all' || item.category === category;
+        return matchKeyword && matchCategory;
+      });
+
+      totalCount.textContent = quizData.length;
+
+      if (!filtered.length) {
+        quizList.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
+        updateStats();
+        return;
+      }
+
+      quizList.innerHTML = filtered.map(item => {
+        const checked = state.checked[item.no];
+        const selected = state.selected[item.no];
+        const isCorrect = checked && selected === item.answer;
+        const feedbackClass = checked ? (isCorrect ? 'ok' : 'bad') : '';
+        const feedbackText = checked
+          ? (isCorrect ? '정답입니다.' : `오답입니다. 정답은 ${item.answer + 1}번입니다.`)
+          : '';
+
+        return `
+          <article class="card">
+            <div class="meta">
+              <span class="chip">문제 ${item.no}</span>
+              <span class="chip">${item.category}</span>
+              <span class="chip">${item.source}</span>
+            </div>
+            <div class="q">${item.question}</div>
+            <div class="options">
+              ${item.options.map((opt, idx) => `
+                <label class="option">
+                  <input type="radio" name="q-${item.no}" value="${idx}" ${selected === idx ? 'checked' : ''} onchange="selectOption(${item.no}, ${idx})" />
+                  <span>${idx + 1}. ${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+            <div class="card-footer">
+              <button class="btn-primary" onclick="checkAnswer(${item.no})">정답 확인</button>
+              <button class="btn-light" onclick="toggleAnswer(${item.no})">해설 보기</button>
+              <div class="feedback ${feedbackClass}" id="feedback-${item.no}">${feedbackText}</div>
+            </div>
+            <div class="answer" id="answer-${item.no}">
+              <strong>정답:</strong> ${item.answer + 1}번<br />
+              <strong>해설:</strong> ${item.explanation}
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const solved = Object.keys(state.checked).length;
+      const correct = Object.keys(state.checked).filter(no => {
+        const num = Number(no);
+        const item = quizData.find(q => q.no === num);
+        return item && state.selected[num] === item.answer;
+      }).length;
+      const rate = solved ? Math.round((correct / solved) * 100) : 0;
+
+      solvedCount.textContent = solved;
+      correctCount.textContent = correct;
+      rateCount.textContent = `${rate}%`;
+    }
+
+    window.selectOption = function(no, idx) {
+      state.selected[no] = idx;
+    }
+
+    window.checkAnswer = function(no) {
+      if (typeof state.selected[no] === 'undefined') {
+        alert('먼저 답을 선택해 주세요.');
+        return;
+      }
+      state.checked[no] = true;
+      render();
+    }
+
+    window.toggleAnswer = function(no) {
+      const el = document.getElementById(`answer-${no}`);
+      if (!el) return;
+      el.classList.toggle('show');
+    }
+
+    searchInput.addEventListener('input', render);
+    categoryFilter.addEventListener('change', render);
+
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('풀이 기록을 모두 초기화할까요?')) return;
+      state.selected = {};
+      state.checked = {};
+      render();
+    });
+
+    showAllAnswersBtn.addEventListener('click', () => {
+      document.querySelectorAll('.answer').forEach(el => el.classList.add('show'));
+    });
+
+    render();
+  </script>
+</body>
+</html>
